@@ -31,15 +31,23 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let status = scriptContext.request.parameters['_status'];
                 status = status?.split('|'); // 'SAVE' -> ['SAVE']
 
-                // Obtener datos por search
+                // Obtener datos por search - Cola de inspeccion
                 let dataColaInspeccion = objSearch.getDataColaInspeccion('', '', '', id);
 
-                // Obtener datos por record
+                // Obtener datos por record - Cola de inspeccion
                 let dataColaInspeccion_ = record.load({ type: 'customrecord_qm_queue', id: id });
+
+                // Obtener datos por search - Datos de calidad
+                let cola_inspeccion_id = dataColaInspeccion_.getValue('id');
+                let transaccion_inv_id = dataColaInspeccion_.getValue('custrecord_qm_queue_transaction_inv');
+                let articulo_id = dataColaInspeccion_.getValue('custrecord_qm_queue_item');
+                let numero_linea_transaccion = dataColaInspeccion_.getValue('custrecord_qm_queue_line');
+                let dataDatosCalidad = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
                 // Debug
                 // objHelper.error_log('id', id);
                 // objHelper.error_log('dataColaInspeccion', dataColaInspeccion);
+                // objHelper.error_log('dataDatosCalidad', dataDatosCalidad);
 
                 // Crear formulario
                 let {
@@ -48,6 +56,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldColaInspeccionIdInterno,
                     fieldEspecificacion,
                     fieldArticulo,
+                    fieldLineaIdInterno,
+                    fieldTipoProductoIdInterno,
                     fieldLinea,
                     fieldTipoProducto,
                     fieldTransaccionPrincipal,
@@ -68,7 +78,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldUsuarioFirma_AprobadoPor,
                     fieldFechaFirma_AprobadoPor,
                     fieldObservaciones
-                } = objWidget.createFormDetail(dataColaInspeccion);
+                } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad);
 
                 if (status?.includes('SAVE')) {
                     form.addPageInitMessage({
@@ -91,6 +101,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 fieldColaInspeccionIdInterno.defaultValue = dataColaInspeccion[0].cola_inspeccion.id;
                 fieldEspecificacion.defaultValue = dataColaInspeccion[0].especificacion.nombre;
                 fieldArticulo.defaultValue = dataColaInspeccion[0].articulo.id;
+                fieldLineaIdInterno.defaultValue = dataColaInspeccion[0].linea.id;
+                fieldTipoProductoIdInterno.defaultValue = dataColaInspeccion[0].tipo_producto.id;
                 fieldLinea.defaultValue = dataColaInspeccion[0].linea.nombre;
                 fieldTipoProducto.defaultValue = dataColaInspeccion[0].tipo_producto.nombre;
                 fieldTransaccionPrincipal.defaultValue = dataColaInspeccion[0].transaccion_principal.id;

@@ -397,7 +397,7 @@ define(['./Bio.Library.Helper', 'N'],
             return resultTransaction;
         }
 
-        function getDataMP_PDFDetalle(cola_inspeccion_id) {
+        function getData_PDFDetalle(cola_inspeccion_id) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -454,7 +454,7 @@ define(['./Bio.Library.Helper', 'N'],
 
             // Cantidad de registros en search
             // let count = searchContext.runPaged().count;
-            // objHelper.error_log('', 'getDataMP_PDFDetalle');
+            // objHelper.error_log('', 'getData_PDFDetalle');
             // objHelper.error_log('', count);
 
             // Recorrer search - con mas de 4000 registros
@@ -498,11 +498,11 @@ define(['./Bio.Library.Helper', 'N'],
                 });
             });
 
-            // objHelper.error_log('getDataMP_PDFDetalle', resultTransaction);
+            // objHelper.error_log('getData_PDFDetalle', resultTransaction);
             return resultTransaction;
         }
 
-        function getDataMP_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion) {
+        function getData_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -569,7 +569,7 @@ define(['./Bio.Library.Helper', 'N'],
 
             // Cantidad de registros en search
             // let count = searchContext.runPaged().count;
-            // objHelper.error_log('', 'getDataMP_PDFDetalle_RecepcionDetalleInventario');
+            // objHelper.error_log('', 'getData_PDFDetalle_RecepcionDetalleInventario');
             // objHelper.error_log('', count);
 
             // Recorrer search - con mas de 4000 registros
@@ -599,10 +599,52 @@ define(['./Bio.Library.Helper', 'N'],
                 });
             });
 
-            // objHelper.error_log('getDataMP_PDFDetalle_RecepcionDetalleInventario', resultTransaction);
+            // objHelper.error_log('getData_PDFDetalle_RecepcionDetalleInventario', resultTransaction);
             return resultTransaction;
         }
 
-        return { getDataColaInspeccion, getTriggerTypeList, getInspectionOutcomesList, getDataMP_PDFCabecera, getDataMP_PDFDetalle, getDataMP_PDFDetalle_RecepcionArticulo }
+        function getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion) {
+
+            // Obtener data
+            let data_PDFDetalle = getData_PDFDetalle(cola_inspeccion_id);
+            let data_PDFDetalle_RecepcionArticulo = getData_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+
+            // Recorrer Datos de calidad
+            data_PDFDetalle.forEach((value, key) => {
+
+                // Recorrer Transaccion - Recepción de artículo (Detalle de inventario)
+                data_PDFDetalle_RecepcionArticulo.forEach((value_, key_) => {
+
+                    // Validar los lotes
+                    if (value.numero_lote == value_.det_inv_lote_nombre) {
+
+                        // Obtener Fecha de Caducidad por Lote del Detalle de Inventario
+                        data_PDFDetalle[key]['fecha_caducidad'] = data_PDFDetalle[key]['fecha_caducidad'] || []; // Validar si encontrara mas de una fecha
+                        data_PDFDetalle[key]['fecha_caducidad'].push(value_.det_inv_fecha_caducidad);
+                    }
+                })
+            });
+
+            // Obtener data en formato agrupado
+            let dataAgrupada = {}; // * Audit: Util, manejo de JSON
+
+            data_PDFDetalle.forEach(element => {
+
+                // Obtener variables
+                let numero_lote = element.numero_lote;
+
+                // Agrupar data
+                dataAgrupada[numero_lote] = dataAgrupada[numero_lote] || [];
+                dataAgrupada[numero_lote].push(element);
+
+                // Otra forma
+                // dataAgrupada[numero_lote] ??= [];
+                // dataAgrupada[numero_lote] = element;
+            });
+
+            return dataAgrupada;
+        }
+
+        return { getDataColaInspeccion, getTriggerTypeList, getInspectionOutcomesList, getDataMP_PDFCabecera, getData_PDFDetalle, getData_PDFDetalle_RecepcionArticulo, getData_PDFDetalle_Completa }
 
     });

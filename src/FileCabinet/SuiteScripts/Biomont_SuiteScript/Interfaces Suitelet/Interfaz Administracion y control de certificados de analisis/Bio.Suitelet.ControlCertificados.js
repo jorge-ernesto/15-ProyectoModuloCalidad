@@ -37,7 +37,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 if (button == 'consultar') {
 
                     // Debug
-                    // objHelper.error_log('debug', { item, triggerType, inspectionOutcomes });
+                    // objHelper.error_log('debug', { item, triggerType, status });
 
                     // Setear datos al formulario
                     fieldItem.defaultValue = item;

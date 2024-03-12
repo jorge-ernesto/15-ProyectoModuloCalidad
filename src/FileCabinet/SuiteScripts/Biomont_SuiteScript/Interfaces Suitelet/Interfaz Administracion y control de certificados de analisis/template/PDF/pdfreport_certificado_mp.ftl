@@ -103,42 +103,42 @@
                 <!-- COLA DE INSPECCION -->
                 <tr>
                     <th colspan="1"><b>CÓDIGO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].articulo_itemid}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_itemid}</th>
                     <th colspan="1"><b>N. DOCUMENTO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].ns_tipo_documento_nombre} ${params.cola_inspeccion_data.dataMP_PDFCabecera[0].ns_serie} ${params.cola_inspeccion_data.dataMP_PDFCabecera[0].ns_numero_correlativo}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].ns_tipo_documento_nombre} ${params.cola_inspeccion_data.data_PDFCabecera[0].ns_serie} ${params.cola_inspeccion_data.data_PDFCabecera[0].ns_numero_correlativo}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>MATERIA PRIMA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].articulo_displayname}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
                     <th colspan="1"><b>N. ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].num_analisis}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>N. TÉCNICA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].num_tecnica}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_tecnica}</th>
                     <th colspan="1"><b>FABRICANTE:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].fabricante}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fabricante}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>FECHA FABRICACIÓN:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].fecha_fabricacion}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_fabricacion}</th>
                     <th colspan="1"><b>FECHA ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].fecha_analisis}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>PROVEEDOR:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].proveedor_nombre}</th>
-                    <th colspan="1"><b>FECHA RECEPCION:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].fecha_recepcion}</th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].proveedor_nombre}</th>
+                    <th colspan="1"><b>FECHA DE REANALISIS:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_reanalisis}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
-                    <th colspan="1"><b>FECHA DE REANALISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.dataMP_PDFCabecera[0].fecha_reanalisis}</th>
+                    <th colspan="1"><b>FECHA RECEPCION:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_recepcion}</th>
                     <th colspan="1"></th>
                     <th colspan="1"></th>
                     <th colspan="1"></th>
@@ -150,9 +150,9 @@
         </table>
 
         <!-- DATOS DE CALIDAD -->
-        <#list params.cola_inspeccion_data.dataMP_PDFDetalle_Agrupada as keylot, lotes>
+        <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
             Lote: ${keylot}<br />
-            Fecha Expiracion: ${lotes[0]['fecha_lote'][0]}
+            Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
                 <tbody>
@@ -173,11 +173,11 @@
         </#list>
 
         <!-- COLA DE INSPECCION -->
-        <#assign observaciones = params.cola_inspeccion_data.dataMP_PDFCabecera[0].observaciones>
-        <#assign usuariofirma_revisadopor = params.cola_inspeccion_data.dataMP_PDFCabecera[0].usuariofirma_revisadopor>
-        <#assign fechafirma_revisadopor = params.cola_inspeccion_data.dataMP_PDFCabecera[0].fechafirma_revisadopor>
-        <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.dataMP_PDFCabecera[0].usuariofirma_aprobadopor>
-        <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.dataMP_PDFCabecera[0].fechafirma_aprobadopor>
+        <#assign observaciones = params.cola_inspeccion_data.data_PDFCabecera[0].observaciones>
+        <#assign usuariofirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_revisadopor>
+        <#assign fechafirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_revisadopor>
+        <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_aprobadopor>
+        <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_aprobadopor>
 
         <span class="fs12">Observaciones: ${observaciones}</span>
         <table width="100%" class="fs12 border-collapse" cellpadding="1">

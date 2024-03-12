@@ -129,7 +129,20 @@ define(['N'],
             let articulo_id = recordContext.getValue('custpage_field_articulo');
             let numero_linea_transacccion = recordContext.getValue('custpage_field_numero_linea_transaccion');
 
-            console.log(cola_inspeccion_id, articulo_id, numero_linea_transacccion);
+            // Determinar tipo de pdf
+            let linea_id = recordContext.getValue('custpage_field_linea_id_interno');
+            let tipo_producto_id = recordContext.getValue('custpage_field_tipo_producto_id_interno');
+            let tipo_pdf = null;
+
+            if (linea_id == 5) // MATERIA PRIMA
+                tipo_pdf = 'MP';
+            else if (linea_id == 7 || linea_id == 8) // MATERIAL DE EMPAQUE, MATERIAL DE ENVASADO
+                tipo_pdf = 'ME_MV';
+            else if (tipo_producto_id == 16) // PRODUCTO TERMINADO
+                tipo_pdf = 'PT';
+
+            // Debug
+            console.log({ cola_inspeccion_id, articulo_id, numero_linea_transacccion, linea_id, tipo_producto_id, tipo_pdf });
 
             // Obtener url del Suitelet mediante ID del Script y ID del Despliegue
             let suitelet = url.resolveScript({
@@ -139,7 +152,8 @@ define(['N'],
                     _button: 'pdf',
                     _cola_inspeccion_id: cola_inspeccion_id,
                     _articulo_id: articulo_id,
-                    _numero_linea_transaccion: numero_linea_transacccion
+                    _numero_linea_transaccion: numero_linea_transacccion,
+                    _tipo_pdf: tipo_pdf
                 }
             });
 

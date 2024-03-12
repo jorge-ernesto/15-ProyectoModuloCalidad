@@ -180,7 +180,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
         }
 
         /****************** Suitelet Detail ******************/
-        function createFormDetail(dataCertificacionAnalisis) {
+        function createFormDetail(dataColaInspeccion, dataDatosCalidad) {
             // Crear formulario
             let form = serverWidget.createForm({
                 title: `Administración y control de certificado de análisis`,
@@ -218,7 +218,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
             // Mostrar SubPestañas
             form.addSubtab({
-                id: 'custpage_subtab_datcal',
+                id: 'custpage_subtab_2',
                 label: 'Datos de calidad'
             });
 
@@ -261,6 +261,27 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
                 fieldArticulo.updateBreakType({ breakType: 'STARTROW' })
                 fieldArticulo.updateDisplayType({ displayType: 'INLINE' });
+
+                // Linea ID interno
+                var fieldLineaIdInterno = form.addField({
+                    id: 'custpage_field_linea_id_interno',
+                    label: 'Linea ID interno',
+                    type: 'text',
+                    container: 'custpage_group_dat'
+                });
+                fieldLineaIdInterno.updateBreakType({ breakType: 'STARTROW' })
+                fieldLineaIdInterno.updateDisplayType({ displayType: 'HIDDEN' });
+
+                // Tipo Producto ID interno
+                var fieldTipoProductoIdInterno = form.addField({
+                    id: 'custpage_field_tipo_producto_id_interno',
+                    label: 'Tipo Producto ID interno',
+                    type: 'select',
+                    source: 'customlist1055',
+                    container: 'custpage_group_dat'
+                });
+                fieldTipoProductoIdInterno.updateBreakType({ breakType: 'STARTROW' })
+                fieldTipoProductoIdInterno.updateDisplayType({ displayType: 'HIDDEN' });
 
                 // Linea
                 var fieldLinea = form.addField({
@@ -461,6 +482,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 fieldObservaciones.updateBreakType({ breakType: 'STARTCOL' })
             }
 
+            /****************** Datos de calidad ******************/
             if (true) {
 
                 // Tipo de sublista
@@ -468,25 +490,49 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
                 // Agregar sublista
                 let sublist = form.addSublist({
-                    id: 'custpage_sublist_reporte_lista_certificados',
+                    id: 'custpage_sublist_reporte_lista_datos_calidad',
                     type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
-                    label: 'Lista de certificados',
-                    tab: 'custpage_subtab_datcal'
+                    label: 'Lista de datos de calidad',
+                    tab: 'custpage_subtab_2'
                 });
 
                 // Setear cabecera a sublista
-                sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.INTEGER, label: 'ID interno' });
-                sublist.addField({ id: 'custpage_editar', type: serverWidget.FieldType.TEXT, label: 'Editar' });
-                sublist.addField({ id: 'custpage_especificacion', type: serverWidget.FieldType.TEXT, label: 'Especificacion' });
-                sublist.addField({ id: 'custpage_articulo', type: serverWidget.FieldType.TEXT, label: 'Articulo' });
-                sublist.addField({ id: 'custpage_linea', type: serverWidget.FieldType.TEXT, label: 'Linea' });
-                sublist.addField({ id: 'custpage_tipo_producto', type: serverWidget.FieldType.TEXT, label: 'Tipo Producto' });
-                sublist.addField({ id: 'custpage_transaccion_principal', type: serverWidget.FieldType.TEXT, label: 'Transaccion Principal' });
-                sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.TEXT, label: 'Estado' });
-                sublist.addField({ id: 'custpage_ubicacion', type: serverWidget.FieldType.TEXT, label: 'Ubicacion' });
-                sublist.addField({ id: 'custpage_transaccion_inventario', type: serverWidget.FieldType.TEXT, label: 'Transaccion Inventario' });
-                sublist.addField({ id: 'custpage_numero_linea_transaccion', type: serverWidget.FieldType.TEXT, label: 'Numero<br /> Linea<br /> Transaccion' });
-                sublist.addField({ id: 'custpage_tipo_disparador', type: serverWidget.FieldType.TEXT, label: 'Tipo Disparador' });
+                sublist.addField({ id: 'custpage_lotes', type: serverWidget.FieldType.TEXT, label: 'Lotes' });
+                sublist.addField({ id: 'custpage_secuencia', type: serverWidget.FieldType.TEXT, label: 'Secuencia' });
+                sublist.addField({ id: 'custpage_ensayos', type: serverWidget.FieldType.TEXT, label: 'Ensayos' });
+                sublist.addField({ id: 'custpage_especificaciones', type: serverWidget.FieldType.TEXT, label: 'Especificaciones' });
+                sublist.addField({ id: 'custpage_campos', type: serverWidget.FieldType.TEXT, label: 'Campos' });
+                sublist.addField({ id: 'custpage_instrucciones', type: serverWidget.FieldType.TEXT, label: 'Instrucciones' });
+                sublist.addField({ id: 'custpage_resultados', type: serverWidget.FieldType.TEXT, label: 'Resultados' });
+
+                // Setear los datos obtenidos a sublista
+                let contador = 0;
+                Object.values(dataDatosCalidad).forEach((lotes, keylot) => {
+                    lotes.forEach((element, i) => {
+                        if (element.numero_lote) {
+                            sublist.setSublistValue({ id: 'custpage_lotes', line: contador, value: element.numero_lote });
+                        }
+                        if (element.secuencia) {
+                            sublist.setSublistValue({ id: 'custpage_secuencia', line: contador, value: element.secuencia });
+                        }
+                        if (element.inspeccion_nombre) {
+                            sublist.setSublistValue({ id: 'custpage_ensayos', line: contador, value: element.inspeccion_nombre });
+                        }
+                        if (element.descripcion_inspeccion) {
+                            sublist.setSublistValue({ id: 'custpage_especificaciones', line: contador, value: element.descripcion_inspeccion });
+                        }
+                        if (element.campo_inspeccion_nombre) {
+                            sublist.setSublistValue({ id: 'custpage_campos', line: contador, value: element.campo_inspeccion_nombre });
+                        }
+                        if (element.instrucciones) {
+                            sublist.setSublistValue({ id: 'custpage_instrucciones', line: contador, value: element.instrucciones });
+                        }
+                        if (element.valor_inspeccion) {
+                            sublist.setSublistValue({ id: 'custpage_resultados', line: contador, value: element.valor_inspeccion });
+                        }
+                        contador++
+                    });
+                });
             }
 
             return {
@@ -495,6 +541,8 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 fieldColaInspeccionIdInterno,
                 fieldEspecificacion,
                 fieldArticulo,
+                fieldLineaIdInterno,
+                fieldTipoProductoIdInterno,
                 fieldLinea,
                 fieldTipoProducto,
                 fieldTransaccionPrincipal,

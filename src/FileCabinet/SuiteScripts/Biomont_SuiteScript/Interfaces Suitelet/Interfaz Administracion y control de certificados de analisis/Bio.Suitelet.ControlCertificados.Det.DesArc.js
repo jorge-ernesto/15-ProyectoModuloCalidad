@@ -6,22 +6,29 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
-define(['./lib/Bio.Library.Search', './lib/Bio.Library.Process', './lib/Bio.Library.Helper', 'N'],
+define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
 
-    function (objSearch, objProcess, objHelper, N) {
+    function (objSearch, objHelper, N) {
 
         const { log, file, render, encode, record } = N;
 
         /******************/
 
         // Crear PDF
-        function createPDF(cola_inspeccion_id, cola_inspeccion_data) {
+        function createPDF(tipo_pdf, cola_inspeccion_id, cola_inspeccion_data) {
             // Nombre del archivo
             let typeRep = 'reporteCertificadoAnalisis';
             let titleDocument = 'Reporte Certificado de Análisis'
 
+            // Determinar tipo de pdf
             // Template del archivo
-            let templatePdf =  'pdfreport_cert_analisis_mp';
+            let templatePdf = null;
+            if (tipo_pdf == 'MP')
+                templatePdf = 'pdfreport_certificado_mp';
+            else if (tipo_pdf == 'ME_MV')
+                templatePdf = '';
+            else if (tipo_pdf == 'PT')
+                templatePdf = '';
 
             // Crear PDF - Contenido dinamico
             let pdfContent = file.load(`./template/PDF/${templatePdf}.ftl`).getContents();
@@ -51,7 +58,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Process', './lib/Bio.Libr
             return { pdfFile };
         }
 
-        function getData(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
+        function getData(tipo_pdf, cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
             // Obtener el record de la cola de inspeccion
             var colaInspeccionRecord = record.load({
                 type: 'customrecord_qm_queue',
@@ -61,19 +68,21 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Process', './lib/Bio.Libr
             // Obtener datos
             let transaccion_inv_id = colaInspeccionRecord.getValue('custrecord_qm_queue_transaction_inv');
 
-            // Obtener data MP
-            let dataMP_PDFCabecera = objSearch.getDataMP_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion)
-            let dataMP_PDFDetalle = objSearch.getDataMP_PDFDetalle(cola_inspeccion_id)
-            let dataMP_PDFDetalle_RecepcionArticulo = objSearch.getDataMP_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion)
-            let dataMP_PDFDetalle_Agrupada = objProcess.getDataMP_PDFDetalle_Agrupada(dataMP_PDFDetalle, dataMP_PDFDetalle_RecepcionArticulo);
+            // Obtener data
+            let data_PDFCabecera = [];
+            let data_PDFDetalle = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+
+            // Determinar tipo de pdf
+            if (tipo_pdf == 'MP')
+                data_PDFCabecera = objSearch.getDataMP_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
 
             // Debug
-            // objHelper.error_log('dataMP', { dataMP_PDFCabecera, dataMP_PDFDetalle, dataMP_PDFDetalle_RecepcionArticulo, dataMP_PDFDetalle_Agrupada });
+            // objHelper.error_log('data', { tipo_pdf, data_PDFCabecera, data_PDFDetalle });
 
             // Obtener data
             let data = {
-                dataMP_PDFCabecera: dataMP_PDFCabecera,
-                dataMP_PDFDetalle_Agrupada: dataMP_PDFDetalle_Agrupada,
+                data_PDFCabecera: data_PDFCabecera,
+                data_PDFDetalle: data_PDFDetalle
             }
 
             return data;
@@ -98,16 +107,17 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Process', './lib/Bio.Libr
                 let cola_inspeccion_id = scriptContext.request.parameters['_cola_inspeccion_id'];
                 let articulo_id = scriptContext.request.parameters['_articulo_id'];
                 let numero_linea_transaccion = scriptContext.request.parameters['_numero_linea_transaccion'];
+                let tipo_pdf = scriptContext.request.parameters['_tipo_pdf'];
 
                 // objHelper.error_log('data', { cola_inspeccion_id, articulo_id, numero_linea_transaccion })
 
                 if (button == 'pdf') {
 
                     // Obtener datos
-                    let cola_inspeccion_data = getData(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
+                    let cola_inspeccion_data = getData(tipo_pdf, cola_inspeccion_id, articulo_id, numero_linea_transaccion);
 
                     // Crear PDF
-                    let { pdfFile } = createPDF(cola_inspeccion_id, cola_inspeccion_data);
+                    let { pdfFile } = createPDF(tipo_pdf, cola_inspeccion_id, cola_inspeccion_data);
 
                     // Descargar PDF
                     scriptContext.response.writeFile({
