@@ -9,8 +9,8 @@ define(['N'],
 
         const { log, runtime, email, url } = N;
 
-        const scriptId = 'customscript_bio_sl_con_fixed_assets_det';
-        const deployId = 'customdeploy_bio_sl_con_fixed_assets_det';
+        const scriptId = 'customscript_bio_sl_control_cert_det';
+        const deployId = 'customdeploy_bio_sl_control_cert_det';
 
         /******************/
 

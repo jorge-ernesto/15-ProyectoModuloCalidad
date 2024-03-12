@@ -11,8 +11,8 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
         const DATA = {
             'clientScriptModulePath': {
-                'suiteletReport': './../Bio.Client.ControlQoA.js',
-                'suiteletDetail': './../Bio.Client.ControlDetalleQoA.js',
+                'suiteletReport': './../Bio.Client.ControlCertificados.js',
+                'suiteletDetail': './../Bio.Client.ControlCertificados.Det.js',
             }
         }
 
@@ -20,7 +20,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
         function createFormReport() {
             // Crear formulario
             let form = serverWidget.createForm({
-                title: `Administración y control de activos`,
+                title: `Administración y control de certificados de análisis`,
                 hideNavbar: false
             })
 
@@ -32,15 +32,15 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
             //     label: 'Consultar'
             // });
             form.addButton({
-                id: 'custpage_button_obtener_activos_fijos',
-                label: 'Obtener activos',
-                functionName: 'getFixedAssets()'
+                id: 'custpage_button_obtener_certificados_analisis',
+                label: 'Obtener certificados',
+                functionName: 'getColaInspeccion()'
             });
 
             // Mostrar SubPestañas
             form.addSubtab({
                 id: 'custpage_subtab',
-                label: 'Lista de activos'
+                label: 'Lista de certificados'
             });
 
             /******************  Filtros ******************/
@@ -51,95 +51,55 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 tab: 'custpage_subtab'
             });
 
-            // Tipos de activos
-            let fieldAssetType = form.addField({
-                id: 'custpage_field_filter_assettype',
-                label: 'Tipos de activos',
+            // Articulos
+            let fieldItem = form.addField({
+                id: 'custpage_field_filter_item',
+                label: 'Artículos',
                 type: 'select',
-                // source: 'customrecord_ncfar_assettype',
+                source: 'item',
                 container: 'custpage_group'
             });
-            fieldAssetType.updateBreakType({ breakType: 'STARTCOL' })
-            setFieldReport(fieldAssetType, 'fieldAssetType');
+            fieldItem.updateBreakType({ breakType: 'STARTCOL' })
 
-            // Subsidiarias
-            let fieldSubsidiary = form.addField({
-                id: 'custpage_field_filter_subsidiary',
-                label: 'Subsidiarias',
-                type: 'multiselect',
-                source: 'subsidiary',
+            // Tipos de disparadores
+            let fieldTriggerType = form.addField({
+                id: 'custpage_field_filter_trigger_type',
+                label: 'Tipos de disparadores',
+                type: 'select',
+                // source: 'customlist_qm_trigger_type',
                 container: 'custpage_group'
             });
-            fieldSubsidiary.updateBreakType({ breakType: 'STARTCOL' })
+            fieldTriggerType.updateBreakType({ breakType: 'STARTCOL' })
+            setFieldReport(fieldTriggerType, 'fieldTriggerType');
 
-            // Clases
-            let fieldClass = form.addField({
-                id: 'custpage_field_filter_class',
-                label: 'Clases',
+            // Estados
+            let fieldStatus = form.addField({
+                id: 'custpage_field_filter_status',
+                label: 'Estados',
                 type: 'select',
-                // source: 'classification',
+                // source: 'customlist_qm_inspection_outcomes',
                 container: 'custpage_group'
             });
-            fieldClass.updateBreakType({ breakType: 'STARTCOL' })
-            setFieldReport(fieldClass, 'fieldClass');
+            fieldStatus.updateBreakType({ breakType: 'STARTCOL' })
+            setFieldReport(fieldStatus, 'fieldInspectionOutcomes');
 
-            // Número de activo alternativo
-            let fieldNumeroActivoAlternativo = form.addField({
-                id: 'custpage_field_filter_numero_activo_alternativo',
-                label: 'Número de activo alternativo',
-                type: 'text',
-                container: 'custpage_group'
-            })
-            fieldNumeroActivoAlternativo.updateBreakType({ breakType: 'STARTCOL' })
-
-            // Nombre
-            let fieldNombre = form.addField({
-                id: 'custpage_field_filter_nombre',
-                label: 'Nombre',
-                type: 'text',
-                container: 'custpage_group'
-            })
-            fieldNombre.updateBreakType({ breakType: 'STARTCOL' })
-
-            // Estado Acción
-            let fieldEstadoAccion = form.addField({
-                id: 'custpage_field_filter_estado_accion',
-                label: 'Estado',
-                type: 'select',
-                // source: 'customlist_bio_lis_est_acc_con_act',
-                container: 'custpage_group'
-            })
-            fieldEstadoAccion.updateBreakType({ breakType: 'STARTCOL' })
-            fieldEstadoAccion.updateDisplaySize({ height: 60, width: 120 });
-            setFieldReport(fieldEstadoAccion, 'fieldEstadoAccion');
-
-            return { form, fieldAssetType, fieldSubsidiary, fieldClass, fieldNumeroActivoAlternativo, fieldNombre, fieldEstadoAccion }
+            return { form, fieldItem, fieldTriggerType, fieldStatus }
         }
 
         function setFieldReport(field, name) {
             // Obtener datos por search
             let dataList = [];
 
-            if (name == 'fieldAssetType') {
-                dataList = objSearch.getAssetTypeList();
-            } else if (name == 'fieldClass') {
-                dataList = objSearch.getClassList();
-            } else if (name == 'fieldEstadoAccion') {
-                dataList = objSearch.getEstadoAccionList();
+            if (name == 'fieldTriggerType') {
+                dataList = objSearch.getTriggerTypeList();
+            } else if (name == 'fieldInspectionOutcomes') {
+                dataList = objSearch.getInspectionOutcomesList();
             }
 
-            // Setear un primer valor vacio
-            if (name == 'fieldEstadoAccion') {
-                field.addSelectOption({
-                    value: '@NONE@',
-                    text: 'PENDIENTE'
-                });
-            } else {
-                field.addSelectOption({
-                    value: '',
-                    text: ''
-                });
-            }
+            field.addSelectOption({
+                value: '',
+                text: ''
+            });
 
             // Setear los datos obtenidos manualmente al campo supervisor personalizado
             dataList.forEach((element, i) => {
@@ -150,93 +110,80 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
             })
         }
 
-        function createSublist(form, dataActivosFijos) {
+        function createSublist(form, dataColaInspeccion) {
             // Tipo de sublista
             sublistType = serverWidget.SublistType.LIST;
 
             // Agregar sublista
             let sublist = form.addSublist({
-                id: 'custpage_sublist_reporte_costo_real_md',
+                id: 'custpage_sublist_reporte_lista_certificados',
                 type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
-                label: 'Lista de activos',
+                label: 'Lista de certificados',
                 tab: 'custpage_subtab'
             });
 
             // Setear cabecera a sublista
-            sublist.addField({ id: 'custpage_id', type: serverWidget.FieldType.TEXT, label: 'ID' });
+            sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.INTEGER, label: 'ID interno' });
             sublist.addField({ id: 'custpage_editar', type: serverWidget.FieldType.TEXT, label: 'Editar' });
-            sublist.addField({ id: 'custpage_transaccion', type: serverWidget.FieldType.TEXT, label: 'Transacción' });
-            sublist.addField({ id: 'custpage_tipo_activo', type: serverWidget.FieldType.TEXT, label: 'Tipo de Activo' });
-            sublist.addField({ id: 'custpage_nombre', type: serverWidget.FieldType.TEXT, label: 'Nombre' });
-            sublist.addField({ id: 'custpage_descripcion', type: serverWidget.FieldType.TEXT, label: 'Descripción' });
-            sublist.addField({ id: 'custpage_proveedor', type: serverWidget.FieldType.TEXT, label: 'Proveedor' });
-            sublist.addField({ id: 'custpage_fecha_compra', type: serverWidget.FieldType.TEXT, label: 'Fecha Compra' });
-            sublist.addField({ id: 'custpage_costo_original', type: serverWidget.FieldType.TEXT, label: 'Costo Original' });
-            sublist.addField({ id: 'custpage_clase', type: serverWidget.FieldType.TEXT, label: 'Centro de Costo' }); // Centro de Costo (Clase)
-            sublist.addField({ id: 'custpage_numero_activo_alternativo', type: serverWidget.FieldType.TEXT, label: 'Número de activo alternativo' });
-            sublist.addField({ id: 'custpage_cantidad_factura', type: serverWidget.FieldType.TEXT, label: 'Cantidad Factura' });
-            sublist.addField({ id: 'custpage_usuario_depositario', type: serverWidget.FieldType.TEXT, label: 'Usuario (Depositario)' }); // Usuario (Depositario)
-            sublist.addField({ id: 'custpage_estado_accion', type: serverWidget.FieldType.TEXT, label: 'Estado Acción' });
-            sublist.addField({ id: 'custpage_estado_activo', type: serverWidget.FieldType.TEXT, label: 'Estado Activo' });
+            sublist.addField({ id: 'custpage_especificacion', type: serverWidget.FieldType.TEXT, label: 'Especificacion' });
+            sublist.addField({ id: 'custpage_articulo', type: serverWidget.FieldType.TEXT, label: 'Articulo' });
+            sublist.addField({ id: 'custpage_linea', type: serverWidget.FieldType.TEXT, label: 'Linea' });
+            sublist.addField({ id: 'custpage_tipo_producto', type: serverWidget.FieldType.TEXT, label: 'Tipo Producto' });
+            sublist.addField({ id: 'custpage_transaccion_principal', type: serverWidget.FieldType.TEXT, label: 'Transaccion Principal' });
+            sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.TEXT, label: 'Estado' });
+            sublist.addField({ id: 'custpage_ubicacion', type: serverWidget.FieldType.TEXT, label: 'Ubicacion' });
+            sublist.addField({ id: 'custpage_transaccion_inventario', type: serverWidget.FieldType.TEXT, label: 'Transaccion Inventario' });
+            sublist.addField({ id: 'custpage_numero_linea_transaccion', type: serverWidget.FieldType.TEXT, label: 'Numero<br /> Linea<br /> Transaccion' });
+            sublist.addField({ id: 'custpage_tipo_disparador', type: serverWidget.FieldType.TEXT, label: 'Tipo Disparador' });
 
             // Setear los datos obtenidos a sublista
-            dataActivosFijos.forEach((element, i) => {
-                let { suitelet } = objHelper.getUrlSuiteletDetail(element.activo_fijo.id_interno);
+            dataColaInspeccion.forEach((element, i) => {
+                let { suitelet } = objHelper.getUrlSuiteletDetail(element.cola_inspeccion.id);
 
-                if (element.activo_fijo.id) {
-                    sublist.setSublistValue({ id: 'custpage_id', line: i, value: element.activo_fijo.id });
+                if (element.cola_inspeccion.id) {
+                    sublist.setSublistValue({ id: 'custpage_id_interno', line: i, value: element.cola_inspeccion.id });
                 }
-                if (element.activo_fijo.id_interno) {
+                if (element.cola_inspeccion.id) {
                     sublist.setSublistValue({ id: 'custpage_editar', line: i, value: `<a href="${suitelet}" target="_blank">Editar</a>` });
                 }
-                if (element.factura_compra.numero_documento) {
-                    sublist.setSublistValue({ id: 'custpage_transaccion', line: i, value: element.factura_compra.numero_documento });
+                if (element.especificacion.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_especificacion', line: i, value: element.especificacion.nombre });
                 }
-                if (element.tipo_activo.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_tipo_activo', line: i, value: element.tipo_activo.nombre });
+                if (element.articulo.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_articulo', line: i, value: element.articulo.nombre });
                 }
-                if (element.activo_fijo.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_nombre', line: i, value: element.activo_fijo.nombre });
+                if (element.linea.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_linea', line: i, value: element.linea.nombre });
                 }
-                if (element.descripcion_activo) {
-                    sublist.setSublistValue({ id: 'custpage_descripcion', line: i, value: element.descripcion_activo });
+                if (element.tipo_producto.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_tipo_producto', line: i, value: element.tipo_producto.nombre });
                 }
-                if (element.proveedor) {
-                    sublist.setSublistValue({ id: 'custpage_proveedor', line: i, value: element.proveedor });
+                if (element.transaccion_principal.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_transaccion_principal', line: i, value: element.transaccion_principal.nombre });
                 }
-                if (element.fecha_compra) {
-                    sublist.setSublistValue({ id: 'custpage_fecha_compra', line: i, value: element.fecha_compra });
+                if (element.estado.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado.nombre });
                 }
-                if (element.costo_original) {
-                    sublist.setSublistValue({ id: 'custpage_costo_original', line: i, value: element.costo_original });
+                if (element.ubicacion.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_ubicacion', line: i, value: element.ubicacion.nombre });
                 }
-                if (element.centro_costo.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_clase', line: i, value: element.centro_costo.nombre });
+                if (element.transaccion_inventario.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_transaccion_inventario', line: i, value: element.transaccion_inventario.nombre });
                 }
-                if (element.numero_activo_alternativo) {
-                    sublist.setSublistValue({ id: 'custpage_numero_activo_alternativo', line: i, value: element.numero_activo_alternativo });
+                if (element.numero_linea_transaccion) {
+                    sublist.setSublistValue({ id: 'custpage_numero_linea_transaccion', line: i, value: element.numero_linea_transaccion });
                 }
-                if (element.cantidad_factura) {
-                    sublist.setSublistValue({ id: 'custpage_cantidad_factura', line: i, value: element.cantidad_factura });
-                }
-                if (element.usuario_depositario.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_usuario_depositario', line: i, value: element.usuario_depositario.nombre });
-                }
-                if (element.estado_accion.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_estado_accion', line: i, value: element.estado_accion.nombre });
-                }
-                if (element.estado_activo.nombre) {
-                    sublist.setSublistValue({ id: 'custpage_estado_activo', line: i, value: element.estado_activo.nombre });
+                if (element.tipo_disparador.nombre) {
+                    sublist.setSublistValue({ id: 'custpage_tipo_disparador', line: i, value: element.tipo_disparador.nombre });
                 }
             });
         }
 
         /****************** Suitelet Detail ******************/
-        function createFormDetail(dataActivoFijo) {
+        function createFormDetail(dataCertificacionAnalisis) {
             // Crear formulario
             let form = serverWidget.createForm({
-                title: `Administración y control de activo`,
-                // title: `Administración y control de activo: ${dataActivoFijo[0].activo_fijo.id} ${dataActivoFijo[0].activo_fijo.nombre}`,
+                title: `Administración y control de certificado de análisis`,
                 hideNavbar: false
             })
 
@@ -247,690 +194,328 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
             form.addSubmitButton({
                 label: 'Guardar'
             });
+            form.addButton({
+                id: 'custpage_button_firmar_certificado_analista',
+                label: 'Firma revisado por',
+                functionName: 'firmaRevisadoPor()'
+            });
+            form.addButton({
+                id: 'custpage_button_firmar_certificado_jcalidad',
+                label: 'Firma aprobado por',
+                functionName: 'firmaAprobadoPor()'
+            });
+            form.addButton({
+                id: 'custpage_button_descargar_pdf',
+                label: 'PDF',
+                functionName: 'descargarPDF()'
+            });
 
             // Mostrar SubPestañas
             form.addSubtab({
                 id: 'custpage_subtab',
-                label: 'Detalle de activo'
+                label: 'Detalle de certificado'
             });
 
-            /****************** Activo fijo ******************/
+            // Mostrar SubPestañas
+            form.addSubtab({
+                id: 'custpage_subtab_datcal',
+                label: 'Datos de calidad'
+            });
+
+            /****************** Datos ******************/
             if (true) {
                 // Mostrar Grupo de Campos
                 form.addFieldGroup({
-                    id: 'custpage_group_actfij',
-                    label: 'Activo fijo',
+                    id: 'custpage_group_dat',
+                    label: 'Datos',
                     tab: 'custpage_subtab'
                 });
 
-                // Activo Fijo ID interno
-                var fieldActivoFijoIdInterno = form.addField({
-                    id: 'custpage_field_activo_fijo_id_interno',
-                    label: 'Activo Fijo ID interno',
+                // Cola Inspeccion ID interno
+                var fieldColaInspeccionIdInterno = form.addField({
+                    id: 'custpage_field_cola_inspeccion_id_interno',
+                    label: 'ID interno',
                     type: 'text',
-                    container: 'custpage_group_actfij'
+                    container: 'custpage_group_dat'
                 });
-                fieldActivoFijoIdInterno.updateDisplayType({ displayType: 'HIDDEN' });
+                fieldColaInspeccionIdInterno.updateBreakType({ breakType: 'STARTCOL' })
+                fieldColaInspeccionIdInterno.updateDisplayType({ displayType: 'INLINE' });
 
-                // Estado Acción ID interno
-                var fieldEstadoAccionIdInterno = form.addField({
-                    id: 'custpage_field_estado_accion_id_interno',
-                    label: 'Estado Accion ID interno',
+                // Especificacion
+                var fieldEspecificacion = form.addField({
+                    id: 'custpage_field_especificacion',
+                    label: 'Especificacion',
                     type: 'text',
-                    container: 'custpage_group_actfij'
+                    container: 'custpage_group_dat'
                 });
-                fieldEstadoAccionIdInterno.updateDisplayType({ displayType: 'HIDDEN' });
+                fieldEspecificacion.updateBreakType({ breakType: 'STARTROW' })
+                fieldEspecificacion.updateDisplayType({ displayType: 'INLINE' });
 
-                // Centro de Costo ID interno
-                var fieldClaseIdInterno = form.addField({
-                    id: 'custpage_field_clase_id_interno',
-                    label: 'Centro de Costo ID interno',
-                    type: 'text',
-                    container: 'custpage_group_actfij'
-                });
-                fieldClaseIdInterno.updateDisplayType({ displayType: 'HIDDEN' });
-
-                // Estado Acción
-                var fieldEstadoAccion = form.addField({
-                    id: 'custpage_field_estado_accion',
-                    label: 'Estado Acción',
+                // Articulo
+                var fieldArticulo = form.addField({
+                    id: 'custpage_field_articulo',
+                    label: 'Articulo',
                     type: 'select',
-                    // source: 'customlist_bio_lis_est_acc_con_act',
-                    container: 'custpage_group_actfij'
+                    source: 'item',
+                    container: 'custpage_group_dat'
                 });
-                fieldEstadoAccion.updateBreakType({ breakType: 'STARTCOL' })
-                setFieldDetail(fieldEstadoAccion, 'fieldEstadoAccion');
-            }
+                fieldArticulo.updateBreakType({ breakType: 'STARTROW' })
+                fieldArticulo.updateDisplayType({ displayType: 'INLINE' });
 
-            /****************** Datos del proveedor ******************/
-            if (true) {
-                // Mostrar Grupo de Campos
-                form.addFieldGroup({
-                    id: 'custpage_group_datpro',
-                    label: 'Datos del proveedor',
-                    tab: 'custpage_subtab'
-                });
-
-                // Proveedor
-                var fieldProveedor = form.addField({
-                    id: 'custpage_field_proveedor',
-                    label: 'Proveedor',
+                // Linea
+                var fieldLinea = form.addField({
+                    id: 'custpage_field_linea',
+                    label: 'Linea',
                     type: 'text',
-                    container: 'custpage_group_datpro'
+                    container: 'custpage_group_dat'
                 });
-                fieldProveedor.updateBreakType({ breakType: 'STARTCOL' })
-                fieldProveedor.updateDisplayType({ displayType: 'INLINE' });
+                fieldLinea.updateBreakType({ breakType: 'STARTCOL' })
+                fieldLinea.updateDisplayType({ displayType: 'INLINE' });
 
-                // Orden de Compra
-                var fieldOrdenCompra = form.addField({
-                    id: 'custpage_field_orden_compra',
-                    label: 'Orden de Compra',
+                // Tipo Producto
+                var fieldTipoProducto = form.addField({
+                    id: 'custpage_field_tipo_producto',
+                    label: 'Tipo Producto',
+                    type: 'text',
+                    container: 'custpage_group_dat'
+                });
+                fieldTipoProducto.updateBreakType({ breakType: 'STARTROW' })
+                fieldTipoProducto.updateDisplayType({ displayType: 'INLINE' });
+
+                // Transaccion Principal
+                var fieldTransaccionPrincipal = form.addField({
+                    id: 'custpage_field_transaccion_principal',
+                    label: 'Transaccion Principal',
                     type: 'select',
-                    source: 'purchaseorder',
-                    container: 'custpage_group_datpro'
+                    source: 'transaction',
+                    container: 'custpage_group_dat'
                 });
-                fieldOrdenCompra.updateBreakType({ breakType: 'STARTROW' })
-                fieldOrdenCompra.updateDisplayType({ displayType: 'INLINE' });
+                fieldTransaccionPrincipal.updateBreakType({ breakType: 'STARTROW' })
+                fieldTransaccionPrincipal.updateDisplayType({ displayType: 'INLINE' });
 
-                // Fecha de compra
-                var fieldFechaCompra = form.addField({
-                    id: 'custpage_field_fecha_compra',
-                    label: 'Fecha de compra',
-                    type: 'date',
-                    container: 'custpage_group_datpro'
-                });
-                fieldFechaCompra.updateBreakType({ breakType: 'STARTCOL' })
-                fieldFechaCompra.updateDisplayType({ displayType: 'INLINE' });
-
-                // Transacción
-                var fieldTransaccion = form.addField({
-                    id: 'custpage_field_transaccion',
-                    label: 'Transacción',
+                // Estado
+                var fieldEstado = form.addField({
+                    id: 'custpage_field_estado',
+                    label: 'Estado',
                     type: 'text',
-                    container: 'custpage_group_datpro'
+                    container: 'custpage_group_dat'
                 });
-                fieldTransaccion.updateBreakType({ breakType: 'STARTROW' })
-                fieldTransaccion.updateDisplayType({ displayType: 'INLINE' });
+                fieldEstado.updateBreakType({ breakType: 'STARTCOL' })
+                fieldEstado.updateDisplayType({ displayType: 'INLINE' });
 
-                // Costo original
-                var fieldCostoOriginal = form.addField({
-                    id: 'custpage_field_costo_original',
-                    label: 'Costo original',
-                    type: 'currency',
-                    container: 'custpage_group_datpro'
-                });
-                fieldCostoOriginal.updateBreakType({ breakType: 'STARTROW' })
-                fieldCostoOriginal.updateDisplayType({ displayType: 'INLINE' });
-
-                // Número de activo alternativo
-                var fieldNumeroActivoAlternativo = form.addField({
-                    id: 'custpage_field_numero_activo_alternativo',
-                    label: 'Número de activo alternativo',
-                    type: 'text',
-                    container: 'custpage_group_datpro'
-                });
-                fieldNumeroActivoAlternativo.updateBreakType({ breakType: 'STARTCOL' })
-                fieldNumeroActivoAlternativo.updateDisplayType({ displayType: 'INLINE' });
-
-                // Cantidad Factura
-                var fieldCantidadFactura = form.addField({
-                    id: 'custpage_field_cantidad_factura',
-                    label: 'Cantidad Factura',
-                    type: 'text',
-                    container: 'custpage_group_datpro'
-                });
-                fieldCantidadFactura.updateBreakType({ breakType: 'STARTROW' })
-                fieldCantidadFactura.updateDisplayType({ displayType: 'INLINE' });
-
-                // Número de guía
-                var fieldNumeroGuia = form.addField({
-                    id: 'custpage_field_numero_guia',
-                    label: 'Número de guía',
-                    type: 'text',
-                    container: 'custpage_group_datpro'
-                });
-                fieldNumeroGuia.updateBreakType({ breakType: 'STARTROW' })
-            }
-
-            /****************** Datos del bien ******************/
-            if (true) {
-                // Mostrar Grupo de Campos
-                form.addFieldGroup({
-                    id: 'custpage_group_datbie',
-                    label: 'Datos del bien',
-                    tab: 'custpage_subtab'
-                });
-
-                // Tipo de activo
-                var fieldTipoActivo = form.addField({
-                    id: 'custpage_field_tipo_activo',
-                    label: 'Tipo de activo',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldTipoActivo.updateBreakType({ breakType: 'STARTCOL' })
-                fieldTipoActivo.updateDisplayType({ displayType: 'INLINE' });
-
-                // Activo Fijo
-                var fieldActivoFijo = form.addField({
-                    id: 'custpage_field_activo_fijo',
-                    label: 'Activo Fijo',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldActivoFijo.updateBreakType({ breakType: 'STARTROW' })
-                fieldActivoFijo.updateDisplayType({ displayType: 'INLINE' });
-
-                // Descripción
-                var fieldDescripcion = form.addField({
-                    id: 'custpage_field_descripcion',
-                    label: 'Descripción',
-                    type: 'textarea',
-                    container: 'custpage_group_datbie'
-                });
-                fieldDescripcion.updateBreakType({ breakType: 'STARTROW' })
-                fieldDescripcion.updateDisplayType({ displayType: 'INLINE' });
-
-                // Estado Activo
-                var fieldEstadoActivo = form.addField({
-                    id: 'custpage_field_estado_activo',
-                    label: 'Estado Activo',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldEstadoActivo.updateBreakType({ breakType: 'STARTROW' })
-                fieldEstadoActivo.updateDisplayType({ displayType: 'INLINE' });
-
-                // Centro de Costo
-                var fieldClase = form.addField({
-                    id: 'custpage_field_clase',
-                    label: 'Centro de Costo',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldClase.updateBreakType({ breakType: 'STARTCOL' })
-                fieldClase.updateDisplayType({ displayType: 'INLINE' });
-
-                // Marca
-                var fieldMarca = form.addField({
-                    id: 'custpage_field_marca',
-                    label: 'Marca',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldMarca.updateBreakType({ breakType: 'STARTROW' })
-
-                // Modelo
-                var fieldModelo = form.addField({
-                    id: 'custpage_field_modelo',
-                    label: 'Modelo',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldModelo.updateBreakType({ breakType: 'STARTROW' })
-
-                // Fecha de activacion
-                var fieldFechaActivacion = form.addField({
-                    id: 'custpage_field_fecha_activacion',
-                    label: 'Fecha de activación (ACTUALIZA CAMPO EXISTENTE)',
-                    type: 'date',
-                    container: 'custpage_group_datbie'
-                });
-                fieldFechaActivacion.updateBreakType({ breakType: 'STARTCOL' })
-
-                // N. Serie
-                var fieldSerie = form.addField({
-                    id: 'custpage_field_nserie',
-                    label: 'N. Serie (ACTUALIZA CAMPO EXISTENTE)',
-                    type: 'text',
-                    container: 'custpage_group_datbie'
-                });
-                fieldSerie.updateBreakType({ breakType: 'STARTROW' })
-
-                // Usuario (Depositario)
-                var fieldUsuarioDepositario = form.addField({
-                    id: 'custpage_field_usuario_depositario',
-                    label: 'Usuario (Depositario) (ACTUALIZA CAMPO EXISTENTE)',
-                    type: 'select',
-                    source: 'employee',
-                    container: 'custpage_group_datbie'
-                });
-                fieldUsuarioDepositario.updateBreakType({ breakType: 'STARTROW' })
-
-                // Ubicación
+                // Ubicacion
                 var fieldUbicacion = form.addField({
                     id: 'custpage_field_ubicacion',
-                    label: 'Ubicación',
+                    label: 'Ubicacion',
                     type: 'text',
-                    container: 'custpage_group_datbie'
+                    container: 'custpage_group_dat'
                 });
-                fieldUbicacion.updateBreakType({ breakType: 'STARTCOL' })
+                fieldUbicacion.updateBreakType({ breakType: 'STARTROW' })
+                fieldUbicacion.updateDisplayType({ displayType: 'INLINE' });
 
-                // Estado Bien
-                var fieldEstadoBien = form.addField({
-                    id: 'custpage_field_estado_bien',
-                    label: 'Estado Bien',
+                // Transaccion Inventario
+                var fieldTransaccionInventario = form.addField({
+                    id: 'custpage_field_transaccion_inventario',
+                    label: 'Transaccion Inventario',
                     type: 'select',
-                    // source: 'customlist_bio_lis_est_bien_con_act',
-                    container: 'custpage_group_datbie'
+                    source: 'transaction',
+                    container: 'custpage_group_dat'
                 });
-                fieldEstadoBien.updateBreakType({ breakType: 'STARTROW' })
-                setFieldDetail(fieldEstadoBien, 'fieldEstadoBien');
+                fieldTransaccionInventario.updateBreakType({ breakType: 'STARTROW' })
+                fieldTransaccionInventario.updateDisplayType({ displayType: 'INLINE' });
 
-                // Detalle de uso
-                var fieldDetalleUso = form.addField({
-                    id: 'custpage_field_detalle_uso',
-                    label: 'Detalle de uso',
-                    type: 'textarea',
-                    container: 'custpage_group_datbie'
+                // Número Linea Transaccion
+                var fieldNumeroLineaTransaccion = form.addField({
+                    id: 'custpage_field_numero_linea_transaccion',
+                    label: 'Numero Linea Transaccion',
+                    type: 'text',
+                    container: 'custpage_group_dat'
                 });
-                fieldDetalleUso.updateBreakType({ breakType: 'STARTROW' })
+                fieldNumeroLineaTransaccion.updateBreakType({ breakType: 'STARTCOL' })
+                fieldNumeroLineaTransaccion.updateDisplayType({ displayType: 'INLINE' });
+
+                // Tipo Disparador
+                var fieldTipoDisparador = form.addField({
+                    id: 'custpage_field_tipo_disparador',
+                    label: 'Tipo Disparador',
+                    type: 'text',
+                    container: 'custpage_group_dat'
+                });
+                fieldTipoDisparador.updateBreakType({ breakType: 'STARTROW' })
+                fieldTipoDisparador.updateDisplayType({ displayType: 'INLINE' });
             }
 
-            /****************** Baja de activo ******************/
+            /****************** Datos a actualizar ******************/
             if (true) {
                 // Mostrar Grupo de Campos
                 form.addFieldGroup({
-                    id: 'custpage_group_bajact',
-                    label: 'Baja de activo',
+                    id: 'custpage_group_datact',
+                    label: 'Datos a actualizar',
                     tab: 'custpage_subtab'
                 });
 
-                // Motivo de baja
-                var fieldMotivoBaja = form.addField({
-                    id: 'custpage_field_motivo_baja',
-                    label: 'Motivo de baja',
-                    type: 'select',
-                    // source: 'customlist_bio_lis_mot_baja_con_act',
-                    container: 'custpage_group_bajact'
-                });
-                fieldMotivoBaja.updateBreakType({ breakType: 'STARTCOL' })
-                setFieldDetail(fieldMotivoBaja, 'fieldMotivoBaja');
-
-                // Detalle de baja
-                var fieldDetalleBaja = form.addField({
-                    id: 'custpage_field_detalle_baja',
-                    label: 'Detalle de baja',
-                    type: 'textarea',
-                    container: 'custpage_group_bajact'
-                });
-                fieldDetalleBaja.updateBreakType({ breakType: 'STARTROW' })
-
-                // * PROCESO DE FIRMA
-                // Anterior Centro de Costo
-                var fieldAnteriorClase_Baja = form.addField({
-                    id: 'custpage_field_anteriorclase_baja',
-                    label: 'Centro de Costo',
+                // Numéro de Técnica
+                var fieldNumeroTecnica = form.addField({
+                    id: 'custpage_field_numero_tecnica',
+                    label: 'Número de Técnica',
                     type: 'text',
-                    container: 'custpage_group_bajact'
+                    container: 'custpage_group_datact'
                 });
-                fieldAnteriorClase_Baja.updateBreakType({ breakType: 'STARTCOL' })
-                fieldAnteriorClase_Baja.updateDisplayType({ displayType: 'INLINE' });
+                fieldNumeroTecnica.updateBreakType({ breakType: 'STARTCOL' })
 
-                // Usuario firma
-                var fieldUsuarioFirma_AnteriorClase_Baja = form.addField({
-                    id: 'custpage_field_usuariofirma_anteriorclase_baja',
-                    label: 'Usuario firma',
-                    type: 'select',
-                    source: 'employee',
-                    container: 'custpage_group_bajact'
-                });
-                fieldUsuarioFirma_AnteriorClase_Baja.updateBreakType({ breakType: 'STARTROW' })
-                fieldUsuarioFirma_AnteriorClase_Baja.updateDisplayType({ displayType: 'INLINE' });
-
-                // Fecha firma
-                var fieldFechaFirma_AnteriorClase_Baja = form.addField({
-                    id: 'custpage_field_fechafirma_anteriorclase_baja',
-                    label: 'Fecha firma',
+                // Fabricante
+                var fieldFabricante = form.addField({
+                    id: 'custpage_field_fabricante',
+                    label: 'Fabricante',
                     type: 'text',
-                    container: 'custpage_group_bajact'
+                    container: 'custpage_group_datact'
                 });
-                fieldFechaFirma_AnteriorClase_Baja.updateBreakType({ breakType: 'STARTROW' })
-                fieldFechaFirma_AnteriorClase_Baja.updateDisplayType({ displayType: 'INLINE' });
+                fieldFabricante.updateBreakType({ breakType: 'STARTROW' })
 
-                // Boton
-                var botonAnteriorClase_Baja = form.addField({
-                    id: 'custpage_boton_anteriorclase_baja',
-                    label: 'Firmar',
-                    type: 'inlinehtml',
-                    container: 'custpage_group_bajact'
+                // Fecha de Fabricación
+                var fieldFechaFabricacion = form.addField({
+                    id: 'custpage_field_fecha_fabricacion',
+                    label: 'Fecha de fabricación',
+                    type: 'date',
+                    container: 'custpage_group_datact'
                 });
-                botonAnteriorClase_Baja.updateBreakType({ breakType: 'STARTROW' })
-                botonAnteriorClase_Baja.updateDisplayType({ displayType: 'HIDDEN' });
-                setButtonDetail(botonAnteriorClase_Baja, 'botonAnteriorClase_Baja');
-                // * CERRAR
+                fieldFechaFabricacion.updateBreakType({ breakType: 'STARTROW' })
 
-                // Archivo de baja
-                var fieldArchivoBaja = form.addField({
-                    id: 'custpage_field_archivo_baja',
-                    label: 'Archivo de baja',
-                    type: 'file',
+                // Fecha de Análisis
+                var fieldFechaAnalisis = form.addField({
+                    id: 'custpage_field_fecha_analisis',
+                    label: 'Fecha de Análisis',
+                    type: 'date',
+                    container: 'custpage_group_datact'
                 });
-                fieldArchivoBaja.updateBreakType({ breakType: 'STARTCOL' })
+                fieldFechaAnalisis.updateBreakType({ breakType: 'STARTROW' })
 
-                form.insertField({
-                    field: fieldArchivoBaja,
-                    nextfield: 'custpage_field_anteriorclase_baja'
+                // Fecha de Reanálisis
+                var fieldFechaReanalisis = form.addField({
+                    id: 'custpage_field_fecha_reanalisis',
+                    label: 'Fecha de Renálisis',
+                    type: 'date',
+                    container: 'custpage_group_datact'
                 });
+                fieldFechaReanalisis.updateBreakType({ breakType: 'STARTROW' })
             }
 
-            /****************** Transferencia de activo ******************/
+            /****************** Datos firma ******************/
             if (true) {
                 // Mostrar Grupo de Campos
                 form.addFieldGroup({
-                    id: 'custpage_group_traact',
-                    label: 'Transferencia de activo',
+                    id: 'custpage_group_datfir',
+                    label: 'Datos firma',
                     tab: 'custpage_subtab'
                 });
 
-                // * PROCESO DE FIRMA
-                // Anterior Centro de Costo
-                var fieldAnteriorClase_Transferencia = form.addField({
-                    id: 'custpage_field_anteriorclase_transferencia',
-                    label: 'Centro de Costo',
-                    type: 'text',
-                    container: 'custpage_group_traact'
-                });
-                fieldAnteriorClase_Transferencia.updateBreakType({ breakType: 'STARTCOL' })
-                fieldAnteriorClase_Transferencia.updateDisplayType({ displayType: 'INLINE' });
-
-                // Usuario firma
-                var fieldUsuarioFirma_AnteriorClase_Transferencia = form.addField({
-                    id: 'custpage_field_usuariofirma_anteriorclase_transferencia',
-                    label: 'Usuario firma',
+                // Usuario Firma Revisado Por
+                var fieldUsuarioFirma_RevisadoPor = form.addField({
+                    id: 'custpage_field_usuariofirma_revisadopor',
+                    label: 'Usuario Firma (Revisado Por)',
                     type: 'select',
                     source: 'employee',
-                    container: 'custpage_group_traact'
+                    container: 'custpage_group_datfir'
                 });
-                fieldUsuarioFirma_AnteriorClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                fieldUsuarioFirma_AnteriorClase_Transferencia.updateDisplayType({ displayType: 'INLINE' });
+                fieldUsuarioFirma_RevisadoPor.updateBreakType({ breakType: 'STARTCOL' })
+                fieldUsuarioFirma_RevisadoPor.updateDisplayType({ displayType: 'INLINE' });
 
-                // Fecha firma
-                var fieldFechaFirma_AnteriorClase_Transferencia = form.addField({
-                    id: 'custpage_field_fechafirma_anteriorclase_transferencia',
-                    label: 'Fecha firma',
+                // Fecha Firma Revisado Por
+                var fieldFechaFirma_RevisadoPor = form.addField({
+                    id: 'custpage_field_fechafirma_revisadopor',
+                    label: 'Fecha Firma (Revisado Por)',
                     type: 'text',
-                    container: 'custpage_group_traact'
+                    container: 'custpage_group_datfir'
                 });
-                fieldFechaFirma_AnteriorClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                fieldFechaFirma_AnteriorClase_Transferencia.updateDisplayType({ displayType: 'INLINE' });
+                fieldFechaFirma_RevisadoPor.updateBreakType({ breakType: 'STARTROW' })
+                fieldFechaFirma_RevisadoPor.updateDisplayType({ displayType: 'INLINE' });
 
-                // Boton
-                var botonAnteriorClase_Transferencia = form.addField({
-                    id: 'custpage_boton_anteriorclase_transferencia',
-                    label: 'Firmar',
-                    type: 'inlinehtml',
-                    container: 'custpage_group_traact'
-                });
-                botonAnteriorClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                botonAnteriorClase_Transferencia.updateDisplayType({ displayType: 'HIDDEN' });
-                setButtonDetail(botonAnteriorClase_Transferencia, 'botonAnteriorClase_Transferencia');
-                // * CERRAR
-
-                // * PROCESO DE FIRMA
-                // Nuevo Centro de Costo
-                var fieldNuevaClase_Transferencia = form.addField({
-                    id: 'custpage_field_nuevaclase_transferencia',
-                    label: 'Nuevo Centro de Costo',
-                    type: 'select',
-                    source: 'classification',
-                    container: 'custpage_group_traact'
-                });
-                fieldNuevaClase_Transferencia.updateBreakType({ breakType: 'STARTCOL' })
-
-                // Usuario firma
-                var fieldUsuarioFirma_NuevaClase_Transferencia = form.addField({
-                    id: 'custpage_field_usuariofirma_nuevaclase_transferencia',
-                    label: 'Usuario firma',
+                // Usuario Firma Aprobado Por
+                var fieldUsuarioFirma_AprobadoPor = form.addField({
+                    id: 'custpage_field_usuariofirma_aprobadopor',
+                    label: 'Usuario Firma (Aprobado Por)',
                     type: 'select',
                     source: 'employee',
-                    container: 'custpage_group_traact'
+                    container: 'custpage_group_datfir'
                 });
-                fieldUsuarioFirma_NuevaClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                fieldUsuarioFirma_NuevaClase_Transferencia.updateDisplayType({ displayType: 'INLINE' });
+                fieldUsuarioFirma_AprobadoPor.updateBreakType({ breakType: 'STARTCOL' })
+                fieldUsuarioFirma_AprobadoPor.updateDisplayType({ displayType: 'INLINE' });
 
-                // Fecha firma
-                var fieldFechaFirma_NuevaClase_Transferencia = form.addField({
-                    id: 'custpage_field_fechafirma_nuevaclase_transferencia',
-                    label: 'Fecha firma',
+                // Fecha Firma Aprobado Por
+                var fieldFechaFirma_AprobadoPor = form.addField({
+                    id: 'custpage_field_fechafirma_aprobadopor',
+                    label: 'Fecha Firma (Aprobado Por)',
                     type: 'text',
-                    container: 'custpage_group_traact'
+                    container: 'custpage_group_datfir'
                 });
-                fieldFechaFirma_NuevaClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                fieldFechaFirma_NuevaClase_Transferencia.updateDisplayType({ displayType: 'INLINE' });
+                fieldFechaFirma_AprobadoPor.updateBreakType({ breakType: 'STARTROW' })
+                fieldFechaFirma_AprobadoPor.updateDisplayType({ displayType: 'INLINE' });
 
-                // Boton
-                var botonNuevaClase_Transferencia = form.addField({
-                    id: 'custpage_boton_nuevaclase_transferencia',
-                    label: 'Firmar',
-                    type: 'inlinehtml',
-                    container: 'custpage_group_traact'
+                // Observaciones
+                var fieldObservaciones = form.addField({
+                    id: 'custpage_field_observaciones',
+                    label: 'Observaciones',
+                    type: 'textarea',
+                    container: 'custpage_group_datfir'
                 });
-                botonNuevaClase_Transferencia.updateBreakType({ breakType: 'STARTROW' })
-                botonNuevaClase_Transferencia.updateDisplayType({ displayType: 'HIDDEN' });
-                setButtonDetail(botonNuevaClase_Transferencia, 'botonNuevaClase_Transferencia');
-                // * CERRAR
+                fieldObservaciones.updateBreakType({ breakType: 'STARTCOL' })
+            }
 
-                // Nueva Ubicacion
-                var fieldNuevaUbicacion = form.addField({
-                    id: 'custpage_field_nueva_ubicacion',
-                    label: 'Nueva Ubicación',
-                    type: 'text',
-                    container: 'custpage_group_traact'
-                });
-                fieldNuevaUbicacion.updateBreakType({ breakType: 'STARTCOL' })
+            if (true) {
 
-                // Nuevo Usuario (Depositario)
-                var fieldNuevoUsuarioDepositario = form.addField({
-                    id: 'custpage_field_nuevo_usuario_depositario',
-                    label: 'Nuevo Usuario (Depositario)',
-                    type: 'select',
-                    source: 'employee',
-                    container: 'custpage_group_traact'
+                // Tipo de sublista
+                sublistType = serverWidget.SublistType.LIST;
+
+                // Agregar sublista
+                let sublist = form.addSublist({
+                    id: 'custpage_sublist_reporte_lista_certificados',
+                    type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
+                    label: 'Lista de certificados',
+                    tab: 'custpage_subtab_datcal'
                 });
-                fieldNuevoUsuarioDepositario.updateBreakType({ breakType: 'STARTROW' })
+
+                // Setear cabecera a sublista
+                sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.INTEGER, label: 'ID interno' });
+                sublist.addField({ id: 'custpage_editar', type: serverWidget.FieldType.TEXT, label: 'Editar' });
+                sublist.addField({ id: 'custpage_especificacion', type: serverWidget.FieldType.TEXT, label: 'Especificacion' });
+                sublist.addField({ id: 'custpage_articulo', type: serverWidget.FieldType.TEXT, label: 'Articulo' });
+                sublist.addField({ id: 'custpage_linea', type: serverWidget.FieldType.TEXT, label: 'Linea' });
+                sublist.addField({ id: 'custpage_tipo_producto', type: serverWidget.FieldType.TEXT, label: 'Tipo Producto' });
+                sublist.addField({ id: 'custpage_transaccion_principal', type: serverWidget.FieldType.TEXT, label: 'Transaccion Principal' });
+                sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.TEXT, label: 'Estado' });
+                sublist.addField({ id: 'custpage_ubicacion', type: serverWidget.FieldType.TEXT, label: 'Ubicacion' });
+                sublist.addField({ id: 'custpage_transaccion_inventario', type: serverWidget.FieldType.TEXT, label: 'Transaccion Inventario' });
+                sublist.addField({ id: 'custpage_numero_linea_transaccion', type: serverWidget.FieldType.TEXT, label: 'Numero<br /> Linea<br /> Transaccion' });
+                sublist.addField({ id: 'custpage_tipo_disparador', type: serverWidget.FieldType.TEXT, label: 'Tipo Disparador' });
             }
 
             return {
                 form,
-                // IDs internos
-                fieldActivoFijoIdInterno,
-                fieldEstadoAccionIdInterno,
-                fieldClaseIdInterno,
-                // Activo fijo
-                fieldEstadoAccion,
-                // Datos del proveedor
-                fieldProveedor,
-                fieldOrdenCompra,
-                fieldFechaCompra,
-                fieldTransaccion,
-                fieldCostoOriginal,
-                fieldNumeroActivoAlternativo,
-                fieldCantidadFactura,
-                fieldNumeroGuia,
-                // Datos del bien
-                fieldTipoActivo,
-                fieldActivoFijo,
-                fieldDescripcion,
-                fieldEstadoActivo,
-                fieldClase,
-                fieldMarca,
-                fieldModelo,
-                fieldFechaActivacion,
-                fieldSerie,
-                fieldUsuarioDepositario,
+                // Datos
+                fieldColaInspeccionIdInterno,
+                fieldEspecificacion,
+                fieldArticulo,
+                fieldLinea,
+                fieldTipoProducto,
+                fieldTransaccionPrincipal,
+                fieldEstado,
                 fieldUbicacion,
-                fieldEstadoBien,
-                fieldDetalleUso,
-                // Baja de activo
-                fieldMotivoBaja,
-                fieldDetalleBaja,
-                fieldAnteriorClase_Baja,
-                fieldUsuarioFirma_AnteriorClase_Baja,
-                fieldFechaFirma_AnteriorClase_Baja,
-                botonAnteriorClase_Baja,
-                fieldArchivoBaja,
-                // Transferencia de activo
-                fieldAnteriorClase_Transferencia,
-                fieldUsuarioFirma_AnteriorClase_Transferencia,
-                fieldFechaFirma_AnteriorClase_Transferencia,
-                botonAnteriorClase_Transferencia,
-                fieldNuevaClase_Transferencia,
-                fieldUsuarioFirma_NuevaClase_Transferencia,
-                fieldFechaFirma_NuevaClase_Transferencia,
-                botonNuevaClase_Transferencia,
-                fieldNuevaUbicacion,
-                fieldNuevoUsuarioDepositario
+                fieldTransaccionInventario,
+                fieldNumeroLineaTransaccion,
+                fieldTipoDisparador,
+                // Datos a actualizar
+                fieldNumeroTecnica,
+                fieldFabricante,
+                fieldFechaFabricacion,
+                fieldFechaAnalisis,
+                fieldFechaReanalisis,
+                // Datos firma
+                fieldUsuarioFirma_RevisadoPor,
+                fieldFechaFirma_RevisadoPor,
+                fieldUsuarioFirma_AprobadoPor,
+                fieldFechaFirma_AprobadoPor,
+                fieldObservaciones
             }
-        }
-
-        function setFieldDetail(field, name) {
-            // Obtener datos por search
-            let dataList = [];
-
-            if (name == 'fieldEstadoAccion') {
-                dataList = objSearch.getEstadoAccionList();
-            } else if (name == 'fieldEstadoBien') {
-                dataList = objSearch.getEstadoBienList();
-            } else if (name == 'fieldMotivoBaja') {
-                dataList = objSearch.getMotivoBajaList();
-            }
-
-            // Setear los datos obtenidos manualmente al campo supervisor personalizado
-            dataList.forEach((element, i) => {
-                field.addSelectOption({
-                    value: element.id,
-                    text: element.name
-                })
-            })
-        }
-
-        function setButtonDetail(button, name) {
-            let html = '';
-
-            let htmlObtenerData = `
-                // Obtener el id interno del record activo fijo
-                let recordContext = currentRecord.get();
-                let assetId = recordContext.getValue('custpage_field_activo_fijo_id_interno');
-
-                // Obtener el record del activo fijo
-                let activoFijoRecord = record.load({ type: 'customrecord_ncfar_asset', id: assetId });
-
-                // Obtener el usuario logueado
-                let user = runtime.getCurrentUser();
-
-                // Obtener fecha y hora actual
-                var now = new Date();
-                var datetime = format.format({ value: now, type: format.Type.DATETIME });
-            `;
-
-            let htmlActualizarPagina = `
-                // Obtener url del Suitelet
-                const scriptId = 'customscript_bio_sl_con_fixed_assets_det';
-                const deployId = 'customdeploy_bio_sl_con_fixed_assets_det';
-                let suitelet = url.resolveScript({
-                    deploymentId: deployId,
-                    scriptId: scriptId,
-                    params: {
-                        _id: assetId,
-                        _status: 'PROCESS_SIGNATURE'
-                    }
-                })
-
-                // Evitar que aparezca el mensaje 'Estas seguro que deseas salir de la pantalla'
-                setWindowChanged(window, false);
-
-                // Redirigir a la url
-                window.location.href = suitelet;
-            `;
-
-            if (name == 'botonAnteriorClase_Baja') {
-                html = `
-                    <script>
-                        function firmarAnteriorClase_Baja() {
-                            if (confirm('¿Estás seguro de que quieres firmar?')) {
-
-                                require(['N/currentRecord', 'N/record', 'N/runtime', 'N/format', 'N/url'], function (currentRecord, record, runtime, format, url) {
-                                    console.log('Firma Anterior Clase Baja');
-                                    console.log(currentRecord.get());
-
-                                    // Obtener data
-                                    ${htmlObtenerData}
-
-                                    // Setear datos al record
-                                    activoFijoRecord.setValue('custrecord_bio_usufir_baja_con_act', user.id);
-                                    activoFijoRecord.setValue('custrecord_bio_fecfir_baja_con_act', datetime);
-                                    let activoFijoId = activoFijoRecord.save();
-                                    console.log(activoFijoId);
-
-                                    // Actualizar pagina
-                                    ${htmlActualizarPagina}
-                                })
-                            }
-                        }
-                    </script>
-
-                    <button type="button" class="pgBntG pgBntB" style="padding: 3px 12px;" onClick="firmarAnteriorClase_Baja()">Firmar</button>
-                `;
-            } else if (name == 'botonAnteriorClase_Transferencia') {
-                html = `
-                    <script>
-                        function firmarAnteriorClase_Transferencia() {
-                            if (confirm('¿Estás seguro de que quieres firmar?')) {
-
-                                require(['N/currentRecord', 'N/record', 'N/runtime', 'N/format', 'N/url'], function (currentRecord, record, runtime, format, url) {
-                                    console.log('Firma Anterior Clase Transferencia');
-                                    console.log(currentRecord.get());
-
-                                    // Obtener data
-                                    ${htmlObtenerData}
-
-                                    // Setear datos al record
-                                    activoFijoRecord.setValue('custrecord_bio_usufirantcc_trans_con_act', user.id);
-                                    activoFijoRecord.setValue('custrecord_bio_fecfirantcc_trans_con_act', datetime);
-                                    let activoFijoId = activoFijoRecord.save();
-                                    console.log(activoFijoId);
-
-                                    // Actualizar pagina
-                                    ${htmlActualizarPagina}
-                                })
-                            }
-                        }
-                    </script>
-
-                    <button type="button" class="pgBntG pgBntB" style="padding: 3px 12px;" onClick="firmarAnteriorClase_Transferencia()">Firmar</button>
-                `;
-            } else if (name == 'botonNuevaClase_Transferencia') {
-                html = `
-                    <script>
-                        function firmarNuevaClase_Transferencia() {
-                            if (confirm('¿Estás seguro de que quieres firmar?')) {
-
-                                require(['N/currentRecord', 'N/record', 'N/runtime', 'N/format', 'N/url'], function (currentRecord, record, runtime, format, url) {
-                                    console.log('Firma Nueva Clase Transferencia');
-                                    console.log(currentRecord.get());
-
-                                    // Obtener data
-                                    ${htmlObtenerData}
-
-                                    // Setear datos al record
-                                    activoFijoRecord.setValue('custrecord_bio_usufirnuecc_trans_con_act', user.id);
-                                    activoFijoRecord.setValue('custrecord_bio_fecfirnuecc_trans_con_act', datetime);
-                                    let activoFijoId = activoFijoRecord.save();
-                                    console.log(activoFijoId);
-
-                                    // Actualizar pagina
-                                    ${htmlActualizarPagina}
-                                })
-                            }
-                        }
-                    </script>
-
-                    <button type="button" class="pgBntG pgBntB" style="padding: 3px 12px;" onClick="firmarNuevaClase_Transferencia()">Firmar</button>
-                `;
-            }
-
-            button.defaultValue = html;
         }
 
         return { createFormReport, createSublist, createFormDetail }
