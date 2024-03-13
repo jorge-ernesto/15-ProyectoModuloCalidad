@@ -44,10 +44,14 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let numero_linea_transaccion = dataColaInspeccion_.getValue('custrecord_qm_queue_line');
                 let dataDatosCalidad = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
+                // Obtener datos por seach - Datos de ISO 2859-1 2009
+                let dataDatosIso2859 = objSearch.getData_PDFDetalle_ISO2859(cola_inspeccion_id);
+
                 // Debug
                 // objHelper.error_log('id', id);
                 // objHelper.error_log('dataColaInspeccion', dataColaInspeccion);
                 // objHelper.error_log('dataDatosCalidad', dataDatosCalidad);
+                // objHelper.error_log('dataDatosIso2859', dataDatosIso2859)
 
                 // Crear formulario
                 let {
@@ -67,18 +71,23 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldNumeroLineaTransaccion,
                     fieldTipoDisparador,
                     // Datos a actualizar
+                    // MP
                     fieldNumeroTecnica,
                     fieldFabricante,
-                    fieldFechaFabricacion,
                     fieldFechaAnalisis,
-                    fieldFechaReanalisis,
+                    // ME_MV
+                    fieldTipoEmbalajePrimario,
+                    fieldTipoEmbalajeSecundario,
+                    fieldCantidadInspeccionada,
+                    fieldCantidadMuestreada,
+                    fieldNivelInspeccionIso2859,
                     // Datos firma
                     fieldUsuarioFirma_RevisadoPor,
                     fieldFechaFirma_RevisadoPor,
                     fieldUsuarioFirma_AprobadoPor,
                     fieldFechaFirma_AprobadoPor,
                     fieldObservaciones
-                } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad);
+                } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosIso2859);
 
                 if (status?.includes('SAVE')) {
                     form.addPageInitMessage({
@@ -113,11 +122,16 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 fieldTipoDisparador.defaultValue = dataColaInspeccion[0].tipo_disparador.nombre;
 
                 // Datos a actualizar
+                // MP
                 fieldNumeroTecnica.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_num_tecnica');
                 fieldFabricante.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_fabricante');
-                fieldFechaFabricacion.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_fec_fabricacion');
                 fieldFechaAnalisis.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_fecha_analisis');
-                fieldFechaReanalisis.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_fecha_reanalisis');
+                // ME_MV
+                fieldTipoEmbalajePrimario.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_tip_emb_pri');
+                fieldTipoEmbalajeSecundario.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_tip_emb_sec');
+                fieldCantidadInspeccionada.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_cant_insp');
+                fieldCantidadMuestreada.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_cant_mues');
+                fieldNivelInspeccionIso2859.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_niv_ins_iso_2859');
 
                 // Datos firma
                 fieldUsuarioFirma_RevisadoPor.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_usufir_revpor');
@@ -134,25 +148,47 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let cola_inspeccion_id_interno = scriptContext.request.parameters['custpage_field_cola_inspeccion_id_interno'];
 
                 // Datos a actualizar
+                // MP
                 let numero_tecnica = scriptContext.request.parameters['custpage_field_numero_tecnica'];
                 let fabricante = scriptContext.request.parameters['custpage_field_fabricante'];
-                let fecha_fabricacion = scriptContext.request.parameters['custpage_field_fecha_fabricacion'];
                 let fecha_analisis = scriptContext.request.parameters['custpage_field_fecha_analisis'];
-                let fecha_reanalisis = scriptContext.request.parameters['custpage_field_fecha_reanalisis'];
+                // ME_MV
+                let tipo_embalaje_primario = scriptContext.request.parameters['custpage_field_tipo_embalaje_primario'];
+                let tipo_embalaje_secundario = scriptContext.request.parameters['custpage_field_tipo_embalaje_secundario'];
+                let cantidad_inspeccionada = scriptContext.request.parameters['custpage_field_cantidad_inspeccionada'];
+                let cantidad_muestreada = scriptContext.request.parameters['custpage_field_cantidad_muestreada'];
+                let nivel_inspeccion_iso_2859 = scriptContext.request.parameters['custpage_field_nivel_inspeccion_iso_2859'];
 
                 // Datos firma
                 let observaciones = scriptContext.request.parameters['custpage_field_observaciones'];
+
+                // Datos de ISO 2859-1 2009
+                // let texto = "1\u00012\u00013\u00014\u00015\u00026\u00017\u00018\u00019\u000110"
+                // let array = texto.split("\u0002").map(item => item.split("\u0001"));
+                let texto_iso_2859_1_2009 = scriptContext.request.parameters['custpage_sublist_reporte_lista_iso_2859_1_2009data'];
+                let array_iso_2859_1_2009 = texto_iso_2859_1_2009.split("\u0002").map(item => item.split("\u0001"));
+
+                // Eliminar registros anteriores
+                objSearch.deleteDataIso2859(cola_inspeccion_id_interno);
+
+                // Guardar nuevos registros
+                objSearch.createDataIso2859(cola_inspeccion_id_interno, array_iso_2859_1_2009);
 
                 /****************** Actualizar Certificados de Análisis ******************/
                 // Datos
                 let colaInspeccionRecord = record.load({ type: 'customrecord_qm_queue', id: cola_inspeccion_id_interno });
 
                 // Datos a actualizar
+                // MP
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_num_tecnica', numero_tecnica);
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_fabricante', fabricante);
-                colaInspeccionRecord.setText('custrecord_bio_qm_queue_fec_fabricacion', fecha_fabricacion);
                 colaInspeccionRecord.setText('custrecord_bio_qm_queue_fecha_analisis', fecha_analisis);
-                colaInspeccionRecord.setText('custrecord_bio_qm_queue_fecha_reanalisis', fecha_reanalisis);
+                // ME_MV
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_tip_emb_pri', tipo_embalaje_primario);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_tip_emb_sec', tipo_embalaje_secundario);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_cant_insp', cantidad_inspeccionada);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_cant_mues', cantidad_muestreada);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_niv_ins_iso_2859', nivel_inspeccion_iso_2859);
 
                 // Datos firma
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_observaciones', observaciones);

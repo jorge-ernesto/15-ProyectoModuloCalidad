@@ -215,9 +215,48 @@ define(['./Bio.Library.Helper', 'N'],
         }
 
         // Suitelet Detail
+        function deleteDataIso2859(cola_inspeccion_id) {
+            let searchObj = search.create({
+                type: 'customrecord_bio_qm_iso_2859_1_2009_data',
+                filters: [
+                    ['custrecord_bio_qm_iso_2859_1_2009_colins', 'is', cola_inspeccion_id]
+                ]
+            });
+
+            searchObj.run().each(function (result) {
+                let recordId = result.id;
+                // console.log('deleteDataIso2859', recordId);
+                // log.debug('deleteDataIso2859', recordId);
+
+                record.delete({
+                    type: 'customrecord_bio_qm_iso_2859_1_2009_data',
+                    id: recordId
+                });
+
+                return true; // Continuar con la búsqueda
+            });
+
+            return true;
+        }
+
+        function createDataIso2859(cola_inspeccion_id, array_iso_2859_1_2009) {
+            array_iso_2859_1_2009.forEach(element => {
+                // console.log('createDataIso2859', element);
+                // log.debug('createDataIso2859', element);
+
+                let newRecord = record.create({ type: 'customrecord_bio_qm_iso_2859_1_2009_data' });
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_colins', cola_inspeccion_id);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_aql', element[1]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_maxace', element[2]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_canenc', element[3]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_defenc', element[4]);
+
+                let recordId = newRecord.save();
+            });
+        }
 
         // Suitelet Detail Download File
-        function getDataMP_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
+        function getData_MPMEMV_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -282,16 +321,22 @@ define(['./Bio.Library.Helper', 'N'],
                     //     formula: "'<span style=\"background-color: red;\">*</span>'",
                     //     label: "Fórmula (HTML)"
                     // }),
+                    // MP
                     search.createColumn({ name: "custrecord_bio_qm_queue_num_tecnica", label: "Numéro de Técnica" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fabricante", label: "Fabricante" }),
-                    search.createColumn({ name: "custrecord_bio_qm_queue_fec_fabricacion", label: "Fecha de Fabricación" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fecha_analisis", label: "Fecha de Análisis" }),
-                    search.createColumn({ name: "custrecord_bio_qm_queue_fecha_reanalisis", label: "Fecha de Reanálisis" }),
+                    // ME_MV
+                    search.createColumn({ name: "custrecord_bio_qm_queue_tip_emb_pri", label: "Tipo de Embalaje Primario" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_tip_emb_sec", label: "Tipo de Embalaje Secundario" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_cant_insp", label: "Cantidad Inspeccionada" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_cant_mues", label: "Cantidad Muestreada" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_niv_ins_iso_2859", label: "Nivel de Inspeccion Norma Tecnica Peruana ISO 2859-1 2009" }),
+                    // Firma
                     search.createColumn({ name: "custrecord_bio_qm_queue_usufir_revpor", label: "Usuario Firma (Revisado Por)" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_revpor", label: "Fecha Firma (Revisado Por)" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_usufir_aprpor", label: "Usuario Firma (Aprobado Por)" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_aprpor", label: "Fecha Firma (Aprobado Por)" }),
-                    search.createColumn({ name: "custrecord_bio_qm_queue_observaciones", label: "Observaciones" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_observaciones", label: "Observaciones" })
                 ],
                 filters: [
                     ["custrecord_qm_queue_transaction_inv.mainline", "is", "F"],
@@ -353,16 +398,22 @@ define(['./Bio.Library.Helper', 'N'],
                     let ns_serie = row.getValue(columns[8]);
                     let ns_numero_correlativo = row.getValue(columns[9]);
                     let num_analisis = row.getValue(columns[10]);
+                    // MP
                     let num_tecnica = row.getValue(columns[11]);
                     let fabricante = row.getValue(columns[12]);
-                    let fecha_fabricacion = row.getValue(columns[13]);
-                    let fecha_analisis = row.getValue(columns[14]);
-                    let fecha_reanalisis = row.getValue(columns[15]);
-                    let usuariofirma_revisadopor = row.getText(columns[16])
-                    let fechafirma_revisadopor = row.getValue(columns[17])
-                    let usuariofirma_aprobadopor = row.getText(columns[18])
-                    let fechafirma_aprobadopor = row.getValue(columns[19])
-                    let observaciones = row.getValue(columns[20])
+                    let fecha_analisis = row.getValue(columns[13]);
+                    // ME_MV
+                    let tipo_embalaje_primario = row.getValue(columns[14]);
+                    let tipo_embalaje_secundario = row.getValue(columns[15]);
+                    let cantidad_inspeccionada = row.getValue(columns[16]);
+                    let cantidad_muestreada = row.getValue(columns[17]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[18]);
+                    // Firma
+                    let usuariofirma_revisadopor = row.getText(columns[19])
+                    let fechafirma_revisadopor = row.getValue(columns[20])
+                    let usuariofirma_aprobadopor = row.getText(columns[21])
+                    let fechafirma_aprobadopor = row.getValue(columns[22])
+                    let observaciones = row.getValue(columns[23])
 
                     // Insertar informacion en array
                     resultTransaction.push({
@@ -379,11 +430,17 @@ define(['./Bio.Library.Helper', 'N'],
                         ns_serie,
                         ns_numero_correlativo,
                         num_analisis,
+                        // MP
                         num_tecnica,
                         fabricante,
-                        fecha_fabricacion,
                         fecha_analisis,
-                        fecha_reanalisis,
+                        // ME_MV
+                        tipo_embalaje_primario,
+                        tipo_embalaje_secundario,
+                        cantidad_inspeccionada,
+                        cantidad_muestreada,
+                        nivel_inspeccion_iso_2859,
+                        // Firma
                         usuariofirma_revisadopor,
                         fechafirma_revisadopor,
                         usuariofirma_aprobadopor,
@@ -645,6 +702,63 @@ define(['./Bio.Library.Helper', 'N'],
             return dataAgrupada;
         }
 
-        return { getDataColaInspeccion, getTriggerTypeList, getInspectionOutcomesList, getDataMP_PDFCabecera, getData_PDFDetalle, getData_PDFDetalle_RecepcionArticulo, getData_PDFDetalle_Completa }
+        function getData_PDFDetalle_ISO2859(cola_inspeccion_id) {
+
+            // Declarar variables
+            let resultTransaction = [];
+
+            // Declarar search
+            let searchObject = {
+                type: 'customrecord_bio_qm_iso_2859_1_2009_data',
+                columns: [
+                    'custrecord_bio_qm_iso_2859_1_2009_colins',
+                    'custrecord_bio_qm_iso_2859_1_2009_aql',
+                    'custrecord_bio_qm_iso_2859_1_2009_maxace',
+                    'custrecord_bio_qm_iso_2859_1_2009_canenc',
+                    'custrecord_bio_qm_iso_2859_1_2009_defenc'
+                ],
+                filters: [
+                    ['custrecord_bio_qm_iso_2859_1_2009_colins', 'is', cola_inspeccion_id]
+                ]
+            };
+
+            // Crear search
+            let searchContext = search.create(searchObject);
+
+            // Cantidad de registros en search
+            // let count = searchContext.runPaged().count;
+            // objHelper.error_log('', 'getData_PDFDetalle_ISO2859');
+            // objHelper.error_log('', count);
+
+            // Recorrer search - con mas de 4000 registros
+            let pageData = searchContext.runPaged({ pageSize: 1000 }); // El minimo de registros que se puede traer por pagina es 50, pondremos 1000 para que en el caso existan 4500 registros, hayan 5 paginas como maximo y no me consuma mucha memoria
+
+            pageData.pageRanges.forEach(function (pageRange) {
+                var myPage = pageData.fetch({ index: pageRange.index });
+                myPage.data.forEach((row) => {
+                    // Obtener informacion
+                    let { columns } = row;
+                    let cola_inspeccion_id_interno = row.getValue(columns[0]);
+                    let aql = row.getValue(columns[1]);
+                    let max_aceptable = row.getValue(columns[2]);
+                    let cantidad_encontrada = row.getValue(columns[3]);
+                    let defecto_encontrado = row.getValue(columns[4]);
+
+                    // Insertar informacion en array
+                    resultTransaction.push({
+                        cola_inspeccion_id_interno,
+                        aql,
+                        max_aceptable,
+                        cantidad_encontrada,
+                        defecto_encontrado
+                    });
+                });
+            });
+
+            // objHelper.error_log('getData_PDFDetalle_ISO2859', resultTransaction);
+            return resultTransaction;
+        }
+
+        return { getDataColaInspeccion, getTriggerTypeList, getInspectionOutcomesList, deleteDataIso2859, createDataIso2859, getData_MPMEMV_PDFCabecera, getData_PDFDetalle, getData_PDFDetalle_RecepcionArticulo, getData_PDFDetalle_Completa, getData_PDFDetalle_ISO2859 }
 
     });

@@ -180,7 +180,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
         }
 
         /****************** Suitelet Detail ******************/
-        function createFormDetail(dataColaInspeccion, dataDatosCalidad) {
+        function createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosIso2859) {
             // Crear formulario
             let form = serverWidget.createForm({
                 title: `Administración y control de certificado de análisis`,
@@ -220,6 +220,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
             form.addSubtab({
                 id: 'custpage_subtab_2',
                 label: 'Datos de calidad'
+            });
+
+            // Mostrar SubPestañas
+            form.addSubtab({
+                id: 'custpage_subtab_3',
+                label: 'Datos de ISO 2859-1 2009'
             });
 
             /****************** Datos ******************/
@@ -393,15 +399,6 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
                 fieldFabricante.updateBreakType({ breakType: 'STARTROW' })
 
-                // Fecha de Fabricación
-                var fieldFechaFabricacion = form.addField({
-                    id: 'custpage_field_fecha_fabricacion',
-                    label: 'Fecha de fabricación',
-                    type: 'date',
-                    container: 'custpage_group_datact'
-                });
-                fieldFechaFabricacion.updateBreakType({ breakType: 'STARTROW' })
-
                 // Fecha de Análisis
                 var fieldFechaAnalisis = form.addField({
                     id: 'custpage_field_fecha_analisis',
@@ -411,14 +408,50 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
                 fieldFechaAnalisis.updateBreakType({ breakType: 'STARTROW' })
 
-                // Fecha de Reanálisis
-                var fieldFechaReanalisis = form.addField({
-                    id: 'custpage_field_fecha_reanalisis',
-                    label: 'Fecha de Renálisis',
-                    type: 'date',
+                // Tipo Embalaje Primario
+                var fieldTipoEmbalajePrimario = form.addField({
+                    id: 'custpage_field_tipo_embalaje_primario',
+                    label: 'Tipo Embalaje Primario',
+                    type: 'text',
                     container: 'custpage_group_datact'
                 });
-                fieldFechaReanalisis.updateBreakType({ breakType: 'STARTROW' })
+                fieldTipoEmbalajePrimario.updateBreakType({ breakType: 'STARTCOL' })
+
+                // Tipo Embalaje Secundario
+                var fieldTipoEmbalajeSecundario = form.addField({
+                    id: 'custpage_field_tipo_embalaje_secundario',
+                    label: 'Tipo Embalaje Secundario',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldTipoEmbalajeSecundario.updateBreakType({ breakType: 'STARTROW' })
+
+                // Cantidad Inspeccionada
+                var fieldCantidadInspeccionada = form.addField({
+                    id: 'custpage_field_cantidad_inspeccionada',
+                    label: 'Cantidad Inspeccionada',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldCantidadInspeccionada.updateBreakType({ breakType: 'STARTROW' })
+
+                // Cantidad Muestreada
+                var fieldCantidadMuestreada = form.addField({
+                    id: 'custpage_field_cantidad_muestreada',
+                    label: 'Cantidad Muestreada',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldCantidadMuestreada.updateBreakType({ breakType: 'STARTROW' })
+
+                // Nivel de Inspeccion Norma Tecnica Peruana ISO 2859-1 2009
+                var fieldNivelInspeccionIso2859 = form.addField({
+                    id: 'custpage_field_nivel_inspeccion_iso_2859',
+                    label: 'Nivel de Inspeccion Norma Tecnica Peruana ISO 2859-1 2009',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldNivelInspeccionIso2859.updateBreakType({ breakType: 'STARTROW' })
             }
 
             /****************** Datos firma ******************/
@@ -535,6 +568,48 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
             }
 
+            /****************** Datos de ISO 2859-1 2009 ******************/
+            if (true) {
+
+                // Tipo de sublista
+                sublistType = serverWidget.SublistType.INLINEEDITOR;
+
+                // Agregar sublista
+                let sublist = form.addSublist({
+                    id: 'custpage_sublist_reporte_lista_iso_2859_1_2009',
+                    type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
+                    label: 'Lista de ISO 2859-1 2009',
+                    tab: 'custpage_subtab_3'
+                });
+
+                // Setear cabecera a sublista
+                sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
+                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.addField({ id: 'custpage_aql', type: serverWidget.FieldType.TEXT, label: 'AQL' });
+                sublist.addField({ id: 'custpage_max_aceptable', type: serverWidget.FieldType.TEXT, label: 'Max. Aceptable' });
+                sublist.addField({ id: 'custpage_cant_encontrada', type: serverWidget.FieldType.TEXT, label: 'Cantidad Encontrada' });
+                sublist.addField({ id: 'custpage_def_encontrado', type: serverWidget.FieldType.TEXT, label: 'Defecto Encontrado' });
+
+                // Setear los datos obtenidos a sublista
+                dataDatosIso2859.forEach((element, i) => {
+                    if (element.cola_inspeccion_id_interno) {
+                        sublist.setSublistValue({ id: 'custpage_id_interno', line: i, value: element.cola_inspeccion_id_interno });
+                    }
+                    if (element.aql) {
+                        sublist.setSublistValue({ id: 'custpage_aql', line: i, value: element.aql });
+                    }
+                    if (element.max_aceptable) {
+                        sublist.setSublistValue({ id: 'custpage_max_aceptable', line: i, value: element.max_aceptable });
+                    }
+                    if (element.cantidad_encontrada) {
+                        sublist.setSublistValue({ id: 'custpage_cant_encontrada', line: i, value: element.cantidad_encontrada });
+                    }
+                    if (element.defecto_encontrado) {
+                        sublist.setSublistValue({ id: 'custpage_def_encontrado', line: i, value: element.defecto_encontrado });
+                    }
+                });
+            }
+
             return {
                 form,
                 // Datos
@@ -552,11 +627,16 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 fieldNumeroLineaTransaccion,
                 fieldTipoDisparador,
                 // Datos a actualizar
+                // MP
                 fieldNumeroTecnica,
                 fieldFabricante,
-                fieldFechaFabricacion,
                 fieldFechaAnalisis,
-                fieldFechaReanalisis,
+                // ME_MV
+                fieldTipoEmbalajePrimario,
+                fieldTipoEmbalajeSecundario,
+                fieldCantidadInspeccionada,
+                fieldCantidadMuestreada,
+                fieldNivelInspeccionIso2859,
                 // Datos firma
                 fieldUsuarioFirma_RevisadoPor,
                 fieldFechaFirma_RevisadoPor,

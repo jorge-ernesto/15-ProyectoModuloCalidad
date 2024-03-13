@@ -26,7 +26,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             if (tipo_pdf == 'MP')
                 templatePdf = 'pdfreport_certificado_mp';
             else if (tipo_pdf == 'ME_MV')
-                templatePdf = '';
+                templatePdf = 'pdfreport_certificado_me_mv';
             else if (tipo_pdf == 'PT')
                 templatePdf = '';
 
@@ -73,8 +73,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             let data_PDFDetalle = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
             // Determinar tipo de pdf
-            if (tipo_pdf == 'MP')
-                data_PDFCabecera = objSearch.getDataMP_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
+            if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV')
+                data_PDFCabecera = objSearch.getData_MPMEMV_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
 
             // Debug
             // objHelper.error_log('data', { tipo_pdf, data_PDFCabecera, data_PDFDetalle });

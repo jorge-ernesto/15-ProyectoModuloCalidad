@@ -1,0 +1,25 @@
+<suitelet scriptid="customscript_bio_sl_con_cert_det_des_arc">
+  <description></description>
+  <isinactive>F</isinactive>
+  <name>Biomont SL Con. Cert. Det. Des. Arc.</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <notifyuser>F</notifyuser>
+  <scriptfile>[/SuiteScripts/Biomont_SuiteScript/Interfaces Suitelet/Interfaz Administracion y control de certificados de analisis/Bio.Suitelet.ControlCertificados.Det.DesArc.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy_bio_sl_con_cert_det_des_arc">
+      <allemployees>F</allemployees>
+      <allpartners>F</allpartners>
+      <allroles>T</allroles>
+      <audslctrole></audslctrole>
+      <eventtype></eventtype>
+      <isdeployed>T</isdeployed>
+      <isonline>F</isonline>
+      <loglevel>DEBUG</loglevel>
+      <runasrole>ADMINISTRATOR</runasrole>
+      <status>RELEASED</status>
+      <title>Biomont SL Con. Cert. Det. Des. Arc.</title>
+    </scriptdeployment>
+  </scriptdeployments>
+</suitelet>

@@ -3,7 +3,13 @@
   <frameworkversion>1.0</frameworkversion>
   <dependencies>
     <features>
+      <feature required="false">MULTILANGUAGE</feature>
       <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">CRM</feature>
+      <feature required="false">EXTREMELIST</feature>
+      <feature required="false">MAILMERGE</feature>
+      <feature required="true">CUSTOMRECORDS</feature>
     </features>
     <objects>
       <object>customlist_qm_priority</object>
@@ -25,7 +31,6 @@
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_controlid</object>
       <object>custbody_nsts_rm_rebate_attachment</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_inv_tran</object>
-      <object>customrecord_qm_queue.custrecord_bio_qm_queue_fecha_reanalisis</object>
       <object>custbody_am_workorder_text</object>
       <object>custbody_11187_pref_entity_bank</object>
       <object>custbodynufocus_cod_banco</object>
@@ -104,7 +109,6 @@
       <object>custbody_ns_monto_neto_pagar</object>
       <object>custbody158</object>
       <object>custbodyiqfwodeliverydate</object>
-      <object>customrecord_qm_queue.custrecord_bio_qm_queue_fec_fabricacion</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_queue</object>
       <object>custbody_am_production_unitsqty</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_item</object>
