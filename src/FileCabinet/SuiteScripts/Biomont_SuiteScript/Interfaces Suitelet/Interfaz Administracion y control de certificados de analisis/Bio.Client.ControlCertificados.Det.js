@@ -135,7 +135,7 @@ define(['N'],
             let tipo_pdf = null;
 
             if (linea_id == 5) // MATERIA PRIMA
-                tipo_pdf = 'MP';
+                tipo_pdf = 'ME_MV';
             else if (linea_id == 7 || linea_id == 8) // MATERIAL DE EMPAQUE, MATERIAL DE ENVASADO
                 tipo_pdf = 'ME_MV';
             else if (tipo_producto_id == 16) // PRODUCTO TERMINADO
@@ -164,11 +164,56 @@ define(['N'],
             window.open(suitelet);
         }
 
+        function cargarDatosPreviosInspeccion() {
+
+            // Datos previos de inspeccion
+            let dataDatosPreviosInspeccion = [
+                'Identificación del material de empaque (etiqueta del proveedor)',
+                'Integridad del embalaje (roto, rasgado, sin aberturas)',
+                'Limpieza del embalaje (libre de polvo, manchas)',
+                'Etiqueta de identificación del almacén (cuarentena)',
+                'Certificado de proveedor'
+            ];
+
+            // Obtener el currentRecord
+            let recordContext = currentRecord.get();
+
+            // Lista de datos previos de inspección
+            let sublistName = 'custpage_sublist_reporte_lista_datos_previos_inspeccion';
+            let lineCount = recordContext.getLineCount({ sublistId: sublistName });
+            let itemSublist = recordContext.getSublist({ sublistId: sublistName });
+
+            // Debug
+            console.log('data', { sublistName, lineCount, itemSublist })
+
+            // Agregar datos a lista
+            dataDatosPreviosInspeccion.forEach(element => {
+
+                // Seleccionar nueva linea
+                recordContext.selectNewLine({ sublistId: sublistName });
+
+                // Setear datos en linea
+                recordContext.setCurrentSublistValue({
+                    sublistId: sublistName,
+                    fieldId: 'custpage_inspeccion',
+                    value: element
+                });
+
+                // Commit en linea
+                recordContext.commitLine({ sublistId: sublistName });
+            });
+
+            // Obtener la sublista actualizada
+            let updatedLineCount = recordContext.getLineCount({ sublistId: sublistName });
+            console.log('Número de líneas después de agregar:', updatedLineCount);
+        }
+
         return {
             pageInit: pageInit,
             firmaRevisadoPor: firmaRevisadoPor,
             firmaAprobadoPor: firmaAprobadoPor,
-            descargarPDF: descargarPDF
+            descargarPDF: descargarPDF,
+            cargarDatosPreviosInspeccion: cargarDatosPreviosInspeccion
         };
 
     });

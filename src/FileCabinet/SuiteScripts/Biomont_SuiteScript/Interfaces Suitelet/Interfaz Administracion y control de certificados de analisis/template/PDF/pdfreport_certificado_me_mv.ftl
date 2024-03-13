@@ -88,12 +88,12 @@
                         Laboratorios Biomont S.A.
                     </th>
                     <th colspan="3" class="fs15 bold" align="center" style="vertical-align: middle;">
-                        CERTIFICADO DE ANALISIS DE MATERIAS PRIMAS
+                        CERTIFICADO DE ANALISIS DE MATERIALES DE<br />EMPAQUE Y ENVASE
                     </th>
                     <th colspan="1" class="bold" width="56" style="vertical-align: middle;">
-                        Código: F-AC.009<br />
-                        Versión: 10<br />
-                        Vigente desde: <br />27/12/2023
+                        Código: F-CC.008<br />
+                        Versión: 04<br />
+                        Vigente desde: <br />27/02/2024
                     </th>
                 </tr>
                 <tr>
@@ -104,36 +104,43 @@
                 <tr>
                     <th colspan="1"><b>CÓDIGO:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_itemid}</th>
-                    <th colspan="1"><b>N. DOCUMENTO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].ns_tipo_documento_nombre} ${params.cola_inspeccion_data.data_PDFCabecera[0].ns_serie} ${params.cola_inspeccion_data.data_PDFCabecera[0].ns_numero_correlativo}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>MATERIA PRIMA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
                     <th colspan="1"><b>N. ANÁLISIS:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
-                    <th colspan="1"><b>N. TÉCNICA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_tecnica}</th>
-                    <th colspan="1"><b>FABRICANTE:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fabricante}</th>
+                    <th colspan="1"><b>MATERIA PRIMA:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
+                    <th colspan="1"><b>TIPO DE EMBALAJE PRIMARIO:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_primario}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>PROVEEDOR:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].proveedor_nombre}</th>
-                    <th colspan="1"><b>FECHA ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
+                    <th colspan="1"><b>TIPO DE EMBALAJE SECUNDARIO:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_secundario}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>FECHA INGRESO:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_recepcion}</th>
+                    <th colspan="1"><b>CANTIDAD INGRESADA:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_recepcion}</th>
                     <th colspan="1"></th>
+                </tr>
+                <tr>
+                    <th colspan="1"><b>FECHA ANALISIS:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
+                    <th colspan="1"><b>CANTIDAD INSPECCIONADA:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_inspeccionada}</th>
                     <th colspan="1"></th>
+                </tr>
+                <tr>
+                    <th colspan="1"><b>NIVEL DE INSPECCION<br /> NORMA TECNICA PERUANA<br /> ISO 2859-1 2009:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].nivel_inspeccion_iso_2859}</th>
+                    <th colspan="1"><b>CANTIDAD MUESTREADA:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_muestreada}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>

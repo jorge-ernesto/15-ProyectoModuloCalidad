@@ -215,7 +215,48 @@ define(['./Bio.Library.Helper', 'N'],
         }
 
         // Suitelet Detail
-        function deleteDataIso2859(cola_inspeccion_id) {
+        function deleteListaDatosPreviosInspeccion(cola_inspeccion_id) {
+            let searchObj = search.create({
+                type: 'customrecord_bio_qm_prev_insp_data',
+                filters: [
+                    ['custrecord_bio_qm_prev_insp_colins', 'is', cola_inspeccion_id]
+                ]
+            });
+
+            searchObj.run().each(function (result) {
+                let recordId = result.id;
+                // console.log('deleteDataIso2859', recordId);
+                // log.debug('deleteDataIso2859', recordId);
+
+                record.delete({
+                    type: 'customrecord_bio_qm_prev_insp_data',
+                    id: recordId
+                });
+
+                return true; // Continuar con la búsqueda
+            });
+
+            return true;
+        }
+
+        function createListaDatosPreviosInspeccion(cola_inspeccion_id, array_previos_inspeccion) {
+            array_previos_inspeccion.forEach(element => {
+                // console.log('createDataPreviosInspeccion', element);
+                // log.debug('createDataPreviosInspeccion', element);
+
+                // Validar valores para checkbox
+                element[2] = element[2] == 'T' ? true : false;
+
+                let newRecord = record.create({ type: 'customrecord_bio_qm_prev_insp_data' });
+                newRecord.setValue('custrecord_bio_qm_prev_insp_colins', cola_inspeccion_id);
+                newRecord.setValue('custrecord_bio_qm_prev_insp_insp', element[1]);
+                newRecord.setValue('custrecord_bio_qm_prev_insp_est', element[2]);
+
+                let recordId = newRecord.save();
+            });
+        }
+
+        function deleteListaDatosIso2859(cola_inspeccion_id) {
             let searchObj = search.create({
                 type: 'customrecord_bio_qm_iso_2859_1_2009_data',
                 filters: [
@@ -239,17 +280,18 @@ define(['./Bio.Library.Helper', 'N'],
             return true;
         }
 
-        function createDataIso2859(cola_inspeccion_id, array_iso_2859_1_2009) {
+        function createListaDatosIso2859(cola_inspeccion_id, array_iso_2859_1_2009) {
             array_iso_2859_1_2009.forEach(element => {
                 // console.log('createDataIso2859', element);
                 // log.debug('createDataIso2859', element);
 
                 let newRecord = record.create({ type: 'customrecord_bio_qm_iso_2859_1_2009_data' });
                 newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_colins', cola_inspeccion_id);
-                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_aql', element[1]);
-                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_maxace', element[2]);
-                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_canenc', element[3]);
-                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_defenc', element[4]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_lote', element[1]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_aql', element[2]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_maxace', element[3]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_canenc', element[4]);
+                newRecord.setValue('custrecord_bio_qm_iso_2859_1_2009_defenc', element[5]);
 
                 let recordId = newRecord.save();
             });
@@ -291,6 +333,11 @@ define(['./Bio.Library.Helper', 'N'],
                         label: "Artículo : Descripción del Artículo"
                     }),
                     search.createColumn({ name: "custrecord_qm_queue_vendor", label: "Proveedor de QM" }),
+                    search.createColumn({
+                        name: "quantity",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
+                        label: "Cantidad Recepción"
+                    }),
                     search.createColumn({
                         name: "trandate",
                         join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
@@ -392,28 +439,29 @@ define(['./Bio.Library.Helper', 'N'],
                     let articulo_displayname = row.getValue(columns[4]);
                     let proveedor_id_interno = row.getValue(columns[5]);
                     let proveedor_nombre = row.getText(columns[5]);
-                    let fecha_recepcion = row.getValue(columns[6]);
-                    let ns_tipo_documento_id_interno = row.getValue(columns[7]);
-                    let ns_tipo_documento_nombre = row.getText(columns[7]);
-                    let ns_serie = row.getValue(columns[8]);
-                    let ns_numero_correlativo = row.getValue(columns[9]);
-                    let num_analisis = row.getValue(columns[10]);
+                    let cantidad_recepcion = row.getValue(columns[6]);
+                    let fecha_recepcion = row.getValue(columns[7]);
+                    let ns_tipo_documento_id_interno = row.getValue(columns[8]);
+                    let ns_tipo_documento_nombre = row.getText(columns[8]);
+                    let ns_serie = row.getValue(columns[9]);
+                    let ns_numero_correlativo = row.getValue(columns[10]);
+                    let num_analisis = row.getValue(columns[11]);
                     // MP
-                    let num_tecnica = row.getValue(columns[11]);
-                    let fabricante = row.getValue(columns[12]);
-                    let fecha_analisis = row.getValue(columns[13]);
+                    let num_tecnica = row.getValue(columns[12]);
+                    let fabricante = row.getValue(columns[13]);
+                    let fecha_analisis = row.getValue(columns[14]);
                     // ME_MV
-                    let tipo_embalaje_primario = row.getValue(columns[14]);
-                    let tipo_embalaje_secundario = row.getValue(columns[15]);
-                    let cantidad_inspeccionada = row.getValue(columns[16]);
-                    let cantidad_muestreada = row.getValue(columns[17]);
-                    let nivel_inspeccion_iso_2859 = row.getValue(columns[18]);
+                    let tipo_embalaje_primario = row.getValue(columns[15]);
+                    let tipo_embalaje_secundario = row.getValue(columns[16]);
+                    let cantidad_inspeccionada = row.getValue(columns[17]);
+                    let cantidad_muestreada = row.getValue(columns[18]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[19]);
                     // Firma
-                    let usuariofirma_revisadopor = row.getText(columns[19])
-                    let fechafirma_revisadopor = row.getValue(columns[20])
-                    let usuariofirma_aprobadopor = row.getText(columns[21])
-                    let fechafirma_aprobadopor = row.getValue(columns[22])
-                    let observaciones = row.getValue(columns[23])
+                    let usuariofirma_revisadopor = row.getText(columns[20]);
+                    let fechafirma_revisadopor = row.getValue(columns[21]);
+                    let usuariofirma_aprobadopor = row.getText(columns[22]);
+                    let fechafirma_aprobadopor = row.getValue(columns[23]);
+                    let observaciones = row.getValue(columns[24]);
 
                     // Insertar informacion en array
                     resultTransaction.push({
@@ -424,6 +472,7 @@ define(['./Bio.Library.Helper', 'N'],
                         articulo_displayname,
                         proveedor_id_interno,
                         proveedor_nombre,
+                        cantidad_recepcion,
                         fecha_recepcion,
                         ns_tipo_documento_id_interno,
                         ns_tipo_documento_nombre,
@@ -702,7 +751,61 @@ define(['./Bio.Library.Helper', 'N'],
             return dataAgrupada;
         }
 
-        function getData_PDFDetalle_ISO2859(cola_inspeccion_id) {
+        function getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id) {
+
+            // Declarar variables
+            let resultTransaction = [];
+
+            // Declarar search
+            let searchObject = {
+                type: 'customrecord_bio_qm_prev_insp_data',
+                columns: [
+                    'custrecord_bio_qm_prev_insp_colins',
+                    'custrecord_bio_qm_prev_insp_insp',
+                    'custrecord_bio_qm_prev_insp_est'
+                ],
+                filters: [
+                    ['custrecord_bio_qm_prev_insp_colins', 'is', cola_inspeccion_id]
+                ]
+            };
+
+            // Crear search
+            let searchContext = search.create(searchObject);
+
+            // Cantidad de registros en search
+            // let count = searchContext.runPaged().count;
+            // objHelper.error_log('', 'getData_PDFDetalle_DatosPreviosInspeccion');
+            // objHelper.error_log('', count);
+
+            // Recorrer search - con mas de 4000 registros
+            let pageData = searchContext.runPaged({ pageSize: 1000 }); // El minimo de registros que se puede traer por pagina es 50, pondremos 1000 para que en el caso existan 4500 registros, hayan 5 paginas como maximo y no me consuma mucha memoria
+
+            pageData.pageRanges.forEach(function (pageRange) {
+                var myPage = pageData.fetch({ index: pageRange.index });
+                myPage.data.forEach((row) => {
+                    // Obtener informacion
+                    let { columns } = row;
+                    let cola_inspeccion_id_interno = row.getValue(columns[0]);
+                    let inspeccion = row.getValue(columns[1]);
+                    let estado = row.getValue(columns[2]);
+
+                    // Validar valores para checkbox
+                    estado = estado == true ? 'T' : 'F';
+
+                    // Insertar informacion en array
+                    resultTransaction.push({
+                        cola_inspeccion_id_interno,
+                        inspeccion,
+                        estado
+                    });
+                });
+            });
+
+            // objHelper.error_log('getData_PDFDetalle_DatosPreviosInspeccion', resultTransaction);
+            return resultTransaction;
+        }
+
+        function getData_PDFDetalle_DatosISO2859(cola_inspeccion_id) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -712,6 +815,7 @@ define(['./Bio.Library.Helper', 'N'],
                 type: 'customrecord_bio_qm_iso_2859_1_2009_data',
                 columns: [
                     'custrecord_bio_qm_iso_2859_1_2009_colins',
+                    'custrecord_bio_qm_iso_2859_1_2009_lote',
                     'custrecord_bio_qm_iso_2859_1_2009_aql',
                     'custrecord_bio_qm_iso_2859_1_2009_maxace',
                     'custrecord_bio_qm_iso_2859_1_2009_canenc',
@@ -739,14 +843,16 @@ define(['./Bio.Library.Helper', 'N'],
                     // Obtener informacion
                     let { columns } = row;
                     let cola_inspeccion_id_interno = row.getValue(columns[0]);
-                    let aql = row.getValue(columns[1]);
-                    let max_aceptable = row.getValue(columns[2]);
-                    let cantidad_encontrada = row.getValue(columns[3]);
-                    let defecto_encontrado = row.getValue(columns[4]);
+                    let lote = row.getValue(columns[1]);
+                    let aql = row.getValue(columns[2]);
+                    let max_aceptable = row.getValue(columns[3]);
+                    let cantidad_encontrada = row.getValue(columns[4]);
+                    let defecto_encontrado = row.getValue(columns[5]);
 
                     // Insertar informacion en array
                     resultTransaction.push({
                         cola_inspeccion_id_interno,
+                        lote,
                         aql,
                         max_aceptable,
                         cantidad_encontrada,
@@ -759,6 +865,20 @@ define(['./Bio.Library.Helper', 'N'],
             return resultTransaction;
         }
 
-        return { getDataColaInspeccion, getTriggerTypeList, getInspectionOutcomesList, deleteDataIso2859, createDataIso2859, getData_MPMEMV_PDFCabecera, getData_PDFDetalle, getData_PDFDetalle_RecepcionArticulo, getData_PDFDetalle_Completa, getData_PDFDetalle_ISO2859 }
+        return {
+            getDataColaInspeccion,
+            getTriggerTypeList,
+            getInspectionOutcomesList,
+            deleteListaDatosPreviosInspeccion,
+            createListaDatosPreviosInspeccion,
+            deleteListaDatosIso2859,
+            createListaDatosIso2859,
+            getData_MPMEMV_PDFCabecera,
+            getData_PDFDetalle,
+            getData_PDFDetalle_RecepcionArticulo,
+            getData_PDFDetalle_Completa,
+            getData_PDFDetalle_DatosPreviosInspeccion,
+            getData_PDFDetalle_DatosISO2859
+        }
 
     });

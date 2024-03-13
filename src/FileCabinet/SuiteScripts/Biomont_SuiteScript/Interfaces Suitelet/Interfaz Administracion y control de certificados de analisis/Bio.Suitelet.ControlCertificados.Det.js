@@ -44,13 +44,17 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let numero_linea_transaccion = dataColaInspeccion_.getValue('custrecord_qm_queue_line');
                 let dataDatosCalidad = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
+                // Obtener datos por seach - Datos previos de inspección
+                let dataDatosPreviosInspeccion = objSearch.getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id);
+
                 // Obtener datos por seach - Datos de ISO 2859-1 2009
-                let dataDatosIso2859 = objSearch.getData_PDFDetalle_ISO2859(cola_inspeccion_id);
+                let dataDatosIso2859 = objSearch.getData_PDFDetalle_DatosISO2859(cola_inspeccion_id);
 
                 // Debug
                 // objHelper.error_log('id', id);
                 // objHelper.error_log('dataColaInspeccion', dataColaInspeccion);
                 // objHelper.error_log('dataDatosCalidad', dataDatosCalidad);
+                // objHelper.error_log('dataDatosPreviosInspeccion', dataDatosPreviosInspeccion);
                 // objHelper.error_log('dataDatosIso2859', dataDatosIso2859)
 
                 // Crear formulario
@@ -87,7 +91,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldUsuarioFirma_AprobadoPor,
                     fieldFechaFirma_AprobadoPor,
                     fieldObservaciones
-                } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosIso2859);
+                } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosPreviosInspeccion, dataDatosIso2859);
 
                 if (status?.includes('SAVE')) {
                     form.addPageInitMessage({
@@ -162,17 +166,19 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 // Datos firma
                 let observaciones = scriptContext.request.parameters['custpage_field_observaciones'];
 
+                // Datos previos de inspeccion
+                let texto_previos_inspeccion = scriptContext.request.parameters['custpage_sublist_reporte_lista_datos_previos_inspecciondata'];
+                let array_previos_inspeccion = texto_previos_inspeccion.split("\u0002").map(item => item.split("\u0001"));
+                objSearch.deleteListaDatosPreviosInspeccion(cola_inspeccion_id_interno);
+                objSearch.createListaDatosPreviosInspeccion(cola_inspeccion_id_interno, array_previos_inspeccion);
+
                 // Datos de ISO 2859-1 2009
                 // let texto = "1\u00012\u00013\u00014\u00015\u00026\u00017\u00018\u00019\u000110"
                 // let array = texto.split("\u0002").map(item => item.split("\u0001"));
-                let texto_iso_2859_1_2009 = scriptContext.request.parameters['custpage_sublist_reporte_lista_iso_2859_1_2009data'];
+                let texto_iso_2859_1_2009 = scriptContext.request.parameters['custpage_sublist_reporte_lista_datos_iso_2859_1_2009data'];
                 let array_iso_2859_1_2009 = texto_iso_2859_1_2009.split("\u0002").map(item => item.split("\u0001"));
-
-                // Eliminar registros anteriores
-                objSearch.deleteDataIso2859(cola_inspeccion_id_interno);
-
-                // Guardar nuevos registros
-                objSearch.createDataIso2859(cola_inspeccion_id_interno, array_iso_2859_1_2009);
+                objSearch.deleteListaDatosIso2859(cola_inspeccion_id_interno);
+                objSearch.createListaDatosIso2859(cola_inspeccion_id_interno, array_iso_2859_1_2009);
 
                 /****************** Actualizar Certificados de Análisis ******************/
                 // Datos

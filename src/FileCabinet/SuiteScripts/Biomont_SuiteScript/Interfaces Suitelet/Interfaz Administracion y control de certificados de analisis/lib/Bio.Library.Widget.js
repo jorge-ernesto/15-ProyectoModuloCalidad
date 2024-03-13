@@ -180,7 +180,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
         }
 
         /****************** Suitelet Detail ******************/
-        function createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosIso2859) {
+        function createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosPreviosInspeccion, dataDatosIso2859) {
             // Crear formulario
             let form = serverWidget.createForm({
                 title: `Administración y control de certificado de análisis`,
@@ -225,6 +225,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
             // Mostrar SubPestañas
             form.addSubtab({
                 id: 'custpage_subtab_3',
+                label: 'Datos previos de inspección'
+            });
+
+            // Mostrar SubPestañas
+            form.addSubtab({
+                id: 'custpage_subtab_4',
                 label: 'Datos de ISO 2859-1 2009'
             });
 
@@ -568,6 +574,47 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
             }
 
+            /****************** Datos previos de inspeccion ******************/
+            if (true) {
+
+                // Tipo de sublista
+                sublistType = serverWidget.SublistType.INLINEEDITOR;
+
+                // Agregar sublista
+                let sublist = form.addSublist({
+                    id: 'custpage_sublist_reporte_lista_datos_previos_inspeccion',
+                    type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
+                    label: 'Lista de datos previos de inspección',
+                    tab: 'custpage_subtab_3'
+                });
+
+                // Mostrar botones
+                sublist.addButton({
+                    id: 'custpage_button_cargar_datos_previos_inspeccion',
+                    label: 'Cargar datos previos de inspección',
+                    functionName: 'cargarDatosPreviosInspeccion()'
+                });
+
+                // Setear cabecera a sublista
+                sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
+                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.addField({ id: 'custpage_inspeccion', type: serverWidget.FieldType.TEXT, label: 'Inspección' });
+                sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.CHECKBOX, label: 'Estado' });
+
+                // Setear los datos obtenidos a sublista
+                dataDatosPreviosInspeccion.forEach((element, i) => {
+                    if (element.cola_inspeccion_id_interno) {
+                        sublist.setSublistValue({ id: 'custpage_id_interno', line: i, value: element.cola_inspeccion_id_interno });
+                    }
+                    if (element.inspeccion) {
+                        sublist.setSublistValue({ id: 'custpage_inspeccion', line: i, value: element.inspeccion });
+                    }
+                    if (element.estado) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    }
+                });
+            }
+
             /****************** Datos de ISO 2859-1 2009 ******************/
             if (true) {
 
@@ -576,15 +623,16 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
                 // Agregar sublista
                 let sublist = form.addSublist({
-                    id: 'custpage_sublist_reporte_lista_iso_2859_1_2009',
+                    id: 'custpage_sublist_reporte_lista_datos_iso_2859_1_2009',
                     type: sublistType, // serverWidget.SublistType.LIST, serverWidget.SublistType.STATICLIST
                     label: 'Lista de ISO 2859-1 2009',
-                    tab: 'custpage_subtab_3'
+                    tab: 'custpage_subtab_4'
                 });
 
                 // Setear cabecera a sublista
                 sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
                 sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.addField({ id: 'custpage_lotes', type: serverWidget.FieldType.TEXT, label: 'Lotes' });
                 sublist.addField({ id: 'custpage_aql', type: serverWidget.FieldType.TEXT, label: 'AQL' });
                 sublist.addField({ id: 'custpage_max_aceptable', type: serverWidget.FieldType.TEXT, label: 'Max. Aceptable' });
                 sublist.addField({ id: 'custpage_cant_encontrada', type: serverWidget.FieldType.TEXT, label: 'Cantidad Encontrada' });
@@ -594,6 +642,9 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 dataDatosIso2859.forEach((element, i) => {
                     if (element.cola_inspeccion_id_interno) {
                         sublist.setSublistValue({ id: 'custpage_id_interno', line: i, value: element.cola_inspeccion_id_interno });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lotes', line: i, value: element.lote });
                     }
                     if (element.aql) {
                         sublist.setSublistValue({ id: 'custpage_aql', line: i, value: element.aql });
