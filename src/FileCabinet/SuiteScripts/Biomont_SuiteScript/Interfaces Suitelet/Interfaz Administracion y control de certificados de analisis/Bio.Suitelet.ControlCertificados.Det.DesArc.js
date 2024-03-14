@@ -71,6 +71,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             // Obtener data
             let data_PDFCabecera = [];
             let data_PDFDetalle = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            let data_PDFDetalle_DatosPreviosInspeccion = objSearch.getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            let data_PDFDetalle_DatosISO2859 = objSearch.getData_PDFDetalle_DatosISO2859(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
             // Determinar tipo de pdf
             if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV')
@@ -82,7 +84,9 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             // Obtener data
             let data = {
                 data_PDFCabecera: data_PDFCabecera,
-                data_PDFDetalle: data_PDFDetalle
+                data_PDFDetalle: data_PDFDetalle,
+                data_PDFDetalle_DatosPreviosInspeccion: data_PDFDetalle_DatosPreviosInspeccion,
+                data_PDFDetalle_DatosISO2859: data_PDFDetalle_DatosISO2859
             }
 
             return data;

@@ -149,6 +149,22 @@
             </thead>
         </table>
 
+        <!-- DATOS PREVIOS DE INSPECCION -->
+        <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
+            <tbody>
+                <tr>
+                    <td colspan="3"><b>INSPECCION</b></td>
+                    <td colspan="2"><b>ESTADO</b></td>
+                </tr>
+                <#list params.cola_inspeccion_data.data_PDFDetalle_DatosPreviosInspeccion as datosprevinsp>
+                    <tr>
+                        <td colspan="3">${datosprevinsp.inspeccion}</td>
+                        <td colspan="2">${datosprevinsp.estado_pdf}</td>
+                    </tr>
+                </#list>
+            </tbody>
+        </table>
+
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
             Lote: ${keylot}<br />
@@ -156,6 +172,7 @@
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
                 <tbody>
+                    <!-- DATOS DE CALIDAD -->
                     <tr>
                         <td colspan="2"><b>ENSAYOS</b></td>
                         <td colspan="2"><b>ESPECIFICACIONES</b></td>
@@ -168,6 +185,41 @@
                             <td colspan="1">${datoscalidad.valor_inspeccion}</td>
                         </tr>
                     </#list>
+                    <tr>
+                        <td style="border: 0" colspan="5"><b>Método de Análisis:</b> Técnica Propia</td>
+                    </tr>
+
+                    <!-- DATOS DE ISO 2859-1 2009 -->
+                    <#assign mostrar_cabecera_datosISO2859 = true>
+                    <#assign mostrar_pie_datosISO2859 = false>
+
+                    <#list params.cola_inspeccion_data.data_PDFDetalle_DatosISO2859 as datosiso>
+                        <#if (datosiso.lote == keylot)>
+                            <#if mostrar_cabecera_datosISO2859 == true>
+                                <tr>
+                                    <td colspan="1"><b>LOTES</b></td>
+                                    <td colspan="1"><b>AQL</b></td>
+                                    <td colspan="1"><b>MAX. ACEPTABLE</b></td>
+                                    <td colspan="1"><b>CANTIDAD ENCONTRADA</b></td>
+                                    <td colspan="1"><b>DEFECTO<br />ENCONTRADO</b></td>
+                                </tr>
+                                <#assign mostrar_cabecera_datosISO2859 = false>
+                                <#assign mostrar_pie_datosISO2859 = true>
+                            </#if>
+                            <tr>
+                                <td colspan="1">${datosiso.lote}</td>
+                                <td colspan="1">${datosiso.aql}</td>
+                                <td colspan="1">${datosiso.max_aceptable}</td>
+                                <td colspan="1">${datosiso.cantidad_encontrada}</td>
+                                <td colspan="1">${datosiso.defecto_encontrado}</td>
+                            </tr>
+                        </#if>
+                    </#list>
+                    <#if mostrar_pie_datosISO2859 == true>
+                        <tr>
+                            <td style="border: 0" colspan="5"><b>Referencia Norma Técnica Peruana ISO 2859-1 2009</b></td>
+                        </tr>
+                    </#if>
                 </tbody>
             </table>
         </#list>

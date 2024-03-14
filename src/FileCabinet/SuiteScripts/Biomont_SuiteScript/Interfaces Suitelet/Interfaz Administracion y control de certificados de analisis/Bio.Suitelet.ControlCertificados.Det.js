@@ -177,8 +177,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 // let array = texto.split("\u0002").map(item => item.split("\u0001"));
                 let texto_iso_2859_1_2009 = scriptContext.request.parameters['custpage_sublist_reporte_lista_datos_iso_2859_1_2009data'];
                 let array_iso_2859_1_2009 = texto_iso_2859_1_2009.split("\u0002").map(item => item.split("\u0001"));
-                objSearch.deleteListaDatosIso2859(cola_inspeccion_id_interno);
-                objSearch.createListaDatosIso2859(cola_inspeccion_id_interno, array_iso_2859_1_2009);
+                objSearch.deleteListaDatosISO2859(cola_inspeccion_id_interno);
+                objSearch.createListaDatosISO2859(cola_inspeccion_id_interno, array_iso_2859_1_2009);
 
                 /****************** Actualizar Certificados de Análisis ******************/
                 // Datos

@@ -144,8 +144,8 @@
 
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
-            Lote: ${keylot}<br />
-            Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}
+            <span class="fs12">Lote: ${keylot}<br /></span>
+            <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
                 <tbody>

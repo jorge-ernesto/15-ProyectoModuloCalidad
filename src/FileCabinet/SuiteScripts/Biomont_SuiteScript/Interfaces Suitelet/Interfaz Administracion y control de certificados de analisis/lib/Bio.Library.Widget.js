@@ -597,9 +597,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
                 // Setear cabecera a sublista
                 sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
-                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
                 sublist.addField({ id: 'custpage_inspeccion', type: serverWidget.FieldType.TEXT, label: 'Inspección' });
                 sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.CHECKBOX, label: 'Estado' });
+
+                // Setear propiedades a sublista
+                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.getField({ id: 'custpage_inspeccion' }).isMandatory = true;
 
                 // Setear los datos obtenidos a sublista
                 dataDatosPreviosInspeccion.forEach((element, i) => {
@@ -609,8 +612,8 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                     if (element.inspeccion) {
                         sublist.setSublistValue({ id: 'custpage_inspeccion', line: i, value: element.inspeccion });
                     }
-                    if (element.estado) {
-                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado });
+                    if (element.estado_sublist) {
+                        sublist.setSublistValue({ id: 'custpage_estado', line: i, value: element.estado_sublist });
                     }
                 });
             }
@@ -631,12 +634,16 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
                 // Setear cabecera a sublista
                 sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
-                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
                 sublist.addField({ id: 'custpage_lotes', type: serverWidget.FieldType.TEXT, label: 'Lotes' });
                 sublist.addField({ id: 'custpage_aql', type: serverWidget.FieldType.TEXT, label: 'AQL' });
                 sublist.addField({ id: 'custpage_max_aceptable', type: serverWidget.FieldType.TEXT, label: 'Max. Aceptable' });
                 sublist.addField({ id: 'custpage_cant_encontrada', type: serverWidget.FieldType.TEXT, label: 'Cantidad Encontrada' });
                 sublist.addField({ id: 'custpage_def_encontrado', type: serverWidget.FieldType.TEXT, label: 'Defecto Encontrado' });
+
+                // Setear propiedades a sublista
+                sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.getField({ id: 'custpage_lotes' }).isMandatory = true;
+                sublist.getField({ id: 'custpage_aql' }).isMandatory = true;
 
                 // Setear los datos obtenidos a sublista
                 dataDatosIso2859.forEach((element, i) => {

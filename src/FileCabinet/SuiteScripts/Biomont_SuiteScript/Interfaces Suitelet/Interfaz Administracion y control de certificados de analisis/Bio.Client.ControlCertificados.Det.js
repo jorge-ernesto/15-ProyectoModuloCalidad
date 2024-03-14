@@ -135,7 +135,7 @@ define(['N'],
             let tipo_pdf = null;
 
             if (linea_id == 5) // MATERIA PRIMA
-                tipo_pdf = 'ME_MV';
+                tipo_pdf = 'MP';
             else if (linea_id == 7 || linea_id == 8) // MATERIAL DE EMPAQUE, MATERIAL DE ENVASADO
                 tipo_pdf = 'ME_MV';
             else if (tipo_producto_id == 16) // PRODUCTO TERMINADO
