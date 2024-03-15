@@ -56,6 +56,7 @@
       <object>custbody_ns_fe_ticket_id</object>
       <object>customrecord_qm_queue.custrecord_bio_qm_queue_fabricante</object>
       <object>custbody_ns_serie_cxp</object>
+      <object>custitem14</object>
       <object>customrecord_ns_tipo_documento</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_date_closed</object>
       <object>custbodynufocus_id_letra_deducciones</object>
@@ -77,6 +78,7 @@
       <object>custbody_4599_mx_operation_type</object>
       <object>custbody_am_production_units</object>
       <object>custitem7</object>
+      <object>custbody126</object>
       <object>custitem3</object>
       <object>customrecord_cseg2</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_issample</object>

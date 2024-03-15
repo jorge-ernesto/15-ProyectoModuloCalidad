@@ -74,9 +74,23 @@
                 height: 40px;
             }
         </style>
+
+        <macrolist>
+            <macro id="nlfooter">
+
+                <table width="100%" class="fs9 border-collapse">
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" align="right">Página <pagenumber/> / <totalpages/></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </macro>
+        </macrolist>
     </head>
 
-    <body size="A4">
+    <body size="A4" footer="nlfooter">
 
         <!-- <img src='https://www.biomont.com.pe/storage/img/logo.png'></img> -->
 
