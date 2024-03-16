@@ -140,6 +140,8 @@ define(['N'],
                 tipo_pdf = 'ME_MV';
             else if (tipo_producto_id == 16) // PRODUCTO TERMINADO
                 tipo_pdf = 'PT';
+            else
+                tipo_pdf = 'PT';
 
             // Debug
             console.log({ cola_inspeccion_id, articulo_id, numero_linea_transacccion, linea_id, tipo_producto_id, tipo_pdf });

@@ -28,7 +28,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             else if (tipo_pdf == 'ME_MV')
                 templatePdf = 'pdfreport_certificado_me_mv';
             else if (tipo_pdf == 'PT')
-                templatePdf = '';
+                templatePdf = 'pdfreport_certificado_pt';
 
             // Crear PDF - Contenido dinamico
             let pdfContent = file.load(`./template/PDF/${templatePdf}.ftl`).getContents();
@@ -70,13 +70,23 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
 
             // Obtener data
             let data_PDFCabecera = [];
-            let data_PDFDetalle = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
-            let data_PDFDetalle_DatosPreviosInspeccion = objSearch.getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
-            let data_PDFDetalle_DatosISO2859 = objSearch.getData_PDFDetalle_DatosISO2859(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            let data_PDFDetalle = [];
+            let data_PDFDetalle_DatosPreviosInspeccion = [];
+            let data_PDFDetalle_DatosISO2859 = [];
 
             // Determinar tipo de pdf
             if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV')
-                data_PDFCabecera = objSearch.getData_MPMEMV_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
+                data_PDFCabecera = objSearch.getData_PDFCabecera_MPMEMV(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
+            else if (tipo_pdf == 'PT')
+                data_PDFCabecera = objSearch.getData_PDFCabecera_PT(cola_inspeccion_id, articulo_id, numero_linea_transaccion);
+
+            if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV') {
+                data_PDFDetalle = objSearch.getData_PDFDetalle_Completa_MPMEMV_PT(tipo_pdf, cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+                data_PDFDetalle_DatosPreviosInspeccion = objSearch.getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+                data_PDFDetalle_DatosISO2859 = objSearch.getData_PDFDetalle_DatosISO2859(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            } else if (tipo_pdf == 'PT') {
+                data_PDFDetalle = objSearch.getData_PDFDetalle_Completa_MPMEMV_PT(tipo_pdf, cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            }
 
             // Debug
             // objHelper.error_log('data', { tipo_pdf, data_PDFCabecera, data_PDFDetalle });

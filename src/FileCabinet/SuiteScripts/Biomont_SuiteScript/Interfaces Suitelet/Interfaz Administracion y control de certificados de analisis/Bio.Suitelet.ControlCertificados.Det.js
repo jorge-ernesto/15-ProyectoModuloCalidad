@@ -42,7 +42,8 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let transaccion_inv_id = dataColaInspeccion_.getValue('custrecord_qm_queue_transaction_inv');
                 let articulo_id = dataColaInspeccion_.getValue('custrecord_qm_queue_item');
                 let numero_linea_transaccion = dataColaInspeccion_.getValue('custrecord_qm_queue_line');
-                let dataDatosCalidad = objSearch.getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
+                let tipo_pdf = '-'; // No es necesario buscar la fecha de caducidad en el suitelet detalle de certificado
+                let dataDatosCalidad = objSearch.getData_PDFDetalle_Completa_MPMEMV_PT(tipo_pdf, cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
                 // Obtener datos por seach - Datos previos de inspección
                 let dataDatosPreviosInspeccion = objSearch.getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id);

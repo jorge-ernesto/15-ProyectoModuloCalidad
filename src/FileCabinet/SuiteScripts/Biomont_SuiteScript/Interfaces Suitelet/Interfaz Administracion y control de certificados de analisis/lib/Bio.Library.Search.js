@@ -306,7 +306,7 @@ define(['./Bio.Library.Helper', 'N'],
         }
 
         // Suitelet Detail Download File
-        function getData_MPMEMV_PDFCabecera(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
+        function getData_PDFCabecera_MPMEMV(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -429,7 +429,7 @@ define(['./Bio.Library.Helper', 'N'],
 
             // Cantidad de registros en search
             // let count = searchContext.runPaged().count;
-            // objHelper.error_log('', 'getDataPDFCabecera_MateriaPrima');
+            // objHelper.error_log('', 'getData_PDFCabecera_MPMEMV');
             // objHelper.error_log('', count);
 
             // Recorrer search - con mas de 4000 registros
@@ -507,7 +507,179 @@ define(['./Bio.Library.Helper', 'N'],
                 });
             });
 
-            // objHelper.error_log('getDataPDFCabecera_MateriaPrima', resultTransaction);
+            // objHelper.error_log('getData_PDFCabecera_MPMEMV', resultTransaction);
+            return resultTransaction;
+        }
+
+        function getData_PDFCabecera_PT(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
+
+            // Declarar variables
+            let resultTransaction = [];
+
+            // Declarar search
+            let searchObject = {
+                type: 'customrecord_qm_queue',
+                columns: [
+                    search.createColumn({
+                        name: "internalid",
+                        sort: search.Sort.ASC,
+                        label: "Cola de inspección : ID interno"
+                    }),
+                    search.createColumn({
+                        name: "internalid",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
+                        label: "Transacción de inventario : ID interno"
+                    }),
+                    search.createColumn({
+                        name: "line",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
+                        label: "Transacción de inventario : ID de línea"
+                    }),
+                    search.createColumn({
+                        name: "itemid",
+                        join: "CUSTRECORD_QM_QUEUE_ITEM",
+                        label: "Artículo : Código del Artículo"
+                    }),
+                    search.createColumn({
+                        name: "displayname",
+                        join: "CUSTRECORD_QM_QUEUE_ITEM",
+                        label: "Artículo : Descripción del Artículo"
+                    }),
+                    search.createColumn({
+                        name: "custitem14",
+                        join: "CUSTRECORD_QM_QUEUE_ITEM",
+                        label: "Artículo : Producto Bulk"
+                    }),
+                    search.createColumn({
+                        name: "custbody126",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION",
+                        label: "BIO_CAM_FECHA_INICIO_PRODUCCION_OT"
+                    }),
+                    // search.createColumn({
+                    //     name: "formulahtml",
+                    //     formula: "'<span style=\"background-color: red;\">*</span>'",
+                    //     label: "Fórmula (HTML)"
+                    // }),
+                    // MP
+                    search.createColumn({ name: "custrecord_bio_qm_queue_num_tecnica", label: "Numéro de Técnica" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_fabricante", label: "Fabricante" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_fecha_analisis", label: "Fecha de Análisis" }),
+                    // ME_MV
+                    search.createColumn({ name: "custrecord_bio_qm_queue_tip_emb_pri", label: "Tipo de Embalaje Primario" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_tip_emb_sec", label: "Tipo de Embalaje Secundario" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_cant_insp", label: "Cantidad Inspeccionada" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_cant_mues", label: "Cantidad Muestreada" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_niv_ins_iso_2859", label: "Nivel de Inspeccion Norma Tecnica Peruana ISO 2859-1 2009" }),
+                    // Firma
+                    search.createColumn({ name: "custrecord_bio_qm_queue_usufir_revpor", label: "Usuario Firma (Revisado Por)" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_revpor", label: "Fecha Firma (Revisado Por)" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_usufir_aprpor", label: "Usuario Firma (Aprobado Por)" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_aprpor", label: "Fecha Firma (Aprobado Por)" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_observaciones", label: "Observaciones" })
+                ],
+                filters: [
+                    ["custrecord_qm_queue_transaction_inv.mainline", "is", "F"],
+                    "AND",
+                    ["custrecord_qm_queue_transaction.mainline", "is", "T"],
+                    "AND",
+                    ["custrecord_qm_queue_item.custitem7", "anyof", "16"]
+                ]
+            };
+
+            // Filtro de certificado de analisis
+            if (cola_inspeccion_id != '') {
+                if (searchObject.filters.length > 0) {
+                    searchObject.filters.push('AND');
+                }
+                searchObject.filters.push(["internalid", "anyof", cola_inspeccion_id]);
+            }
+
+            // Filtro de articulo
+            if (articulo_id != '') {
+                if (searchObject.filters.length > 0) {
+                    searchObject.filters.push('AND');
+                }
+                searchObject.filters.push(["custrecord_qm_queue_transaction_inv.item", "anyof", articulo_id]);
+            }
+
+            // Filtro de numero de linea de transaccion
+            if (numero_linea_transaccion != '') {
+                if (searchObject.filters.length > 0) {
+                    searchObject.filters.push('AND');
+                }
+                searchObject.filters.push(["custrecord_qm_queue_transaction_inv.line", "equalto", numero_linea_transaccion]);
+            }
+
+            // Crear search
+            let searchContext = search.create(searchObject);
+
+            // Cantidad de registros en search
+            // let count = searchContext.runPaged().count;
+            // objHelper.error_log('', 'getData_PDFCabecera_PT');
+            // objHelper.error_log('', count);
+
+            // Recorrer search - con mas de 4000 registros
+            let pageData = searchContext.runPaged({ pageSize: 1000 }); // El minimo de registros que se puede traer por pagina es 50, pondremos 1000 para que en el caso existan 4500 registros, hayan 5 paginas como maximo y no me consuma mucha memoria
+
+            pageData.pageRanges.forEach(function (pageRange) {
+                var myPage = pageData.fetch({ index: pageRange.index });
+                myPage.data.forEach((row) => {
+                    // Obtener informacion
+                    let { columns } = row;
+                    let cola_inspeccion_id_interno = row.getValue(columns[0]);
+                    let transaccion_inventario_id_interno = row.getValue(columns[1]);
+                    let numero_linea_transaccion = row.getValue(columns[2]);
+                    let articulo_itemid = row.getValue(columns[3]);
+                    let articulo_displayname = row.getValue(columns[4]);
+                    let articulo_producto_bulk = row.getValue(columns[5]);
+                    let fecha_inicio_produccion_ot = row.getValue(columns[6]);
+                    // MP
+                    let num_tecnica = row.getValue(columns[7]);
+                    let fabricante = row.getValue(columns[8]);
+                    let fecha_analisis = row.getValue(columns[9]);
+                    // ME_MV
+                    let tipo_embalaje_primario = row.getValue(columns[10]);
+                    let tipo_embalaje_secundario = row.getValue(columns[11]);
+                    let cantidad_inspeccionada = row.getValue(columns[12]);
+                    let cantidad_muestreada = row.getValue(columns[13]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[14]);
+                    // Firma
+                    let usuariofirma_revisadopor = row.getText(columns[15]);
+                    let fechafirma_revisadopor = row.getValue(columns[16]);
+                    let usuariofirma_aprobadopor = row.getText(columns[17]);
+                    let fechafirma_aprobadopor = row.getValue(columns[18]);
+                    let observaciones = row.getValue(columns[19]);
+
+                    // Insertar informacion en array
+                    resultTransaction.push({
+                        cola_inspeccion_id_interno,
+                        transaccion_inventario_id_interno,
+                        numero_linea_transaccion,
+                        articulo_itemid,
+                        articulo_displayname,
+                        articulo_producto_bulk,
+                        fecha_inicio_produccion_ot,
+                        // MP
+                        num_tecnica,
+                        fabricante,
+                        fecha_analisis,
+                        // ME_MV
+                        tipo_embalaje_primario,
+                        tipo_embalaje_secundario,
+                        cantidad_inspeccionada,
+                        cantidad_muestreada,
+                        nivel_inspeccion_iso_2859,
+                        // Firma
+                        usuariofirma_revisadopor,
+                        fechafirma_revisadopor,
+                        usuariofirma_aprobadopor,
+                        fechafirma_aprobadopor,
+                        observaciones
+                    });
+                });
+            });
+
+            // objHelper.error_log('getData_PDFCabecera_PT', resultTransaction);
             return resultTransaction;
         }
 
@@ -619,7 +791,7 @@ define(['./Bio.Library.Helper', 'N'],
             return resultTransaction;
         }
 
-        function getData_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion) {
+        function getData_PDFDetalle_RecepcionArticulo_MPMEMV(transaccion_inv_id, articulo_id, numero_linea_transaccion) {
 
             // Declarar variables
             let resultTransaction = [];
@@ -686,7 +858,7 @@ define(['./Bio.Library.Helper', 'N'],
 
             // Cantidad de registros en search
             // let count = searchContext.runPaged().count;
-            // objHelper.error_log('', 'getData_PDFDetalle_RecepcionDetalleInventario');
+            // objHelper.error_log('', 'getData_PDFDetalle_RecepcionArticulo_MPMEMV');
             // objHelper.error_log('', count);
 
             // Recorrer search - con mas de 4000 registros
@@ -719,21 +891,119 @@ define(['./Bio.Library.Helper', 'N'],
                 });
             });
 
-            // objHelper.error_log('getData_PDFDetalle_RecepcionDetalleInventario', resultTransaction);
+            // objHelper.error_log('getData_PDFDetalle_RecepcionArticulo_MPMEMV', resultTransaction);
             return resultTransaction;
         }
 
-        function getData_PDFDetalle_Completa(cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion) {
+        function getData_PDFDetalle_FinalizacionOrdenProduccion_PT(transaccion_inv_id, articulo_id, numero_linea_transaccion) {
+
+            // Declarar variables
+            let resultTransaction = [];
+
+            // Declarar search
+            let searchObject = {
+                type: 'transaction',
+                columns: [
+                    search.createColumn({ name: "internalid", label: "Recepción de artículo : ID interno" }),
+                    search.createColumn({ name: "line", label: "Recepción de artículo : ID de línea" }),
+                    search.createColumn({
+                        name: "internalid",
+                        join: "inventoryDetail",
+                        sort: search.Sort.ASC,
+                        label: "ID interno"
+                    }),
+                    search.createColumn({
+                        name: "inventorynumber",
+                        join: "inventoryDetail",
+                        sort: search.Sort.ASC,
+                        label: "Número"
+                    }),
+                    search.createColumn({
+                        name: "expirationdate",
+                        join: "inventoryDetail",
+                        label: "Fecha de caducidad"
+                    })
+                ],
+                filters: [
+                    ["mainline", "is", "T"],
+                    "AND",
+                    ["type", "anyof", "WOCompl"],
+                ]
+            };
+
+            // Filtro de certificado de analisis
+            if (transaccion_inv_id != '') {
+                if (searchObject.filters.length > 0) {
+                    searchObject.filters.push('AND');
+                }
+                searchObject.filters.push(["internalid", "anyof", transaccion_inv_id]);
+            }
+
+            // Crear search
+            let searchContext = search.create(searchObject);
+
+            // Cantidad de registros en search
+            // let count = searchContext.runPaged().count;
+            // objHelper.error_log('', 'getData_PDFDetalle_FinalizacionOrdenProduccion_PT');
+            // objHelper.error_log('', count);
+
+            // Recorrer search - con mas de 4000 registros
+            let pageData = searchContext.runPaged({ pageSize: 1000 }); // El minimo de registros que se puede traer por pagina es 50, pondremos 1000 para que en el caso existan 4500 registros, hayan 5 paginas como maximo y no me consuma mucha memoria
+
+            pageData.pageRanges.forEach(function (pageRange) {
+                var myPage = pageData.fetch({ index: pageRange.index });
+                myPage.data.forEach((row) => {
+                    // Obtener informacion
+                    let { columns } = row;
+                    let recepcion_articulo_id_interno = row.getValue(columns[0]);
+                    let numero_linea_transaccion = row.getValue(columns[1]);
+                    let det_inv_id_interno = row.getValue(columns[2]);
+                    let det_inv_lote_id_interno = row.getValue(columns[3]);
+                    let det_inv_lote_nombre = row.getText(columns[3]);
+                    let det_inv_fecha_caducidad = row.getValue(columns[4]);
+
+                    // Procesar informacion
+                    det_inv_lote_nombre = det_inv_lote_nombre.trim()
+
+                    // Insertar informacion en array
+                    resultTransaction.push({
+                        recepcion_articulo_id_interno,
+                        numero_linea_transaccion,
+                        det_inv_id_interno,
+                        det_inv_lote_id_interno,
+                        det_inv_lote_nombre,
+                        det_inv_fecha_caducidad
+                    });
+                });
+            });
+
+            // objHelper.error_log('getData_PDFDetalle_FinalizacionOrdenProduccion_PT', resultTransaction);
+            return resultTransaction;
+        }
+
+        function getData_PDFDetalle_Completa_MPMEMV_PT(tipo_pdf, cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion) {
 
             // Obtener data
             let data_PDFDetalle = getData_PDFDetalle(cola_inspeccion_id);
-            let data_PDFDetalle_RecepcionArticulo = getData_PDFDetalle_RecepcionArticulo(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            let data_PDFDetalle_TransaccioInventario = []; // Puede ser Recepción Articulo o Finalización de Orden de Producción
+
+            // Determinar tipo de pdf
+            if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV')
+                data_PDFDetalle_TransaccioInventario = getData_PDFDetalle_RecepcionArticulo_MPMEMV(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+            else if (tipo_pdf == 'PT')
+                data_PDFDetalle_TransaccioInventario = getData_PDFDetalle_FinalizacionOrdenProduccion_PT(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+
+            // Debug
+            // objHelper.error_log('', { data_PDFDetalle, data_PDFDetalle_TransaccioInventario });
 
             // Recorrer Datos de calidad
             data_PDFDetalle.forEach((value, key) => {
 
+                // Objeto en el array donde almacenaremos Fecha de Caducidad
+                data_PDFDetalle[key]['fecha_caducidad'] = data_PDFDetalle[key]['fecha_caducidad'] || []; // Validar si encontrara mas de una fecha
+
                 // Recorrer Transaccion - Recepción de artículo (Detalle de inventario)
-                data_PDFDetalle_RecepcionArticulo.forEach((value_, key_) => {
+                data_PDFDetalle_TransaccioInventario.forEach((value_, key_) => {
 
                     // Validar los lotes
                     if (value.numero_lote == value_.det_inv_lote_nombre) {
@@ -762,9 +1032,11 @@ define(['./Bio.Library.Helper', 'N'],
                 // dataAgrupada[numero_lote] = element;
             });
 
+            // objHelper.error_log('getData_PDFDetalle_Completa_MPMEMV_PT', dataAgrupada);
             return dataAgrupada;
         }
 
+        // Suitelet Detail Download File - Others
         function getData_PDFDetalle_DatosPreviosInspeccion(cola_inspeccion_id) {
 
             // Declarar variables
@@ -848,7 +1120,7 @@ define(['./Bio.Library.Helper', 'N'],
 
             // Cantidad de registros en search
             // let count = searchContext.runPaged().count;
-            // objHelper.error_log('', 'getData_PDFDetalle_ISO2859');
+            // objHelper.error_log('', 'getData_PDFDetalle_DatosISO2859');
             // objHelper.error_log('', count);
 
             // Recorrer search - con mas de 4000 registros
@@ -881,7 +1153,7 @@ define(['./Bio.Library.Helper', 'N'],
                 });
             });
 
-            // objHelper.error_log('getData_PDFDetalle_ISO2859', resultTransaction);
+            // objHelper.error_log('getData_PDFDetalle_DatosISO2859', resultTransaction);
             return resultTransaction;
         }
 
@@ -893,10 +1165,12 @@ define(['./Bio.Library.Helper', 'N'],
             createListaDatosPreviosInspeccion,
             deleteListaDatosISO2859,
             createListaDatosISO2859,
-            getData_MPMEMV_PDFCabecera,
+            getData_PDFCabecera_MPMEMV,
+            getData_PDFCabecera_PT,
             getData_PDFDetalle,
-            getData_PDFDetalle_RecepcionArticulo,
-            getData_PDFDetalle_Completa,
+            getData_PDFDetalle_RecepcionArticulo_MPMEMV,
+            getData_PDFDetalle_FinalizacionOrdenProduccion_PT,
+            getData_PDFDetalle_Completa_MPMEMV_PT,
             getData_PDFDetalle_DatosPreviosInspeccion,
             getData_PDFDetalle_DatosISO2859
         }
