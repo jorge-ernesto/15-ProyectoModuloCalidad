@@ -86,6 +86,10 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldCantidadInspeccionada,
                     fieldCantidadMuestreada,
                     fieldNivelInspeccionIso2859,
+                    // PT
+                    fieldFormaFarmaceutica,
+                    fieldProcedencia,
+                    fieldNumeroAnalisis,
                     // Datos firma
                     fieldUsuarioFirma_RevisadoPor,
                     fieldFechaFirma_RevisadoPor,
@@ -137,6 +141,10 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 fieldCantidadInspeccionada.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_cant_insp');
                 fieldCantidadMuestreada.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_cant_mues');
                 fieldNivelInspeccionIso2859.defaultValue = dataColaInspeccion_.getText('custrecord_bio_qm_queue_niv_ins_iso_2859');
+                // PT
+                fieldFormaFarmaceutica.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_pharma_form');
+                fieldProcedencia.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_procedencia');
+                fieldNumeroAnalisis.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_num_analisis');
 
                 // Datos firma
                 fieldUsuarioFirma_RevisadoPor.defaultValue = dataColaInspeccion_.getValue('custrecord_bio_qm_queue_usufir_revpor');
@@ -163,6 +171,10 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let cantidad_inspeccionada = scriptContext.request.parameters['custpage_field_cantidad_inspeccionada'];
                 let cantidad_muestreada = scriptContext.request.parameters['custpage_field_cantidad_muestreada'];
                 let nivel_inspeccion_iso_2859 = scriptContext.request.parameters['custpage_field_nivel_inspeccion_iso_2859'];
+                // PT
+                let forma_farmaceutica = scriptContext.request.parameters['custpage_field_forma_farmaceutica'];
+                let procedencia = scriptContext.request.parameters['custpage_field_procedencia'];
+                let numero_analisis = scriptContext.request.parameters['custpage_field_numero_analisis'];
 
                 // Datos firma
                 let observaciones = scriptContext.request.parameters['custpage_field_observaciones'];
@@ -196,6 +208,10 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_cant_insp', cantidad_inspeccionada);
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_cant_mues', cantidad_muestreada);
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_niv_ins_iso_2859', nivel_inspeccion_iso_2859);
+                // PT
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_pharma_form', forma_farmaceutica);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_procedencia', procedencia);
+                colaInspeccionRecord.setValue('custrecord_bio_qm_queue_num_analisis', numero_analisis);
 
                 // Datos firma
                 colaInspeccionRecord.setValue('custrecord_bio_qm_queue_observaciones', observaciones);

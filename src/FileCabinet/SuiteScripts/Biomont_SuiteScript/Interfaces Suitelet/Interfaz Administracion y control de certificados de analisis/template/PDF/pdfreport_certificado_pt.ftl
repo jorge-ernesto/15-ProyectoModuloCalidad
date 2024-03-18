@@ -118,15 +118,15 @@
                 <tr>
                     <th colspan="1"><b>PRODUCTO:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_producto_bulk}</th>
-                    <th colspan="1"><b>CODIGO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_itemid}</th>
+                    <th colspan="1"><b>LOTE:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].lote_finot}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>FORMA FARMACEUTICA:</b></th>
-                    <th colspan="1"></th>
-                    <th colspan="1"><b>N. ANÁLISIS:</b></th>
-                    <th colspan="1"></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].forma_farmaceutica_nombre}</th>
+                    <th colspan="1"><b>FECHA EXPIRACION:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_caducidad_finot}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
@@ -138,14 +138,21 @@
                 </tr>
                 <tr>
                     <th colspan="1"><b>PROCEDENCIA:</b></th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].procedencia}</th>
+                    <th colspan="1"><b>N. ANÁLISIS:</b></th>
+                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
                     <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="1"><b>PRESENTACIÓN:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
+                    <th colspan="1"></th>
+                    <th colspan="1"></th>
+                    <th colspan="1"></th>
+                </tr>
+                <tr>
+                    <th colspan="1"><b>MÉTODO ANALITICO:</b></th>
+                    <th colspan="1">Técnica Propia</th>
                     <th colspan="1"></th>
                     <th colspan="1"></th>
                     <th colspan="1"></th>
@@ -158,8 +165,10 @@
 
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
+            <!--
             <span class="fs12">Lote: ${keylot}<br /></span>
             <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
+            -->
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
                 <tbody>

@@ -555,6 +555,16 @@ define(['./Bio.Library.Helper', 'N'],
                         join: "CUSTRECORD_QM_QUEUE_TRANSACTION",
                         label: "BIO_CAM_FECHA_INICIO_PRODUCCION_OT"
                     }),
+                    search.createColumn({
+                        name: "custbodybio_cam_lote",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
+                        label: "LOTE"
+                    }),
+                    search.createColumn({
+                        name: "custbodybio_cam_fechacaducidad",
+                        join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
+                        label: "BIO_CAM_OP_FECHA_CADUCIDAD"
+                    }),
                     // search.createColumn({
                     //     name: "formulahtml",
                     //     formula: "'<span style=\"background-color: red;\">*</span>'",
@@ -570,6 +580,10 @@ define(['./Bio.Library.Helper', 'N'],
                     search.createColumn({ name: "custrecord_bio_qm_queue_cant_insp", label: "Cantidad Inspeccionada" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_cant_mues", label: "Cantidad Muestreada" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_niv_ins_iso_2859", label: "Nivel de Inspeccion Norma Tecnica Peruana ISO 2859-1 2009" }),
+                    // PT
+                    search.createColumn({ name: "custrecord_bio_qm_queue_pharma_form", label: "Forma farmaceutica" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_procedencia", label: "Procedencia" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_num_analisis", label: "Número de Análisis" }),
                     // Firma
                     search.createColumn({ name: "custrecord_bio_qm_queue_usufir_revpor", label: "Usuario Firma (Revisado Por)" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_revpor", label: "Fecha Firma (Revisado Por)" }),
@@ -633,22 +647,33 @@ define(['./Bio.Library.Helper', 'N'],
                     let articulo_displayname = row.getValue(columns[4]);
                     let articulo_producto_bulk = row.getValue(columns[5]);
                     let fecha_inicio_produccion_ot = row.getValue(columns[6]);
+                    let lote_finot = row.getValue(columns[7]);
+                    let fecha_caducidad_finot = row.getValue(columns[8]);
                     // MP
-                    let num_tecnica = row.getValue(columns[7]);
-                    let fabricante = row.getValue(columns[8]);
-                    let fecha_analisis = row.getValue(columns[9]);
+                    let num_tecnica = row.getValue(columns[9]);
+                    let fabricante = row.getValue(columns[10]);
+                    let fecha_analisis = row.getValue(columns[11]);
                     // ME_MV
-                    let tipo_embalaje_primario = row.getValue(columns[10]);
-                    let tipo_embalaje_secundario = row.getValue(columns[11]);
-                    let cantidad_inspeccionada = row.getValue(columns[12]);
-                    let cantidad_muestreada = row.getValue(columns[13]);
-                    let nivel_inspeccion_iso_2859 = row.getValue(columns[14]);
+                    let tipo_embalaje_primario = row.getValue(columns[12]);
+                    let tipo_embalaje_secundario = row.getValue(columns[13]);
+                    let cantidad_inspeccionada = row.getValue(columns[14]);
+                    let cantidad_muestreada = row.getValue(columns[15]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[16]);
+                    // PT
+                    let forma_farmaceutica_id_intenro = row.getValue(columns[17]);
+                    let forma_farmaceutica_nombre = row.getText(columns[17]);
+                    let procedencia = row.getValue(columns[18]);
+                    let num_analisis = row.getValue(columns[19]);
                     // Firma
-                    let usuariofirma_revisadopor = row.getText(columns[15]);
-                    let fechafirma_revisadopor = row.getValue(columns[16]);
-                    let usuariofirma_aprobadopor = row.getText(columns[17]);
-                    let fechafirma_aprobadopor = row.getValue(columns[18]);
-                    let observaciones = row.getValue(columns[19]);
+                    let usuariofirma_revisadopor = row.getText(columns[20]);
+                    let fechafirma_revisadopor = row.getValue(columns[21]);
+                    let usuariofirma_aprobadopor = row.getText(columns[22]);
+                    let fechafirma_aprobadopor = row.getValue(columns[23]);
+                    let observaciones = row.getValue(columns[24]);
+
+                    // Procesar informacion
+                    fecha_inicio_produccion_ot = fecha_inicio_produccion_ot ? fecha_inicio_produccion_ot.split('/')[1] + '-' + fecha_inicio_produccion_ot.split('/')[2] : '';
+                    fecha_caducidad_finot = fecha_caducidad_finot ? fecha_caducidad_finot.split('/')[1] + '-' + fecha_caducidad_finot.split('/')[2] : '';
 
                     // Insertar informacion en array
                     resultTransaction.push({
@@ -659,6 +684,8 @@ define(['./Bio.Library.Helper', 'N'],
                         articulo_displayname,
                         articulo_producto_bulk,
                         fecha_inicio_produccion_ot,
+                        lote_finot,
+                        fecha_caducidad_finot,
                         // MP
                         num_tecnica,
                         fabricante,
@@ -669,6 +696,11 @@ define(['./Bio.Library.Helper', 'N'],
                         cantidad_inspeccionada,
                         cantidad_muestreada,
                         nivel_inspeccion_iso_2859,
+                        // PT
+                        forma_farmaceutica_id_intenro,
+                        forma_farmaceutica_nombre,
+                        procedencia,
+                        num_analisis,
                         // Firma
                         usuariofirma_revisadopor,
                         fechafirma_revisadopor,

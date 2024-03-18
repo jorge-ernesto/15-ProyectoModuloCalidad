@@ -1,0 +1,20 @@
+<customlist scriptid="customlist_qm_queue_pharma_form_list">
+  <description></description>
+  <isinactive>F</isinactive>
+  <isordered>T</isordered>
+  <name>Lista de forma farmaceutica</name>
+  <customvalues>
+    <customvalue scriptid="val_2802326_6462530_sb1_743">
+      <isinactive>F</isinactive>
+      <value>Opcion 1</value>
+    </customvalue>
+    <customvalue scriptid="val_2802327_6462530_sb1_878">
+      <isinactive>F</isinactive>
+      <value>Opcion 2</value>
+    </customvalue>
+    <customvalue scriptid="val_2802328_6462530_sb1_767">
+      <isinactive>F</isinactive>
+      <value>Opcion 3</value>
+    </customvalue>
+  </customvalues>
+</customlist>

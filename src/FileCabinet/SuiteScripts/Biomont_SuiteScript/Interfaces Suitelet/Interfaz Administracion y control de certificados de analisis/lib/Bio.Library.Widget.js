@@ -387,6 +387,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                     tab: 'custpage_subtab'
                 });
 
+                // MP
                 // Numéro de Técnica
                 var fieldNumeroTecnica = form.addField({
                     id: 'custpage_field_numero_tecnica',
@@ -414,6 +415,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 });
                 fieldFechaAnalisis.updateBreakType({ breakType: 'STARTROW' })
 
+                // ME_MV
                 // Tipo Embalaje Primario
                 var fieldTipoEmbalajePrimario = form.addField({
                     id: 'custpage_field_tipo_embalaje_primario',
@@ -458,6 +460,35 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                     container: 'custpage_group_datact'
                 });
                 fieldNivelInspeccionIso2859.updateBreakType({ breakType: 'STARTROW' })
+
+                // PT
+                // Forma farmaceutica
+                var fieldFormaFarmaceutica = form.addField({
+                    id: 'custpage_field_forma_farmaceutica',
+                    label: 'Forma farmaceutica',
+                    type: 'select',
+                    source: 'customlist_qm_queue_pharma_form_list',
+                    container: 'custpage_group_datact'
+                });
+                fieldFormaFarmaceutica.updateBreakType({ breakType: 'STARTCOL' })
+
+                // Procedencia
+                var fieldProcedencia = form.addField({
+                    id: 'custpage_field_procedencia',
+                    label: 'Procedencia',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldProcedencia.updateBreakType({ breakType: 'STARTROW' })
+
+                // Numéro de Análisis
+                var fieldNumeroAnalisis = form.addField({
+                    id: 'custpage_field_numero_analisis',
+                    label: 'Número de Análisis',
+                    type: 'text',
+                    container: 'custpage_group_datact'
+                });
+                fieldNumeroAnalisis.updateBreakType({ breakType: 'STARTROW' })
             }
 
             /****************** Datos firma ******************/
@@ -695,6 +726,10 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 fieldCantidadInspeccionada,
                 fieldCantidadMuestreada,
                 fieldNivelInspeccionIso2859,
+                // PT
+                fieldFormaFarmaceutica,
+                fieldProcedencia,
+                fieldNumeroAnalisis,
                 // Datos firma
                 fieldUsuarioFirma_RevisadoPor,
                 fieldFechaFirma_RevisadoPor,

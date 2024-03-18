@@ -59,6 +59,7 @@
       <object>custitem14</object>
       <object>customrecord_ns_tipo_documento</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_date_closed</object>
+      <object>custbodybio_cam_fechacaducidad</object>
       <object>custbodynufocus_id_letra_deducciones</object>
       <object>customlist_qm_trigger_type</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_parent</object>
@@ -83,6 +84,7 @@
       <object>customrecord_cseg2</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_issample</object>
       <object>custbody_4599_sg_import_permit_num</object>
+      <object>custbodybio_cam_lote</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_datetime</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_trigger</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_test_fail_email_sent</object>

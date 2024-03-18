@@ -123,7 +123,7 @@
                     <th colspan="1"></th>
                 </tr>
                 <tr>
-                    <th colspan="1"><b>MATERIA PRIMA:</b></th>
+                    <th colspan="1"><b>MATERIAL DE EMPAQUE Y ENVASE:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
                     <th colspan="1"><b>TIPO DE EMBALAJE PRIMARIO:</b></th>
                     <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_primario}</th>
