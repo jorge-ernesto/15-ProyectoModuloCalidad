@@ -211,8 +211,8 @@
                         <#if (datosiso.lote == keylot)>
                             <#if mostrar_cabecera_datosISO2859 == true>
                                 <tr>
-                                    <td colspan="1"><b>LOTES</b></td>
-                                    <td colspan="1"><b>AQL</b></td>
+                                    <#--  <td colspan="1"><b>LOTES</b></td>  -->
+                                    <td colspan="2"><b>AQL</b></td>
                                     <td colspan="1"><b>MAX. ACEPTABLE</b></td>
                                     <td colspan="1"><b>CANTIDAD ENCONTRADA</b></td>
                                     <td colspan="1"><b>DEFECTO<br />ENCONTRADO</b></td>
@@ -221,8 +221,8 @@
                                 <#assign mostrar_pie_datosISO2859 = true>
                             </#if>
                             <tr>
-                                <td colspan="1">${datosiso.lote}</td>
-                                <td colspan="1">${datosiso.aql}</td>
+                                <#--  <td colspan="1">${datosiso.lote}</td>  -->
+                                <td colspan="2">${datosiso.aql}</td>
                                 <td colspan="1">${datosiso.max_aceptable}</td>
                                 <td colspan="1">${datosiso.cantidad_encontrada}</td>
                                 <td colspan="1">${datosiso.defecto_encontrado}</td>
