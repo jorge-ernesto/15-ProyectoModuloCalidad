@@ -49,6 +49,24 @@ define(['N'],
             return { suitelet };
         }
 
-        return { getUser, error_log, email_log, getUrlSuiteletDetail }
+        /******************/
+
+        // Convertir valores nulos en un objeto JavaScript a string - Al parecer FreeMarker no acepta valores nulos
+        function convertObjectValuesToStrings(obj) {
+            for (const key in obj) {
+                if (obj[key] === null) {
+                    obj[key] = '';
+                } else if (typeof obj[key] === 'number') {
+                    obj[key] = obj[key];
+                    // obj[key] = obj[key].toString();
+                } else if (typeof obj[key] === 'object') {
+                    // Si el valor es un objeto, llamamos recursivamente a la función
+                    convertObjectValuesToStrings(obj[key]);
+                }
+            }
+            return obj;
+        }
+
+        return { getUser, error_log, email_log, getUrlSuiteletDetail, convertObjectValuesToStrings }
 
     });

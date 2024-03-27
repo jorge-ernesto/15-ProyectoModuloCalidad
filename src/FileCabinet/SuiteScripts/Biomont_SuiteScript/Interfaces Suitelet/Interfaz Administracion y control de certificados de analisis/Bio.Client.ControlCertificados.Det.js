@@ -166,9 +166,46 @@ define(['N'],
             window.open(suitelet);
         }
 
+        function obtenerLotes() {
+
+            // Declarar variables
+            let setLotes = new Set();
+            let arrayLotes = [];
+
+            // Obtener el currentRecord
+            let recordContext = currentRecord.get();
+
+            // Lista de datos de calidad
+            let sublistName = 'custpage_sublist_reporte_lista_datos_calidad';
+            let lineCount = recordContext.getLineCount({ sublistId: sublistName });
+            let itemSublist = recordContext.getSublist({ sublistId: sublistName });
+
+            // Debug
+            // console.log('data', { sublistName, lineCount, itemSublist })
+
+            for (let i = 0; i < lineCount; i++) {
+                // console.log('i', i)
+
+                let columnLote = recordContext.getSublistValue({
+                    sublistId: sublistName,
+                    fieldId: 'custpage_lotes',
+                    line: i
+                });
+                setLotes.add(columnLote);
+            }
+
+            // Convertir set en array
+            arrayLotes = [...setLotes]; // Array.from(setLotes)
+
+            // Retornar array
+            return arrayLotes;
+        }
+
         function cargarDatosPreviosInspeccion() {
 
-            // Datos previos de inspeccion
+            // Obtener data
+            let dataLotes = obtenerLotes();
+
             let dataDatosPreviosInspeccion = [
                 'Identificación del material de empaque (etiqueta del proveedor)',
                 'Integridad del embalaje (roto, rasgado, sin aberturas)',
@@ -186,23 +223,30 @@ define(['N'],
             let itemSublist = recordContext.getSublist({ sublistId: sublistName });
 
             // Debug
-            console.log('data', { sublistName, lineCount, itemSublist })
+            // console.log('data', { sublistName, lineCount, itemSublist })
 
             // Agregar datos a lista
-            dataDatosPreviosInspeccion.forEach(element => {
+            dataLotes.forEach((value_lot, key_lot) => {
+                dataDatosPreviosInspeccion.forEach((value_datprev, key_datprev) => {
 
-                // Seleccionar nueva linea
-                recordContext.selectNewLine({ sublistId: sublistName });
+                    // Seleccionar nueva linea
+                    recordContext.selectNewLine({ sublistId: sublistName });
 
-                // Setear datos en linea
-                recordContext.setCurrentSublistValue({
-                    sublistId: sublistName,
-                    fieldId: 'custpage_inspeccion',
-                    value: element
+                    // Setear datos en linea
+                    recordContext.setCurrentSublistValue({
+                        sublistId: sublistName,
+                        fieldId: 'custpage_lotes',
+                        value: value_lot
+                    });
+                    recordContext.setCurrentSublistValue({
+                        sublistId: sublistName,
+                        fieldId: 'custpage_inspeccion',
+                        value: value_datprev
+                    });
+
+                    // Commit en linea
+                    recordContext.commitLine({ sublistId: sublistName });
                 });
-
-                // Commit en linea
-                recordContext.commitLine({ sublistId: sublistName });
             });
 
             // Obtener la sublista actualizada

@@ -570,6 +570,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 sublist.addField({ id: 'custpage_lotes', type: serverWidget.FieldType.TEXT, label: 'Lotes' });
                 sublist.addField({ id: 'custpage_secuencia', type: serverWidget.FieldType.TEXT, label: 'Secuencia' });
                 sublist.addField({ id: 'custpage_ensayos', type: serverWidget.FieldType.TEXT, label: 'Ensayos' });
+                sublist.addField({ id: 'custpage_ensayos_mostrar', type: serverWidget.FieldType.TEXT, label: 'Ensayos Mostrar' });
                 sublist.addField({ id: 'custpage_especificaciones', type: serverWidget.FieldType.TEXT, label: 'Especificaciones' });
                 sublist.addField({ id: 'custpage_campos', type: serverWidget.FieldType.TEXT, label: 'Campos' });
                 sublist.addField({ id: 'custpage_instrucciones', type: serverWidget.FieldType.TEXT, label: 'Instrucciones' });
@@ -587,6 +588,9 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                         }
                         if (element.inspeccion_nombre) {
                             sublist.setSublistValue({ id: 'custpage_ensayos', line: contador, value: element.inspeccion_nombre });
+                        }
+                        if (element.inspeccion_nombre_mostrar) {
+                            sublist.setSublistValue({ id: 'custpage_ensayos_mostrar', line: contador, value: element.inspeccion_nombre_mostrar });
                         }
                         if (element.descripcion_inspeccion) {
                             sublist.setSublistValue({ id: 'custpage_especificaciones', line: contador, value: element.descripcion_inspeccion });
@@ -628,17 +632,22 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
 
                 // Setear cabecera a sublista
                 sublist.addField({ id: 'custpage_id_interno', type: serverWidget.FieldType.TEXT, label: 'ID interno', displayType: 'HIDDEN' });
+                sublist.addField({ id: 'custpage_lotes', type: serverWidget.FieldType.TEXT, label: 'Lotes' });
                 sublist.addField({ id: 'custpage_inspeccion', type: serverWidget.FieldType.TEXT, label: 'Inspección' });
                 sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.CHECKBOX, label: 'Estado' });
 
                 // Setear propiedades a sublista
                 sublist.getField({ id: 'custpage_id_interno' }).updateDisplayType({ displayType: 'HIDDEN' });
+                sublist.getField({ id: 'custpage_lotes' }).isMandatory = true;
                 sublist.getField({ id: 'custpage_inspeccion' }).isMandatory = true;
 
                 // Setear los datos obtenidos a sublista
                 dataDatosPreviosInspeccion.forEach((element, i) => {
                     if (element.cola_inspeccion_id_interno) {
                         sublist.setSublistValue({ id: 'custpage_id_interno', line: i, value: element.cola_inspeccion_id_interno });
+                    }
+                    if (element.lote) {
+                        sublist.setSublistValue({ id: 'custpage_lotes', line: i, value: element.lote });
                     }
                     if (element.inspeccion) {
                         sublist.setSublistValue({ id: 'custpage_inspeccion', line: i, value: element.inspeccion });

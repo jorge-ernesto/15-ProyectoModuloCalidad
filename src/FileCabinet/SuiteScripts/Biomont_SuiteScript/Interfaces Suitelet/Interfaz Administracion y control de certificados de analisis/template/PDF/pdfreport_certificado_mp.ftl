@@ -158,7 +158,7 @@
 
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
-            <span class="fs12">Lote: ${keylot}<br /></span>
+            <span class="fs12">Lote: ${keylot}</span><br />
             <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
@@ -170,7 +170,7 @@
                     </tr>
                     <#list lotes as datoscalidad>
                         <tr>
-                            <td colspan="2">${datoscalidad.inspeccion_nombre}</td>
+                            <td colspan="2">${datoscalidad.inspeccion_nombre_mostrar}</td>
                             <td colspan="2">${datoscalidad.descripcion_inspeccion}</td>
                             <td colspan="1">${datoscalidad.valor_inspeccion}</td>
                         </tr>
@@ -181,12 +181,14 @@
 
         <!-- COLA DE INSPECCION -->
         <#assign observaciones = params.cola_inspeccion_data.data_PDFCabecera[0].observaciones>
+        <#assign estado_nombre_mostrar = params.cola_inspeccion_data.data_PDFCabecera[0].estado_nombre_mostrar>
         <#assign usuariofirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_revisadopor>
         <#assign fechafirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_revisadopor>
         <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_aprobadopor>
         <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_aprobadopor>
 
-        <span class="fs12">Observaciones: ${observaciones}</span>
+        <span class="fs12">Observaciones: ${observaciones}</span><br />
+        <span class="fs12">Estado: ${estado_nombre_mostrar}</span>
         <table width="100%" class="fs12 border-collapse" cellpadding="1">
             <tbody>
                 <tr>
