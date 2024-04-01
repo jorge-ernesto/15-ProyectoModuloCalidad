@@ -100,6 +100,7 @@
       <object>customrecord_qm_queue.custrecord_qm_queue_line</object>
       <object>custbodynufocus_enlace_letra</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_last_operation</object>
+      <object>customrecord_qm_quality_inspection.custrecord_bio_qm_inspection_nom_mos</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_sampleid</object>
       <object>custbody_am_production_unitstype</object>
       <object>custbody_10184_customer_entity_bank</object>

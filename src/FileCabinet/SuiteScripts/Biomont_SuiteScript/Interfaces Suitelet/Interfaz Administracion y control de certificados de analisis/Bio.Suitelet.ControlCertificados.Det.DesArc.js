@@ -65,7 +65,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
                 id: cola_inspeccion_id
             });
 
-            // Obtener datos
+            // Obtener data
             let transaccion_inv_id = colaInspeccionRecord.getValue('custrecord_qm_queue_transaction_inv');
 
             // Obtener data
@@ -93,10 +93,10 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
 
             // Obtener data
             let data = {
-                data_PDFCabecera: data_PDFCabecera,
-                data_PDFDetalle: data_PDFDetalle,
-                data_PDFDetalle_DatosPreviosInspeccion: data_PDFDetalle_DatosPreviosInspeccion,
-                data_PDFDetalle_DatosISO2859: data_PDFDetalle_DatosISO2859
+                data_PDFCabecera: objHelper.convertObjectValuesToStrings(data_PDFCabecera),
+                data_PDFDetalle: objHelper.convertObjectValuesToStrings(data_PDFDetalle),
+                data_PDFDetalle_DatosPreviosInspeccion: objHelper.convertObjectValuesToStrings(data_PDFDetalle_DatosPreviosInspeccion),
+                data_PDFDetalle_DatosISO2859: objHelper.convertObjectValuesToStrings(data_PDFDetalle_DatosISO2859)
             }
 
             return data;

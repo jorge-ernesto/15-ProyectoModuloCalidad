@@ -108,6 +108,7 @@ define(['./Bio.Library.Helper', 'N'],
                     let transaccion_principal_nombre = row.getText(columns[3]);
                     let estado_id_interno = row.getValue(columns[4]);
                     let estado_nombre = row.getText(columns[4]);
+                    let estado_nombre_mostrar = [1, 2, 3].includes(Number(estado_id_interno)) ? estado_nombre.toUpperCase() : 'RECHAZADO';
                     let ubicacion_id_interno = row.getValue(columns[5]);
                     let ubicacion_nombre = row.getText(columns[5]);
                     let transaccion_inventario_id_interno = row.getValue(columns[6]);
@@ -126,7 +127,7 @@ define(['./Bio.Library.Helper', 'N'],
                         especificacion: { id: especificacion_id_interno, nombre: especificacion_nombre },
                         articulo: { id: articulo_id_interno, nombre: articulo_nombre },
                         transaccion_principal: { id: transaccion_principal_id_interno, nombre: transaccion_principal_nombre },
-                        estado: { id: estado_id_interno, nombre: estado_nombre },
+                        estado: { id: estado_id_interno, nombre: estado_nombre, nombre_mostrar: estado_nombre_mostrar },
                         ubicacion: { id: ubicacion_id_interno, nombre: ubicacion_nombre },
                         transaccion_inventario: { id: transaccion_inventario_id_interno, nombre: transaccion_inventario_nombre },
                         numero_linea_transaccion: numero_linea_transaccion,
@@ -245,15 +246,16 @@ define(['./Bio.Library.Helper', 'N'],
                 // log.debug('createListaDatosPreviosInspeccion', element);
 
                 // Validar campos obligatorios: Inspección
-                if (element[1]) {
+                if (element[1] && element[2]) {
 
                     // Validar valores para checkbox
-                    element[2] = element[2] == 'T' ? true : false;
+                    element[3] = element[3] == 'T' ? true : false;
 
                     let newRecord = record.create({ type: 'customrecord_bio_qm_prev_insp_data' });
                     newRecord.setValue('custrecord_bio_qm_prev_insp_colins', cola_inspeccion_id);
-                    newRecord.setValue('custrecord_bio_qm_prev_insp_insp', element[1]);
-                    newRecord.setValue('custrecord_bio_qm_prev_insp_est', element[2]);
+                    newRecord.setValue('custrecord_bio_qm_prev_insp_lote', element[1]);
+                    newRecord.setValue('custrecord_bio_qm_prev_insp_insp', element[2]);
+                    newRecord.setValue('custrecord_bio_qm_prev_insp_est', element[3]);
 
                     let recordId = newRecord.save();
                 }
@@ -306,6 +308,7 @@ define(['./Bio.Library.Helper', 'N'],
         }
 
         // Suitelet Detail Download File
+        // Cabecera
         function getData_PDFCabecera_MPMEMV(cola_inspeccion_id, articulo_id, numero_linea_transaccion) {
 
             // Declarar variables
@@ -371,6 +374,7 @@ define(['./Bio.Library.Helper', 'N'],
                         join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
                         label: "BIO_CAM_REC_NUM_ANALISIS"
                     }),
+                    search.createColumn({ name: "custrecord_qm_queue_status", label: "Estado" }),
                     // search.createColumn({
                     //     name: "formulahtml",
                     //     formula: "'<span style=\"background-color: red;\">*</span>'",
@@ -454,22 +458,25 @@ define(['./Bio.Library.Helper', 'N'],
                     let ns_serie = row.getValue(columns[9]);
                     let ns_numero_correlativo = row.getValue(columns[10]);
                     let num_analisis = row.getValue(columns[11]);
+                    let estado_id_interno = row.getValue(columns[12]);
+                    let estado_nombre = row.getText(columns[12]);
+                    let estado_nombre_mostrar = [1, 2, 3].includes(Number(estado_id_interno)) ? estado_nombre.toUpperCase() : 'RECHAZADO';
                     // MP
-                    let num_tecnica = row.getValue(columns[12]);
-                    let fabricante = row.getValue(columns[13]);
-                    let fecha_analisis = row.getValue(columns[14]);
+                    let num_tecnica = row.getValue(columns[13]);
+                    let fabricante = row.getValue(columns[14]);
+                    let fecha_analisis = row.getValue(columns[15]);
                     // ME_MV
-                    let tipo_embalaje_primario = row.getValue(columns[15]);
-                    let tipo_embalaje_secundario = row.getValue(columns[16]);
-                    let cantidad_inspeccionada = row.getValue(columns[17]);
-                    let cantidad_muestreada = row.getValue(columns[18]);
-                    let nivel_inspeccion_iso_2859 = row.getValue(columns[19]);
+                    let tipo_embalaje_primario = row.getValue(columns[16]);
+                    let tipo_embalaje_secundario = row.getValue(columns[17]);
+                    let cantidad_inspeccionada = row.getValue(columns[18]);
+                    let cantidad_muestreada = row.getValue(columns[19]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[20]);
                     // Firma
-                    let usuariofirma_revisadopor = row.getText(columns[20]);
-                    let fechafirma_revisadopor = row.getValue(columns[21]);
-                    let usuariofirma_aprobadopor = row.getText(columns[22]);
-                    let fechafirma_aprobadopor = row.getValue(columns[23]);
-                    let observaciones = row.getValue(columns[24]);
+                    let usuariofirma_revisadopor = row.getText(columns[21]);
+                    let fechafirma_revisadopor = row.getValue(columns[22]);
+                    let usuariofirma_aprobadopor = row.getText(columns[23]);
+                    let fechafirma_aprobadopor = row.getValue(columns[24]);
+                    let observaciones = row.getValue(columns[25]);
 
                     // Insertar informacion en array
                     resultTransaction.push({
@@ -487,6 +494,9 @@ define(['./Bio.Library.Helper', 'N'],
                         ns_serie,
                         ns_numero_correlativo,
                         num_analisis,
+                        estado_id_interno,
+                        estado_nombre,
+                        estado_nombre_mostrar,
                         // MP
                         num_tecnica,
                         fabricante,
@@ -565,6 +575,7 @@ define(['./Bio.Library.Helper', 'N'],
                         join: "CUSTRECORD_QM_QUEUE_TRANSACTION_INV",
                         label: "BIO_CAM_OP_FECHA_CADUCIDAD"
                     }),
+                    search.createColumn({ name: "custrecord_qm_queue_status", label: "Estado" }),
                     // search.createColumn({
                     //     name: "formulahtml",
                     //     formula: "'<span style=\"background-color: red;\">*</span>'",
@@ -584,6 +595,7 @@ define(['./Bio.Library.Helper', 'N'],
                     search.createColumn({ name: "custrecord_bio_qm_queue_pharma_form", label: "Forma farmaceutica" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_procedencia", label: "Procedencia" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_num_analisis", label: "Número de Análisis" }),
+                    search.createColumn({ name: "custrecord_bio_qm_queue_presentacion", label: "Presentación" }),
                     // Firma
                     search.createColumn({ name: "custrecord_bio_qm_queue_usufir_revpor", label: "Usuario Firma (Revisado Por)" }),
                     search.createColumn({ name: "custrecord_bio_qm_queue_fecfir_revpor", label: "Fecha Firma (Revisado Por)" }),
@@ -649,27 +661,31 @@ define(['./Bio.Library.Helper', 'N'],
                     let fecha_inicio_produccion_ot = row.getValue(columns[6]);
                     let lote_finot = row.getValue(columns[7]);
                     let fecha_caducidad_finot = row.getValue(columns[8]);
+                    let estado_id_interno = row.getValue(columns[9]);
+                    let estado_nombre = row.getText(columns[9]);
+                    let estado_nombre_mostrar = [1, 2, 3].includes(Number(estado_id_interno)) ? estado_nombre.toUpperCase() : 'RECHAZADO';
                     // MP
-                    let num_tecnica = row.getValue(columns[9]);
-                    let fabricante = row.getValue(columns[10]);
-                    let fecha_analisis = row.getValue(columns[11]);
+                    let num_tecnica = row.getValue(columns[10]);
+                    let fabricante = row.getValue(columns[11]);
+                    let fecha_analisis = row.getValue(columns[12]);
                     // ME_MV
-                    let tipo_embalaje_primario = row.getValue(columns[12]);
-                    let tipo_embalaje_secundario = row.getValue(columns[13]);
-                    let cantidad_inspeccionada = row.getValue(columns[14]);
-                    let cantidad_muestreada = row.getValue(columns[15]);
-                    let nivel_inspeccion_iso_2859 = row.getValue(columns[16]);
+                    let tipo_embalaje_primario = row.getValue(columns[13]);
+                    let tipo_embalaje_secundario = row.getValue(columns[14]);
+                    let cantidad_inspeccionada = row.getValue(columns[15]);
+                    let cantidad_muestreada = row.getValue(columns[16]);
+                    let nivel_inspeccion_iso_2859 = row.getValue(columns[17]);
                     // PT
-                    let forma_farmaceutica_id_intenro = row.getValue(columns[17]);
-                    let forma_farmaceutica_nombre = row.getText(columns[17]);
-                    let procedencia = row.getValue(columns[18]);
-                    let num_analisis = row.getValue(columns[19]);
+                    let forma_farmaceutica_id_intenro = row.getValue(columns[18]);
+                    let forma_farmaceutica_nombre = row.getText(columns[18]);
+                    let procedencia = row.getValue(columns[19]);
+                    let num_analisis = row.getValue(columns[20]);
+                    let presentacion = row.getValue(columns[21]);
                     // Firma
-                    let usuariofirma_revisadopor = row.getText(columns[20]);
-                    let fechafirma_revisadopor = row.getValue(columns[21]);
-                    let usuariofirma_aprobadopor = row.getText(columns[22]);
-                    let fechafirma_aprobadopor = row.getValue(columns[23]);
-                    let observaciones = row.getValue(columns[24]);
+                    let usuariofirma_revisadopor = row.getText(columns[22]);
+                    let fechafirma_revisadopor = row.getValue(columns[23]);
+                    let usuariofirma_aprobadopor = row.getText(columns[24]);
+                    let fechafirma_aprobadopor = row.getValue(columns[25]);
+                    let observaciones = row.getValue(columns[26]);
 
                     // Procesar informacion
                     fecha_inicio_produccion_ot = fecha_inicio_produccion_ot ? fecha_inicio_produccion_ot.split('/')[1] + '-' + fecha_inicio_produccion_ot.split('/')[2] : '';
@@ -686,6 +702,9 @@ define(['./Bio.Library.Helper', 'N'],
                         fecha_inicio_produccion_ot,
                         lote_finot,
                         fecha_caducidad_finot,
+                        estado_id_interno,
+                        estado_nombre,
+                        estado_nombre_mostrar,
                         // MP
                         num_tecnica,
                         fabricante,
@@ -701,6 +720,7 @@ define(['./Bio.Library.Helper', 'N'],
                         forma_farmaceutica_nombre,
                         procedencia,
                         num_analisis,
+                        presentacion,
                         // Firma
                         usuariofirma_revisadopor,
                         fechafirma_revisadopor,
@@ -715,6 +735,7 @@ define(['./Bio.Library.Helper', 'N'],
             return resultTransaction;
         }
 
+        // Detalle
         function getData_PDFDetalle(cola_inspeccion_id) {
 
             // Declarar variables
@@ -731,6 +752,11 @@ define(['./Bio.Library.Helper', 'N'],
                         label: "Registro principal de cola de inspección"
                     }),
                     search.createColumn({ name: "custrecord_qm_quality_data_inspection", label: "Inspección" }),
+                    search.createColumn({
+                        name: "custrecord_bio_qm_inspection_nom_mos",
+                        join: "CUSTRECORD_QM_QUALITY_DATA_INSPECTION",
+                        label: "Nombre a mostrar"
+                    }),
                     search.createColumn({ name: "custrecord_qm_quality_data_description", label: "Descripción de inspección" }),
                     search.createColumn({ name: "custrecord_qm_quality_data_status", label: "Estado" }),
                     search.createColumn({
@@ -787,15 +813,16 @@ define(['./Bio.Library.Helper', 'N'],
                     let registro_principal_cola_inspeccion = row.getValue(columns[1]);
                     let inspeccion_id_interno = row.getValue(columns[2]);
                     let inspeccion_nombre = row.getText(columns[2]);
-                    let descripcion_inspeccion = row.getValue(columns[3]);
-                    let estado = row.getText(columns[4]);
-                    let secuencia = row.getValue(columns[5]);
-                    let id_control = row.getValue(columns[6]);
-                    let numero_lote = row.getValue(columns[7]);
-                    let campo_inspeccion_id_interno = row.getValue(columns[8]);
-                    let campo_inspeccion_nombre = row.getText(columns[8]);
-                    let instrucciones = row.getValue(columns[9]);
-                    let valor_inspeccion = row.getValue(columns[10]);
+                    let inspeccion_nombre_mostrar = row.getValue(columns[3]);
+                    let descripcion_inspeccion = row.getValue(columns[4]);
+                    let estado = row.getText(columns[5]);
+                    let secuencia = row.getValue(columns[6]);
+                    let id_control = row.getValue(columns[7]);
+                    let numero_lote = row.getValue(columns[8]);
+                    let campo_inspeccion_id_interno = row.getValue(columns[9]);
+                    let campo_inspeccion_nombre = row.getText(columns[9]);
+                    let instrucciones = row.getValue(columns[10]);
+                    let valor_inspeccion = row.getValue(columns[11]);
 
                     // Procesar informacion
                     numero_lote = numero_lote.trim()
@@ -806,6 +833,7 @@ define(['./Bio.Library.Helper', 'N'],
                         registro_principal_cola_inspeccion,
                         inspeccion_id_interno,
                         inspeccion_nombre,
+                        inspeccion_nombre_mostrar,
                         descripcion_inspeccion,
                         estado,
                         secuencia,
@@ -820,6 +848,73 @@ define(['./Bio.Library.Helper', 'N'],
             });
 
             // objHelper.error_log('getData_PDFDetalle', resultTransaction);
+            return resultTransaction;
+        }
+
+        function getData_PDFDetalle_ListaCamposInspeccionCalidad(data_PDFDetalle) {
+
+            // Filtro de ID Interno de Lista de campos de inspección de calidad
+            let id_interno = ["@NONE@"];
+            if (Object.keys(data_PDFDetalle).length > 0) {
+                id_interno = [];
+                data_PDFDetalle.forEach(element => {
+                    id_interno.push(element.campo_inspeccion_id_interno)
+                });
+            }
+
+            // Declarar variables
+            let resultTransaction = [];
+
+            // Declarar search
+            let searchObject = {
+                type: 'customrecord_qm_inspection_fields',
+                columns: [
+                    search.createColumn({
+                        name: "internalid",
+                        sort: search.Sort.ASC,
+                        label: "ID interno"
+                    }),
+                    search.createColumn({ name: "name", label: "Nombre" }),
+                    search.createColumn({ name: "custrecord_qm_field_data_type", label: "Tipo de datos" }),
+                    search.createColumn({ name: "custrecord_qm_field_summary_field", label: "Campo Resumen de muestreo" }),
+                    search.createColumn({ name: "custrecord_qm_field_coa_field", label: "Campo de certificado de análisis (CoA)" }),
+                    search.createColumn({ name: "custrecord_bio_qm_field_coa_uni_med", label: "Unidad de medida" })
+                ],
+                filters: [
+                    ["internalid", "anyof"].concat(id_interno)
+                ]
+            };
+
+            // Crear search
+            let searchContext = search.create(searchObject);
+
+            // Cantidad de registros en search
+            // let count = searchContext.runPaged().count;
+            // objHelper.error_log('', 'getData_PDFDetalle_ListaCamposInspeccionCalidad');
+            // objHelper.error_log('', count);
+
+            // Recorrer search - con mas de 4000 registros
+            let pageData = searchContext.runPaged({ pageSize: 1000 }); // El minimo de registros que se puede traer por pagina es 50, pondremos 1000 para que en el caso existan 4500 registros, hayan 5 paginas como maximo y no me consuma mucha memoria
+
+            pageData.pageRanges.forEach(function (pageRange) {
+                var myPage = pageData.fetch({ index: pageRange.index });
+                myPage.data.forEach((row) => {
+                    // Obtener informacion
+                    let { columns } = row;
+                    let id_interno = row.getValue(columns[0]);
+                    let nombre = row.getValue(columns[1]);
+                    let unidad_medida = row.getValue(columns[5]);
+
+                    // Insertar informacion en array
+                    resultTransaction.push({
+                        id_interno,
+                        nombre,
+                        unidad_medida
+                    });
+                });
+            });
+
+            // objHelper.error_log('getData_PDFDetalle_ListaCamposInspeccionCalidad', resultTransaction);
             return resultTransaction;
         }
 
@@ -1015,37 +1110,61 @@ define(['./Bio.Library.Helper', 'N'],
 
         function getData_PDFDetalle_Completa_MPMEMV_PT(tipo_pdf, cola_inspeccion_id, transaccion_inv_id, articulo_id, numero_linea_transaccion) {
 
+            // Declarar variables
+            let data_PDFDetalle = [];
+            let data_PDFDetalle_ListaCamposInspeccionCalidad = [];
+            let data_PDFDetalle_TransaccionInventario = []; // Puede ser Recepción Articulo o Finalización de Orden de Producción
+
             // Obtener data
-            let data_PDFDetalle = getData_PDFDetalle(cola_inspeccion_id);
-            let data_PDFDetalle_TransaccioInventario = []; // Puede ser Recepción Articulo o Finalización de Orden de Producción
+            data_PDFDetalle = getData_PDFDetalle(cola_inspeccion_id);
+            data_PDFDetalle_ListaCamposInspeccionCalidad = getData_PDFDetalle_ListaCamposInspeccionCalidad(data_PDFDetalle);
 
             // Determinar tipo de pdf
             if (tipo_pdf == 'MP' || tipo_pdf == 'ME_MV')
-                data_PDFDetalle_TransaccioInventario = getData_PDFDetalle_RecepcionArticulo_MPMEMV(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+                data_PDFDetalle_TransaccionInventario = getData_PDFDetalle_RecepcionArticulo_MPMEMV(transaccion_inv_id, articulo_id, numero_linea_transaccion);
             else if (tipo_pdf == 'PT')
-                data_PDFDetalle_TransaccioInventario = getData_PDFDetalle_FinalizacionOrdenProduccion_PT(transaccion_inv_id, articulo_id, numero_linea_transaccion);
+                data_PDFDetalle_TransaccionInventario = getData_PDFDetalle_FinalizacionOrdenProduccion_PT(transaccion_inv_id, articulo_id, numero_linea_transaccion);
 
-            // Debug
-            // objHelper.error_log('', { data_PDFDetalle, data_PDFDetalle_TransaccioInventario });
+            /******************/
 
             // Recorrer Datos de calidad
             data_PDFDetalle.forEach((value, key) => {
 
-                // Objeto en el array donde almacenaremos Fecha de Caducidad
+                data_PDFDetalle[key]['unidad_medida'] = '';
+
+                // Recorrer Lista de campos de inspección de calidad
+                data_PDFDetalle_ListaCamposInspeccionCalidad.forEach((value_, key_) => {
+
+                    // Validar los id interno
+                    if (value.campo_inspeccion_id_interno == value_.id_interno) {
+
+                        // Obtener Unidad de Medida de Lista de campos de inspección de calidad
+                        data_PDFDetalle[key]['unidad_medida'] = value_.unidad_medida;
+                    }
+                });
+            });
+
+            /******************/
+
+            // Recorrer Datos de calidad
+            data_PDFDetalle.forEach((value, key) => {
+
                 data_PDFDetalle[key]['fecha_caducidad'] = data_PDFDetalle[key]['fecha_caducidad'] || []; // Validar si encontrara mas de una fecha
 
                 // Recorrer Transaccion - Recepción de artículo (Detalle de inventario)
-                data_PDFDetalle_TransaccioInventario.forEach((value_, key_) => {
+                data_PDFDetalle_TransaccionInventario.forEach((value_, key_) => {
 
                     // Validar los lotes
                     if (value.numero_lote == value_.det_inv_lote_nombre) {
 
-                        // Obtener Fecha de Caducidad por Lote del Detalle de Inventario
+                        // Obtener Fecha de Caducidad por Lote de Detalle de Inventario
                         data_PDFDetalle[key]['fecha_caducidad'] = data_PDFDetalle[key]['fecha_caducidad'] || []; // Validar si encontrara mas de una fecha
                         data_PDFDetalle[key]['fecha_caducidad'].push(value_.det_inv_fecha_caducidad);
                     }
                 })
             });
+
+            /******************/
 
             // Obtener data en formato agrupado
             let dataAgrupada = {}; // * Audit: Util, manejo de JSON
@@ -1079,6 +1198,7 @@ define(['./Bio.Library.Helper', 'N'],
                 type: 'customrecord_bio_qm_prev_insp_data',
                 columns: [
                     'custrecord_bio_qm_prev_insp_colins',
+                    'custrecord_bio_qm_prev_insp_lote',
                     'custrecord_bio_qm_prev_insp_insp',
                     'custrecord_bio_qm_prev_insp_est'
                 ],
@@ -1104,8 +1224,9 @@ define(['./Bio.Library.Helper', 'N'],
                     // Obtener informacion
                     let { columns } = row;
                     let cola_inspeccion_id_interno = row.getValue(columns[0]);
-                    let inspeccion = row.getValue(columns[1]);
-                    let estado = row.getValue(columns[2]);
+                    let lote = row.getValue(columns[1]);
+                    let inspeccion = row.getValue(columns[2]);
+                    let estado = row.getValue(columns[3]);
 
                     // Validar valores para checkbox
                     estado_sublist = estado == true ? 'T' : 'F';
@@ -1114,6 +1235,7 @@ define(['./Bio.Library.Helper', 'N'],
                     // Insertar informacion en array
                     resultTransaction.push({
                         cola_inspeccion_id_interno,
+                        lote,
                         inspeccion,
                         estado,
                         estado_sublist,

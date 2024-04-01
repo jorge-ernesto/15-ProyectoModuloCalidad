@@ -163,29 +163,42 @@
             </thead>
         </table>
 
-        <!-- DATOS PREVIOS DE INSPECCION -->
-        <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
-            <tbody>
-                <tr>
-                    <td colspan="3"><b>INSPECCION</b></td>
-                    <td colspan="2"><b>ESTADO</b></td>
-                </tr>
-                <#list params.cola_inspeccion_data.data_PDFDetalle_DatosPreviosInspeccion as datosprevinsp>
-                    <tr>
-                        <td colspan="3">${datosprevinsp.inspeccion}</td>
-                        <td colspan="2">${datosprevinsp.estado_pdf}</td>
-                    </tr>
-                </#list>
-            </tbody>
-        </table>
-
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
-            Lote: ${keylot}<br />
-            Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}
+            <span class="fs12">Lote: ${keylot}</span><br />
+            <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
+
+            <#--  Lote: ${keylot}<br />
+            Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}  -->
 
             <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
                 <tbody>
+                    <!-- DATOS PREVIOS DE INSPECCION -->
+                    <#assign mostrar_cabecera_datosPreviosInspeccion = true>
+                    <#assign mostrar_pie_datosPreviosInspeccion = false>
+
+                    <#list params.cola_inspeccion_data.data_PDFDetalle_DatosPreviosInspeccion as datosprevinsp>
+                        <#if (datosprevinsp.lote == keylot)>
+                            <#if mostrar_cabecera_datosPreviosInspeccion == true>
+                                <tr>
+                                    <td colspan="3"><b>INSPECCION</b></td>
+                                    <td colspan="2"><b>ESTADO</b></td>
+                                </tr>
+                                <#assign mostrar_cabecera_datosPreviosInspeccion = false>
+                                <#assign mostrar_pie_datosPreviosInspeccion = true>
+                            </#if>
+                            <tr>
+                                <td colspan="3">${datosprevinsp.inspeccion}</td>
+                                <td colspan="2">${datosprevinsp.estado_pdf}</td>
+                            </tr>
+                        </#if>
+                    </#list>
+                    <#if mostrar_pie_datosPreviosInspeccion == true>
+                        <tr>
+                            <td style="border: 0" colspan="5">&nbsp;</td>
+                        </tr>
+                    </#if>
+
                     <!-- DATOS DE CALIDAD -->
                     <tr>
                         <td colspan="2"><b>ENSAYOS</b></td>
@@ -194,9 +207,9 @@
                     </tr>
                     <#list lotes as datoscalidad>
                         <tr>
-                            <td colspan="2">${datoscalidad.inspeccion_nombre}</td>
+                            <td colspan="2">${datoscalidad.inspeccion_nombre_mostrar}</td>
                             <td colspan="2">${datoscalidad.descripcion_inspeccion}</td>
-                            <td colspan="1">${datoscalidad.valor_inspeccion}</td>
+                            <td colspan="1"><#if datoscalidad.valor_inspeccion?has_content>${datoscalidad.valor_inspeccion} ${datoscalidad.unidad_medida}</#if></td>
                         </tr>
                     </#list>
                     <tr>
@@ -240,12 +253,14 @@
 
         <!-- COLA DE INSPECCION -->
         <#assign observaciones = params.cola_inspeccion_data.data_PDFCabecera[0].observaciones>
+        <#assign estado_nombre_mostrar = params.cola_inspeccion_data.data_PDFCabecera[0].estado_nombre_mostrar>
         <#assign usuariofirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_revisadopor>
         <#assign fechafirma_revisadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_revisadopor>
         <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_aprobadopor>
         <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_aprobadopor>
 
-        <span class="fs12">Observaciones: ${observaciones}</span>
+        <span class="fs12">Observaciones: ${observaciones?replace("\n", "<br/>")}</span><br />
+        <span class="fs12">Estado: <b>${estado_nombre_mostrar}</b></span>
         <table width="100%" class="fs12 border-collapse" cellpadding="1">
             <tbody>
                 <tr>
