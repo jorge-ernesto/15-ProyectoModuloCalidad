@@ -6,15 +6,47 @@
   <customvalues>
     <customvalue scriptid="val_2802326_6462530_sb1_743">
       <isinactive>F</isinactive>
-      <value>Opcion 1</value>
+      <value>CAPSULA</value>
     </customvalue>
     <customvalue scriptid="val_2802327_6462530_sb1_878">
       <isinactive>F</isinactive>
-      <value>Opcion 2</value>
+      <value>CREMA</value>
     </customvalue>
     <customvalue scriptid="val_2802328_6462530_sb1_767">
       <isinactive>F</isinactive>
-      <value>Opcion 3</value>
+      <value>GEL ORAL</value>
+    </customvalue>
+    <customvalue scriptid="val_3898966_6462530_sb1_248">
+      <isinactive>F</isinactive>
+      <value>GOTAS</value>
+    </customvalue>
+    <customvalue scriptid="val_3898967_6462530_sb1_344">
+      <isinactive>F</isinactive>
+      <value>PASTA</value>
+    </customvalue>
+    <customvalue scriptid="val_3898968_6462530_sb1_556">
+      <isinactive>F</isinactive>
+      <value>POLVO</value>
+    </customvalue>
+    <customvalue scriptid="val_3898969_6462530_sb1_411">
+      <isinactive>F</isinactive>
+      <value>SOLUCION INYECTABLE</value>
+    </customvalue>
+    <customvalue scriptid="val_3898970_6462530_sb1_464">
+      <isinactive>F</isinactive>
+      <value>SOLUCION ORAL</value>
+    </customvalue>
+    <customvalue scriptid="val_3898971_6462530_sb1_608">
+      <isinactive>F</isinactive>
+      <value>SOLUCION TOPICA</value>
+    </customvalue>
+    <customvalue scriptid="val_3898972_6462530_sb1_403">
+      <isinactive>F</isinactive>
+      <value>SUSPENSION ORAL</value>
+    </customvalue>
+    <customvalue scriptid="val_3898973_6462530_sb1_251">
+      <isinactive>F</isinactive>
+      <value>TABLETAS</value>
     </customvalue>
   </customvalues>
 </customlist>

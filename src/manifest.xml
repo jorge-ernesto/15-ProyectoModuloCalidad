@@ -30,7 +30,9 @@
       <object>customrecord_qm_queue.custrecord_qm_queue_trans_edit</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_controlid</object>
       <object>custbody_nsts_rm_rebate_attachment</object>
+      <object>customrecord_qm_inspection_fields.custrecord_bio_qm_field_coa_uni_med</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_inv_tran</object>
+      <object>customlist_qm_data_types</object>
       <object>custbody_am_workorder_text</object>
       <object>custbody_11187_pref_entity_bank</object>
       <object>custbodynufocus_cod_banco</object>
@@ -64,18 +66,21 @@
       <object>customlist_qm_trigger_type</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_parent</object>
       <object>customrecord_qm_quality_detail.custrecord_qm_quality_detail_value</object>
+      <object>customrecord_qm_inspection_fields.custrecord_qm_field_data_type</object>
       <object>custbody_ns_planilla_generada_letras</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_vs_fail</object>
       <object>custbodyiqityscrappedmoved</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_transaction_inv</object>
       <object>customrecord_qm_quality_data.custrecord_qm_quality_data_mandatory</object>
       <object>custbody_15529_vendor_entity_bank</object>
+      <object>customrecord_qm_inspection_fields.custrecord_qm_field_coa_field</object>
       <object>custbody_ns_co_tretefuente</object>
       <object>customrecord_qm_queue</object>
       <object>custbody_ns_doc_ref_type</object>
       <object>customrecord_qm_quality_detail.custrecord_qm_quality_detail_parent</object>
       <object>custbody_11724_bank_fee</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_vs_pass</object>
+      <object>customrecord_qm_inspection_fields.custrecord_qm_field_summary_field</object>
       <object>custbody_4599_mx_operation_type</object>
       <object>custbody_am_production_units</object>
       <object>custitem7</object>
@@ -94,6 +99,7 @@
       <object>customrecord_qm_queue.custrecord_qm_queue_employee</object>
       <object>customlist_qm_inspection_outcomes</object>
       <object>cseg2</object>
+      <object>customrecord_qm_inspection_fields</object>
       <object>customrecord_qm_quality_data.custrecord_qm_parent_record</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_context</object>
       <object>customrecord_qm_queue.custrecord_qm_queue_priority</object>

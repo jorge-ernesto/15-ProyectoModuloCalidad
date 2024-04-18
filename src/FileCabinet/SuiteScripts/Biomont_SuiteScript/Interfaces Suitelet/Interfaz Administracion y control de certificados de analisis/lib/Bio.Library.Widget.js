@@ -330,11 +330,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 var fieldEstado = form.addField({
                     id: 'custpage_field_estado',
                     label: 'Estado',
-                    type: 'text',
+                    type: 'select',
+                    // source: 'customlist_qm_inspection_outcomes',
                     container: 'custpage_group_dat'
                 });
                 fieldEstado.updateBreakType({ breakType: 'STARTCOL' })
-                fieldEstado.updateDisplayType({ displayType: 'INLINE' });
+                setFieldReport(fieldEstado, 'fieldInspectionOutcomes');
 
                 // Ubicacion
                 var fieldUbicacion = form.addField({
@@ -584,6 +585,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 sublist.addField({ id: 'custpage_campos', type: serverWidget.FieldType.TEXT, label: 'Campos' });
                 sublist.addField({ id: 'custpage_instrucciones', type: serverWidget.FieldType.TEXT, label: 'Instrucciones' });
                 sublist.addField({ id: 'custpage_resultados', type: serverWidget.FieldType.TEXT, label: 'Resultados' });
+                sublist.addField({ id: 'custpage_estado', type: serverWidget.FieldType.TEXT, label: 'Estado' });
 
                 // Setear los datos obtenidos a sublista
                 let contador = 0;
@@ -612,6 +614,9 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                         }
                         if (element.valor_inspeccion) { // || element.unidad_medida
                             sublist.setSublistValue({ id: 'custpage_resultados', line: contador, value: `${element.valor_inspeccion} ${element.unidad_medida}` });
+                        }
+                        if (element.estado) {
+                            sublist.setSublistValue({ id: 'custpage_estado', line: contador, value: `${element.estado}` });
                         }
                         contador++
                     });

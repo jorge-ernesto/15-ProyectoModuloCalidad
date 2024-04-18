@@ -125,7 +125,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 fieldLinea.defaultValue = dataColaInspeccion[0].linea.nombre;
                 fieldTipoProducto.defaultValue = dataColaInspeccion[0].tipo_producto.nombre;
                 fieldTransaccionPrincipal.defaultValue = dataColaInspeccion[0].transaccion_principal.id;
-                fieldEstado.defaultValue = dataColaInspeccion[0].estado.nombre;
+                fieldEstado.defaultValue = dataColaInspeccion[0].estado.id;
                 fieldUbicacion.defaultValue = dataColaInspeccion[0].ubicacion.nombre;
                 fieldTransaccionInventario.defaultValue = dataColaInspeccion[0].transaccion_inventario.id;
                 fieldNumeroLineaTransaccion.defaultValue = dataColaInspeccion[0].numero_linea_transaccion;
@@ -161,6 +161,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 /****************** Recibir parametros por POST ******************/
                 // Datos
                 let cola_inspeccion_id_interno = scriptContext.request.parameters['custpage_field_cola_inspeccion_id_interno'];
+                let estado = scriptContext.request.parameters['custpage_field_estado'];
 
                 // Datos a actualizar
                 // MP
@@ -204,6 +205,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 /****************** Actualizar Certificados de Análisis ******************/
                 // Datos
                 let colaInspeccionRecord = record.load({ type: 'customrecord_qm_queue', id: cola_inspeccion_id_interno });
+                colaInspeccionRecord.setValue('custrecord_qm_queue_status', estado);
 
                 // Datos a actualizar
                 // MP
