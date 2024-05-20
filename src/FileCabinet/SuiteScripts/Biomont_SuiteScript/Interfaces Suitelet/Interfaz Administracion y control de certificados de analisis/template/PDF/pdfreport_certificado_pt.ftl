@@ -54,11 +54,11 @@
             }
 
             .border-collapse {
-                border-collapse: collapse;
+                border-collapse: collapse; /* Asegura que los bordes de las celdas se fusionen correctamente */
             }
 
             .tbody {
-                border-collapse: collapse; /* Asegura que los bordes de las celdas se fusionen correctamente */
+                border-collapse: collapse;
                 width: 100%;
             }
 

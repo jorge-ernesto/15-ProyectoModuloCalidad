@@ -70,7 +70,7 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 container: 'custpage_group'
             });
             fieldTriggerType.updateBreakType({ breakType: 'STARTCOL' })
-            setFieldReport(fieldTriggerType, 'fieldTriggerType');
+            setFieldReport(fieldTriggerType, 'fieldTriggerType', 'optionInitEmpty');
 
             // Estados
             let fieldStatus = form.addField({
@@ -81,12 +81,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 container: 'custpage_group'
             });
             fieldStatus.updateBreakType({ breakType: 'STARTCOL' })
-            setFieldReport(fieldStatus, 'fieldInspectionOutcomes');
+            setFieldReport(fieldStatus, 'fieldInspectionOutcomes', 'optionInitEmpty');
 
             return { form, fieldItem, fieldTriggerType, fieldStatus }
         }
 
-        function setFieldReport(field, name) {
+        function setFieldReport(field, name, option = '') {
             // Obtener datos por search
             let dataList = [];
 
@@ -96,10 +96,12 @@ define(['./Bio.Library.Search', './Bio.Library.Helper', 'N'],
                 dataList = objSearch.getInspectionOutcomesList();
             }
 
-            field.addSelectOption({
-                value: '',
-                text: ''
-            });
+            if (option == 'optionInitEmpty') {
+                field.addSelectOption({
+                    value: '',
+                    text: ''
+                });
+            }
 
             // Setear los datos obtenidos manualmente al campo supervisor personalizado
             dataList.forEach((element, i) => {

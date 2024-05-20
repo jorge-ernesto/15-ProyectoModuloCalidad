@@ -229,8 +229,10 @@ define(['N'],
             dataLotes.forEach((value_lot, key_lot) => {
                 dataDatosPreviosInspeccion.forEach((value_datprev, key_datprev) => {
 
-                    // Seleccionar nueva linea
-                    recordContext.selectNewLine({ sublistId: sublistName });
+                    // Seleccionar nueva linea de la sublista
+                    recordContext.selectNewLine({
+                        sublistId: sublistName
+                    });
 
                     // Setear datos en linea
                     recordContext.setCurrentSublistValue({
@@ -245,7 +247,9 @@ define(['N'],
                     });
 
                     // Commit en linea
-                    recordContext.commitLine({ sublistId: sublistName });
+                    recordContext.commitLine({
+                        sublistId: sublistName
+                    });
                 });
             });
 
