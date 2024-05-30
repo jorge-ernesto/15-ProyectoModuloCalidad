@@ -50,10 +50,13 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             });
 
             // Crear PDF
-            let pdfFile = rendererPDF.renderAsPdf();
+            // let pdfFile = rendererPDF.renderAsPdf();
 
             // Reescribir datos de PDF
-            pdfFile.name = `biomont_${typeRep}.pdf`;
+            // pdfFile.name = `biomont_${typeRep}.pdf`;
+
+            // Crear PDF
+            pdfFile = rendererPDF.renderAsString().replace(/&/g, '&amp;');
 
             return { pdfFile };
         }
@@ -89,7 +92,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
             }
 
             // Debug
-            // objHelper.error_log('data', { tipo_pdf, data_PDFCabecera, data_PDFDetalle });
+            // objHelper.error_log('data', { tipo_pdf, data_PDFCabecera, data_PDFDetalle, data_PDFDetalle_DatosPreviosInspeccion, data_PDFDetalle_DatosISO2859 });
 
             // Obtener data
             let data = {
@@ -98,6 +101,9 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
                 data_PDFDetalle_DatosPreviosInspeccion: objHelper.convertObjectValuesToStrings(data_PDFDetalle_DatosPreviosInspeccion),
                 data_PDFDetalle_DatosISO2859: objHelper.convertObjectValuesToStrings(data_PDFDetalle_DatosISO2859)
             }
+
+            // Debug
+            // objHelper.error_log('data', data);
 
             return data;
         }
@@ -123,8 +129,6 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
                 let numero_linea_transaccion = scriptContext.request.parameters['_numero_linea_transaccion'];
                 let tipo_pdf = scriptContext.request.parameters['_tipo_pdf'];
 
-                // objHelper.error_log('data', { cola_inspeccion_id, articulo_id, numero_linea_transaccion })
-
                 if (button == 'pdf') {
 
                     // Obtener datos
@@ -134,9 +138,12 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Helper', 'N'],
                     let { pdfFile } = createPDF(tipo_pdf, cola_inspeccion_id, cola_inspeccion_data);
 
                     // Descargar PDF
-                    scriptContext.response.writeFile({
-                        file: pdfFile
-                    });
+                    // scriptContext.response.writeFile({
+                    //     file: pdfFile
+                    // });
+
+                    // Descargar PDF
+                    scriptContext.response.renderPdf(pdfFile);
                 }
             }
         }

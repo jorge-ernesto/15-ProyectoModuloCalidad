@@ -94,74 +94,79 @@
 
         <!-- <img src='https://www.biomont.com.pe/storage/img/logo.png'></img> -->
 
-        <table width="100%" class="fs9 border-collapse" cellpadding="4">
+        <table width="100%" class="fs9 border-collapse" cellpadding="3">
             <thead>
                 <tr>
-                    <th colspan="1" class="bold" align="center" style="vertical-align: middle;">
+                    <th colspan="1" class="bold" align="center" valign="middle">
                         <img src='https://www.biomont.com.pe/storage/img/logo.png'></img>
                         Laboratorios Biomont S.A.
                     </th>
-                    <th colspan="3" class="fs15 bold" align="center" style="vertical-align: middle;">
+                    <th colspan="3" class="fs15 bold" align="center" valign="middle">
                         CERTIFICADO DE ANALISIS DE PRODUCTO TERMINADO
                     </th>
-                    <th colspan="1" class="bold" width="56" style="vertical-align: middle;">
+                    <th colspan="1" class="bold" width="70" valign="middle">
                         Código: F-AC.009<br />
                         Versión: 10<br />
-                        Vigente desde: <br />27/12/2023
+                        Vigente desde:<br />
+                        27/12/2023
                     </th>
-                </tr>
-                <tr>
-                    <th colspan="5"></th>
-                </tr>
-
-                <!-- COLA DE INSPECCION -->
-                <tr>
-                    <th colspan="1"><b>PRODUCTO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_producto_bulk}</th>
-                    <th colspan="1"><b>LOTE:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].lote_finot}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>FORMA FARMACEUTICA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].forma_farmaceutica_nombre}</th>
-                    <th colspan="1"><b>FECHA EXPIRACION:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_caducidad_finot}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>FECHA FABRICACIÓN:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_inicio_produccion_ot}</th>
-                    <th colspan="1"><b>FECHA ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>PROCEDENCIA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].procedencia}</th>
-                    <th colspan="1"><b>N. ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>PRESENTACIÓN:</b></th>
-                    <#--  <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>  -->
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].presentacion?replace("\n", "<br/>")}</th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>MÉTODO ANALITICO:</b></th>
-                    <th colspan="1">Técnica Propia</th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
-                    <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="5"></th>
                 </tr>
             </thead>
+        </table>
+
+        <!-- COLA DE INSPECCION -->
+        <table width="100%" class="fs9 border-collapse" cellpadding="3">
+            <tr>
+                <th colspan="1"><b>PRODUCTO:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_producto_bulk}</th>
+                <th colspan="1"><b>LOTE:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].lote_finot}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>FORMA FARMACEUTICA:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].forma_farmaceutica_nombre}</th>
+                <th colspan="1"><b>FECHA EXPIRACION:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_caducidad_finot}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>FECHA FABRICACIÓN:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_inicio_produccion_ot}</th>
+                <th colspan="1"><b>FECHA ANÁLISIS:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>PROCEDENCIA:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].procedencia}</th>
+                <th colspan="1"><b>N. ANÁLISIS:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>PRESENTACIÓN:</b></th>
+                <#--  <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>  -->
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].presentacion?replace("\n", "<br/>")}</th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>MÉTODO ANALITICO:</b></th>
+                <th colspan="1">Técnica Propia</th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+                <th colspan="1"></th>
+            </tr>
+            <#--
+            <tr>
+                <th colspan="5"></th>
+            </tr>
+            -->
         </table>
 
         <!-- DATOS DE CALIDAD -->
@@ -171,7 +176,7 @@
             <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
             -->
 
-            <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
+            <table width="100%" class="fs9 border-collapse tbody" style="margin-top: 15px;" cellpadding="3">
                 <tbody>
                     <tr>
                         <td colspan="2"><b>ENSAYOS</b></td>
@@ -197,24 +202,24 @@
         <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_aprobadopor>
         <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_aprobadopor>
 
-        <span class="fs12">Observaciones: ${observaciones?replace("\n", "<br/>")}</span><br />
-        <span class="fs12">Estado: <b>${estado_nombre_mostrar}</b></span>
+        <span class="fs10">Observaciones: ${observaciones?replace("\n", "<br/>")}</span><br />
+        <span class="fs10">Estado: ${estado_nombre_mostrar}</span>
         <table width="100%" class="fs12 border-collapse" cellpadding="1">
             <tbody>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>${usuariofirma_revisadopor}<br />${fechafirma_revisadopor}</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>${usuariofirma_revisadopor}<br />${fechafirma_revisadopor}</b></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>${usuariofirma_aprobadopor}<br />${fechafirma_aprobadopor}</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>${usuariofirma_aprobadopor}<br />${fechafirma_aprobadopor}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b/>______________________________<b/></td>
+                    <td colspan="2" align="center" valign="middle"><b/>______________________<b/></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b/>______________________________<b/></td>
+                    <td colspan="2" align="center" valign="middle"><b/>______________________<b/></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>REVISADO POR</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>REVISADO POR</b></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>APROBADO POR</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>APROBADO POR</b></td>
                 </tr>
             </tbody>
         </table>

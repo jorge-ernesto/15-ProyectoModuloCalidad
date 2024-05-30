@@ -94,68 +94,22 @@
 
         <!-- <img src='https://www.biomont.com.pe/storage/img/logo.png'></img> -->
 
-        <table width="100%" class="fs9 border-collapse" cellpadding="4">
+        <table width="100%" class="fs9 border-collapse" cellpadding="3">
             <thead>
                 <tr>
-                    <th colspan="1" class="bold" align="center" style="vertical-align: middle;">
+                    <th colspan="1" class="bold" align="center" valign="middle">
                         <img src='https://www.biomont.com.pe/storage/img/logo.png'></img>
                         Laboratorios Biomont S.A.
                     </th>
-                    <th colspan="3" class="fs15 bold" align="center" style="vertical-align: middle;">
-                        CERTIFICADO DE ANALISIS DE MATERIALES DE<br />EMPAQUE Y ENVASE
+                    <th colspan="3" class="fs15 bold" align="center" valign="middle">
+                        CERTIFICADO DE ANALISIS DE MATERIALES<br />DE EMPAQUE Y ENVASE
                     </th>
-                    <th colspan="1" class="bold" width="56" style="vertical-align: middle;">
+                    <th colspan="1" class="bold" width="70" valign="middle">
                         Código: F-CC.008<br />
                         Versión: 04<br />
-                        Vigente desde: <br />27/02/2024
+                        Vigente desde:<br />
+                        27/02/2024
                     </th>
-                </tr>
-                <tr>
-                    <th colspan="5"></th>
-                </tr>
-
-                <!-- COLA DE INSPECCION -->
-                <tr>
-                    <th colspan="1"><b>CÓDIGO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_itemid}</th>
-                    <th colspan="1"><b>N. ANÁLISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>MATERIAL DE EMPAQUE Y ENVASE:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
-                    <th colspan="1"><b>TIPO DE EMBALAJE PRIMARIO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_primario}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>PROVEEDOR:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].proveedor_nombre}</th>
-                    <th colspan="1"><b>TIPO DE EMBALAJE SECUNDARIO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_secundario}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>FECHA INGRESO:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_recepcion}</th>
-                    <th colspan="1"><b>CANTIDAD INGRESADA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_recepcion}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>FECHA ANALISIS:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
-                    <th colspan="1"><b>CANTIDAD INSPECCIONADA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_inspeccionada}</th>
-                    <th colspan="1"></th>
-                </tr>
-                <tr>
-                    <th colspan="1"><b>NIVEL DE INSPECCION<br /> NORMA TECNICA PERUANA<br /> ISO 2859-1 2009:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].nivel_inspeccion_iso_2859}</th>
-                    <th colspan="1"><b>CANTIDAD MUESTREADA:</b></th>
-                    <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_muestreada}</th>
-                    <th colspan="1"></th>
                 </tr>
                 <tr>
                     <th colspan="5"></th>
@@ -163,15 +117,63 @@
             </thead>
         </table>
 
+        <!-- COLA DE INSPECCION -->
+        <table width="100%" class="fs9 border-collapse" cellpadding="3">
+            <tr>
+                <th colspan="1"><b>CÓDIGO:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_itemid}</th>
+                <th colspan="1"><b>N. ANÁLISIS:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].num_analisis}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>MATERIAL DE EMPAQUE Y ENVASE:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].articulo_displayname}</th>
+                <th colspan="1"><b>TIPO DE EMBALAJE PRIMARIO:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_primario}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>PROVEEDOR:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].proveedor_nombre}</th>
+                <th colspan="1"><b>TIPO DE EMBALAJE SECUNDARIO:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].tipo_embalaje_secundario}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>FECHA INGRESO:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_recepcion}</th>
+                <th colspan="1"><b>CANTIDAD INGRESADA:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_recepcion}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>FECHA ANALISIS:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].fecha_analisis}</th>
+                <th colspan="1"><b>CANTIDAD INSPECCIONADA:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_inspeccionada}</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr>
+                <th colspan="1"><b>NIVEL DE INSPECCION<br /> NORMA TECNICA PERUANA<br /> ISO 2859-1 2009:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].nivel_inspeccion_iso_2859}</th>
+                <th colspan="1"><b>CANTIDAD MUESTREADA:</b></th>
+                <th colspan="1">${params.cola_inspeccion_data.data_PDFCabecera[0].cantidad_muestreada}</th>
+                <th colspan="1"></th>
+            </tr>
+            <#--
+            <tr>
+                <th colspan="5"></th>
+            </tr>
+            -->
+        </table>
+
         <!-- DATOS DE CALIDAD -->
         <#list params.cola_inspeccion_data.data_PDFDetalle as keylot, lotes>
-            <span class="fs12">Lote: ${keylot}</span><br />
-            <span class="fs12">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
+            <span class="fs10">Lote: ${keylot}</span><br />
+            <span class="fs10">Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}</span>
 
-            <#--  Lote: ${keylot}<br />
-            Fecha Expiracion: ${lotes[0]['fecha_caducidad'][0]}  -->
-
-            <table width="100%" class="fs9 border-collapse tbody" cellpadding="4">
+            <table width="100%" class="fs9 border-collapse tbody" cellpadding="3">
                 <tbody>
                     <!-- DATOS PREVIOS DE INSPECCION -->
                     <#assign mostrar_cabecera_datosPreviosInspeccion = true>
@@ -195,7 +197,7 @@
                     </#list>
                     <#if mostrar_pie_datosPreviosInspeccion == true>
                         <tr>
-                            <td style="border: 0" colspan="5">&nbsp;</td>
+                            <td style="border: 0" colspan="5"></td>
                         </tr>
                     </#if>
 
@@ -259,24 +261,24 @@
         <#assign usuariofirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].usuariofirma_aprobadopor>
         <#assign fechafirma_aprobadopor = params.cola_inspeccion_data.data_PDFCabecera[0].fechafirma_aprobadopor>
 
-        <span class="fs12">Observaciones: ${observaciones?replace("\n", "<br/>")}</span><br />
-        <span class="fs12">Estado: <b>${estado_nombre_mostrar}</b></span>
+        <span class="fs10">Observaciones: ${observaciones?replace("\n", "<br/>")}</span><br />
+        <span class="fs10">Estado: ${estado_nombre_mostrar}</span>
         <table width="100%" class="fs12 border-collapse" cellpadding="1">
             <tbody>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>${usuariofirma_revisadopor}<br />${fechafirma_revisadopor}</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>${usuariofirma_revisadopor}<br />${fechafirma_revisadopor}</b></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>${usuariofirma_aprobadopor}<br />${fechafirma_aprobadopor}</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>${usuariofirma_aprobadopor}<br />${fechafirma_aprobadopor}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b/>______________________________<b/></td>
+                    <td colspan="2" align="center" valign="middle"><b/>______________________<b/></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b/>______________________________<b/></td>
+                    <td colspan="2" align="center" valign="middle"><b/>______________________<b/></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>REVISADO POR</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>REVISADO POR</b></td>
                     <th colspan="1"></th>
-                    <td colspan="2" align="center" style="vertical-align: middle;"><b>APROBADO POR</b></td>
+                    <td colspan="2" align="center" valign="middle"><b>APROBADO POR</b></td>
                 </tr>
             </tbody>
         </table>
