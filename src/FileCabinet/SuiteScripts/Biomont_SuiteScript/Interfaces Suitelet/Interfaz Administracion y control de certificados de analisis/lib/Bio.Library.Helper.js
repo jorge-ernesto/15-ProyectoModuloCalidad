@@ -61,7 +61,7 @@ define(['N'],
                     // obj[key] = obj[key].toString();
                 } else if (typeof obj[key] === 'string') {
                     // Si el valor es un string, remplazamos & por &amp;
-                    // obj[key] = obj[key].replace(/&/g, '&amp;'); // Esto no es necesario si mostramos el PDF en pestaña, buscar el el proyecto: replace(/&/g, '&amp;');
+                    // obj[key] = obj[key].replace(/&/g, '&amp;'); // Esto no es necesario si mostramos el PDF en pestaña, buscar en el proyecto: .replace(/&/g, '&amp;');
                 } else if (typeof obj[key] === 'object') {
                     // Si el valor es un objeto, llamamos recursivamente a la función
                     convertObjectValuesToStrings(obj[key]);
