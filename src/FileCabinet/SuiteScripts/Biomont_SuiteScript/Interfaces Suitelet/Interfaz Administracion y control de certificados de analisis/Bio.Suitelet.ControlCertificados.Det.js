@@ -158,6 +158,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 /***************** Renderizar formulario *****************/
                 scriptContext.response.writePage(form);
             } else { // POST
+
                 /****************** Recibir parametros por POST ******************/
                 // Datos
                 let cola_inspeccion_id_interno = scriptContext.request.parameters['custpage_field_cola_inspeccion_id_interno'];

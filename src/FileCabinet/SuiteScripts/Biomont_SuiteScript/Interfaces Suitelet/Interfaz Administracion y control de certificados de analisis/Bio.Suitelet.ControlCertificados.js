@@ -56,6 +56,11 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
 
                 // Renderizar formulario
                 scriptContext.response.writePage(form);
+            } else { // POST
+
+                // Recuperar valores de los campos
+                // Debug
+                // Redirigir a este mismo Suitelet (Redirigir a si mismo)
             }
         }
 
