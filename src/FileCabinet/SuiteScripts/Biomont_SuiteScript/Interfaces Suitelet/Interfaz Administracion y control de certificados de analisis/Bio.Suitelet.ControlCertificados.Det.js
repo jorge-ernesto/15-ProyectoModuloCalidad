@@ -29,7 +29,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 // Obtener datos por url
                 let id = scriptContext.request.parameters['_id'];
                 let status = scriptContext.request.parameters['_status'];
-                status = status?.split('|'); // 'SAVE' -> ['SAVE']
+                status = status?.split('|'); // 'PROCESS_SAVE' -> ['PROCESS_SAVE']
 
                 // Obtener datos por search - Cola de inspeccion
                 let dataColaInspeccion = objSearch.getDataColaInspeccion('', '', '', id);
@@ -99,15 +99,14 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                     fieldObservaciones
                 } = objWidget.createFormDetail(dataColaInspeccion, dataDatosCalidad, dataDatosPreviosInspeccion, dataDatosIso2859);
 
-                if (status?.includes('SAVE')) {
+                // Si hubo una redireccion a este mismo suitelet
+                if (status?.includes('PROCESS_SAVE')) {
                     form.addPageInitMessage({
                         type: message.Type.INFORMATION,
                         message: `Se guardo el registro correctamente`,
                         duration: 25000 // 25 segundos
                     });
-                }
-
-                if (status?.includes('PROCESS_SIGNATURE')) {
+                } else if (status?.includes('PROCESS_SIGNATURE')) {
                     form.addPageInitMessage({
                         type: message.Type.INFORMATION,
                         message: `Se firmo correctamente`,
@@ -232,7 +231,7 @@ define(['./lib/Bio.Library.Search', './lib/Bio.Library.Widget', './lib/Bio.Libra
                 let _status = '';
 
                 if (colaInspeccionId) {
-                    _status = 'SAVE';
+                    _status = 'PROCESS_SAVE';
                 }
 
                 /****************** Redirigir a este mismo Suitelet (Redirigir a si mismo) ******************/
